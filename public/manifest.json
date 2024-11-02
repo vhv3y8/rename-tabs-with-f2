@@ -3,6 +3,10 @@
   "name": "Rename Tabs with F2",
   "version": "1.0",
   "description": "Rename opened tabs with F2 keyboard shortcut.",
+  "icons": {
+    "128": "icon128.png"
+  },
+  "default_locale": "en",
   "permissions": ["tabs"],
   "background": {
     "service_worker": "sw.js",

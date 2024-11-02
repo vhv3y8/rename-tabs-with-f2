@@ -1,47 +1,41 @@
-# Svelte + Vite
+## Rename Tabs with F2
 
-This template should help get you started developing with Svelte in Vite.
+![](/promo/rename-tabs-screenshot-1.png)
 
-## Recommended IDE Setup
+Chrome Extension that adds a F2 shortcut to open a Tab Rename Extension Page.
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+(\* Not available at some pages due to security reasons of the browser. This extension uses content script.)
 
-## Need an official Svelte framework?
+### How to use
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+- Press `F2` to Open Tab Rename Page
+- `Tab` or `Enter` / `Shift+Tab` or `Shift+Enter` to Move around tab titles
+- `F5` or `Ctrl+R` to Reset changes (browser original shortcut)
+- `Ctrl+Enter` to Apply changes and Close
+- `Ctrl+W` or `Ctrl+F4` to Close without applying (browser original shortcut)
 
-## Technical considerations
+### How to build
 
-**Why use this over SvelteKit?**
-
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
-
-This template contains as little as possible to get started with Vite + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
-
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
-
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
-
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
-
-**Why include `.vscode/extensions.json`?**
-
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
-
-**Why enable `checkJs` in the JS template?**
-
-It is likely that most cases of changing variable types in runtime are likely to be accidental, rather than deliberate. This provides advanced typechecking out of the box. Should you like to take advantage of the dynamically-typed nature of JavaScript, it is trivial to change the configuration.
-
-**Why is HMR not preserving my local component state?**
-
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/sveltejs/svelte-hmr/tree/master/packages/svelte-hmr#preservation-of-local-state).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
-
-```js
-// store.js
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
+```bash
+npm i && npm run build
+# or pnpm i && pnpm build
 ```
+
+### How to apply `dist` folder
+
+1. Go to `chrome://extensions/`
+2. Turn on `Developer mode` at the top right
+3. Click `Load unpacked` and select `dist` folder / or drop `dist` folder to the page
+4. After modifying and rebuilding, click `Refresh Icon` at extension list
+
+### LICENSE
+
+`Images`
+
+- [Default Favicon Globe Svg](https://www.svgrepo.com/svg/507722/globe-alt) : [MIT License](https://www.svgrepo.com/page/licensing/#MIT)
+
+`Fonts`
+
+- [Open Sans](https://fonts.google.com/specimen/Open+Sans) : [SIL OPEN FONT LICENSE Version 1.1 ](https://fonts.google.com/specimen/Open+Sans/license)
+- [Ubuntu](https://fonts.google.com/specimen/Ubuntu) : [UBUNTU FONT LICENCE Version 1.0](https://fonts.google.com/specimen/Ubuntu/license)
+- [Ubuntu Mono](https://fonts.google.com/specimen/Ubuntu+Mono) : [UBUNTU FONT LICENCE Version 1.0](https://ubuntu.com/legal/font-licence)

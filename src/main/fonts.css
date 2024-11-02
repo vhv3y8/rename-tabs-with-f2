@@ -1,0 +1,20 @@
+/* Ubuntu */
+
+@font-face {
+  font-family: "Ubuntu";
+  src: url("./assets/fonts/Ubuntu-Regular.ttf") format("truetype");
+}
+
+/* Ubuntu Mono */
+
+@font-face {
+  font-family: "Ubuntu Mono";
+  src: url("./assets/fonts/UbuntuMono-Regular.ttf") format("truetype");
+}
+
+/* Open Sans */
+
+@font-face {
+  font-family: "Open Sans";
+  src: url("./assets/fonts/OpenSans-Regular.ttf") format("truetype");
+}

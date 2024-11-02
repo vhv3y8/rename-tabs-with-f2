@@ -7,17 +7,12 @@ export default defineConfig({
   build: {
     outDir: "../dist",
     assetsDir: ".", // if not set to ".", js/css files are created at dist/assets/
-    emptyOutDir: true, // empty dist folder at build
+    emptyOutDir: true, // empty dist folder before build
     target: "esnext", // to use top level await
     rollupOptions: {
-      input: [
-        "src/main/index.html",
-        "src/options/index.html",
-        "src/content.js",
-        "src/sw.js",
-      ],
+      input: ["src/main/index.html", "src/content.js", "src/sw.js"],
       output: {
-        entryFileNames: "[name].js", // applied at js files
+        entryFileNames: "[name].js", // applied to js files
       },
     },
   },

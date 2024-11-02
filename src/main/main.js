@@ -1,5 +1,7 @@
 import { mount } from "svelte"
 import App from "./App.svelte"
+import "./style.css"
+import "./fonts.css"
 
 const app = mount(App, {
   target: document.getElementById("app"),
@@ -9,16 +11,19 @@ const app = mount(App, {
 
 const credits = [
   {
-    preMessage: "Default favIcon Globe Svg",
+    what: "Default favIcon Globe Svg",
     link: "https://www.svgrepo.com/svg/507722/globe-alt",
-    author: "https://www.svgrepo.com/author/scarlab/",
+    author: "scarlab (https://www.svgrepo.com/author/scarlab/)",
     license: "MIT License",
   },
 ]
 
 for (const credit of credits) {
   console.log(
-    `${credit.preMessage} is from\n\n${credit.link}\n\nBy ${credit.author}\n\nUnder ${credit.license}`,
+    `%c${credit.what} %cis from\n\n${credit.link}\n\nBy ${credit.author}\n\nUnder %c${credit.license}`,
+    "font-size: 18px; color: crimson;",
+    "font-size: 18px;",
+    "font-size: 18px; color: seagreen;",
   )
 }
 

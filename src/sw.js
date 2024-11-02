@@ -1,13 +1,17 @@
-let f2PressedTabId
+let activeTabId
 let createdExtensionTabId
 
-chrome.runtime.onMessage.addListener((msg, sender, sendRes) => {
+chrome.runtime.onMessage.addListener(async (msg, sender, sendRes) => {
   switch (msg) {
     case "RENAME": {
-      // get active tab
-      chrome.tabs.query({ currentWindow: true, active: true }).then((tabs) => {
-        f2PressedTabId = tabs[0].id
-
+      sendRes(chrome.runtime.id)
+      Promise.all([
+        // get active tab
+        chrome.tabs
+          .query({ currentWindow: true, active: true })
+          .then((tabs) => {
+            activeTabId = tabs[0].id
+          }),
         // open extension main page
         chrome.tabs
           .create({
@@ -15,13 +19,13 @@ chrome.runtime.onMessage.addListener((msg, sender, sendRes) => {
           })
           .then((tab) => {
             createdExtensionTabId = tab.id
-          })
-      })
+          }),
+      ])
       break
     }
 
     case "TABID": {
-      sendRes(f2PressedTabId)
+      sendRes(activeTabId)
       break
     }
   }

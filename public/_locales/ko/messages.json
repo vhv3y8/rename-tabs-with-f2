@@ -1,0 +1,15 @@
+{
+  "header_focus_initial": {
+    "message": "처음으로"
+  },
+  "header_next": {
+    "message": "다음"
+  },
+  "header_previous": {
+    "message": "이전"
+  },
+
+  "footer_save_and_close": {
+    "message": "저장 & 닫기"
+  }
+}

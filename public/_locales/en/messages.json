@@ -1,0 +1,15 @@
+{
+  "header_focus_initial": {
+    "message": "Focus Initial"
+  },
+  "header_next": {
+    "message": "Next"
+  },
+  "header_previous": {
+    "message": "Previous"
+  },
+
+  "footer_save_and_close": {
+    "message": "Save & Close"
+  }
+}
