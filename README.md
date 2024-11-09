@@ -32,10 +32,14 @@ npm i && npm run build
 
 `Images`
 
-- [Default Favicon Globe Svg](https://www.svgrepo.com/svg/507722/globe-alt) : [MIT License](https://www.svgrepo.com/page/licensing/#MIT)
+- [Default Favicon Globe Svg](https://www.svgrepo.com/svg/507722/globe-alt) by [scarlab](https://www.svgrepo.com/author/scarlab/) : [MIT License](https://www.svgrepo.com/page/licensing/#MIT)
 
 `Fonts`
 
 - [Open Sans](https://fonts.google.com/specimen/Open+Sans) : [SIL OPEN FONT LICENSE Version 1.1 ](https://fonts.google.com/specimen/Open+Sans/license)
 - [Ubuntu](https://fonts.google.com/specimen/Ubuntu) : [UBUNTU FONT LICENCE Version 1.0](https://fonts.google.com/specimen/Ubuntu/license)
 - [Ubuntu Mono](https://fonts.google.com/specimen/Ubuntu+Mono) : [UBUNTU FONT LICENCE Version 1.0](https://ubuntu.com/legal/font-licence)
+
+`Promotion Image`
+
+- [Right Arrow Svg](https://www.svgrepo.com/svg/491324/arrow-small-right) by [thewolfkit](https://www.svgrepo.com/author/thewolfkit/) : [CC Attribution License](https://www.svgrepo.com/page/licensing/#CC%20Attribution)

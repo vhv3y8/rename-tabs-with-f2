@@ -1,0 +1,11 @@
+⌨️ Rename tabs without using a mouse!
+
+- Press 'F2' to Open Rename Page at any tab
+- 'Tab' or 'Enter' / 'Shift+Tab' or 'Shift+Enter' to Move around tab titles
+- 'Ctrl+Enter' to Apply changes and Close
+- 'F5' or 'Ctrl+R' to Reset changes (browser original shortcut)
+- 'Ctrl+W' or 'Ctrl+F4' to Close without applying (browser original shortcut)
+
+* 'F2' and Renaming is not available at some pages due to security reasons of the browser.
+
+Feature Request, Language Support, Bug Report : vhv3y8@gmail.com

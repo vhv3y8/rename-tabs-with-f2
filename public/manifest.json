@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Rename Tabs with F2",
   "version": "1.0",
-  "description": "Rename opened tabs with F2 keyboard shortcut.",
+  "description": "Rename opened tabs using the F2 keyboard shortcut.",
   "icons": {
     "128": "icon128.png"
   },

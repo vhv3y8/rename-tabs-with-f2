@@ -2,9 +2,7 @@
   import { createEventDispatcher } from "svelte"
   const dispatch = createEventDispatcher()
 
-  export let favIconUrl
-  export let title = ""
-  export let id
+  let { favIconUrl, title = "", id } = $props()
 
   function selectAll(e) {
     e.target.select()
@@ -27,8 +25,8 @@
       id={`tab-${id}`}
       value={title}
       spellcheck="false"
-      on:click={selectAll}
-      on:change={onInputChange}
+      onclick={selectAll}
+      onchange={onInputChange}
     />
   </label>
 </li>

@@ -88,8 +88,8 @@
 <script>
   import { onMount } from "svelte"
 
-  let ulElem
-  let ctrlEnterBtn, tabKey, shiftTabKey, enterKey, shiftEnterKey, escKey
+  let ulElem = $state()
+  let ctrlEnterBtn = $state(), tabKey = $state(), shiftTabKey = $state(), enterKey = $state(), shiftEnterKey = $state(), escKey = $state()
   onMount(() => {
     console.log("onMount")
     const elemToFocus = ulElem.querySelector(
@@ -203,7 +203,7 @@
       id="ctrlEnterBtn"
       class="key pressable"
       bind:this={ctrlEnterBtn}
-      on:click={apply}>Ctrl + Enter</button
+      onclick={apply}>Ctrl + Enter</button
     >
   </footer>
 </main>
