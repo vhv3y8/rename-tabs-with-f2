@@ -1,200 +1,175 @@
-<script module>
+<script>
   import TabItem from "./components/TabItem.svelte"
+  import { activeTabId, tabIdToInfo } from "./lib/state.svelte"
+  import { onMount } from "svelte"
+  import { sendTitleChangeMessages } from "./lib/tabs"
 
-  let tabIdToFocus = await chrome.runtime
-    .sendMessage("TABID")
-    .then((activeTabId) => activeTabId)
-  let tabInfoArray = await chrome.tabs
-    .query({ currentWindow: true, active: false })
-    .then((tabs) =>
-      tabs.map(({ id, title, favIconUrl, index }) => ({
-        id,
-        title,
-        favIconUrl,
-        index,
-      })),
+  let elements = $state({
+    ulElem: null,
+    initialFocusTabItem: null,
+
+    ctrlEnterBtn: null,
+    tabKeyBtn: null,
+    shiftTabKeyBtn: null,
+    enterKeyBtn: null,
+    shiftEnterKeyBtn: null,
+    escKeyBtn: null,
+  })
+  let keydownElem = $state(null)
+
+  let focusableInputElements = $state(null)
+  let currentFocusInputIdx = $state(null)
+  let initialFocusInputIdx = $state(null)
+
+  onMount(() => {
+    console.log("onMount")
+
+    /* Set focusableInputElements */
+    focusableInputElements = Array.from(
+      elements.ulElem.querySelectorAll("input"),
     )
+    console.log("focusableInputElements", focusableInputElements)
 
-  // Only Tab Id To TabInfo is used
-  let tabIdToTabInfo = {}
-  for (const tabInfo of tabInfoArray) {
-    tabIdToTabInfo[tabInfo.id] = {
-      ...tabInfo,
-      hasChanged: false,
-    }
-  }
-  console.log("tabId to tab info: ", tabIdToTabInfo)
+    /* Set initial focus elem */
+    elements.initialFocusTabItem = elements.ulElem.querySelector(
+      `input#tab-${activeTabId}`,
+    )
+    elements.initialFocusTabItem.click()
+    elements.initialFocusTabItem.scrollIntoView({ block: "center" })
 
-  function onTitleInputChange(e) {
-    tabIdToTabInfo[e.detail.id].title = e.detail.title
-    tabIdToTabInfo[e.detail.id].hasChanged = true
-    console.log(tabIdToTabInfo)
-  }
+    /* Set initial indexes */
+    initialFocusInputIdx = focusableInputElements.indexOf(
+      elements.initialFocusTabItem,
+    )
+    currentFocusInputIdx = initialFocusInputIdx
+  })
+
+  /* Functions */
 
   function apply() {
     // to trigger change event for focused input element
     focusNextElement()
     focusPreviousElement()
 
-    Promise.all(
-      Object.values(tabIdToTabInfo)
-        .filter((tabInfo) => tabInfo.hasChanged)
-        .map((tabInfo) => {
-          // send changed title to each content script
-          chrome.tabs.sendMessage(tabInfo.id, {
-            title: tabInfo.title,
-          })
-        }),
-    ).then(() => {
-      // close window after sending message is done
-      window.close()
+    sendTitleChangeMessages(tabIdToInfo).then(() => {
+      // close window after focusing tab
+      chrome.runtime.sendMessage("FOCUS").then(() => {
+        window.close()
+      })
     })
-  }
-
-  /* Focus Functions */
-  // mainly generated with ChatGPT
-
-  function getFocusableElements(container = document) {
-    return Array.from(
-      // container.querySelectorAll(
-      //   'a, button, input, textarea, select, details, [tabindex]:not([tabindex="-1"])',
-      // ),
-      container.querySelectorAll("input"),
-    ).filter(
-      (el) => !el.hasAttribute("disabled") && !el.getAttribute("aria-hidden"),
-    )
   }
 
   function focusNextElement() {
-    const focusableElements = getFocusableElements()
-    console.log(focusableElements)
-    const index = focusableElements.indexOf(document.activeElement)
-    const nextIndex = (index + 1) % focusableElements.length
-    focusableElements[nextIndex].click()
-    focusableElements[nextIndex].scrollIntoView({ block: "center" })
+    const nextFocusInputIdx =
+      currentFocusInputIdx === focusableInputElements.length - 1
+        ? 0
+        : currentFocusInputIdx + 1
+    focusableInputElements[nextFocusInputIdx].click()
+    focusableInputElements[nextFocusInputIdx].scrollIntoView({
+      block: "center",
+    })
+    currentFocusInputIdx = nextFocusInputIdx
   }
 
   function focusPreviousElement() {
-    const focusableElements = getFocusableElements()
-    console.log(focusableElements)
-    const index = focusableElements.indexOf(document.activeElement)
-    const prevIndex =
-      (index - 1 + focusableElements.length) % focusableElements.length
-    focusableElements[prevIndex].click()
-    focusableElements[prevIndex].scrollIntoView({ block: "center" })
+    const nextFocusInputIdx =
+      currentFocusInputIdx === 0
+        ? focusableInputElements.length - 1
+        : currentFocusInputIdx - 1
+    focusableInputElements[nextFocusInputIdx].click()
+    focusableInputElements[nextFocusInputIdx].scrollIntoView({
+      block: "center",
+    })
+    currentFocusInputIdx = nextFocusInputIdx
   }
 </script>
 
-<script>
-  import { onMount } from "svelte"
-
-  let ulElem = $state()
-  let ctrlEnterBtn = $state(), tabKey = $state(), shiftTabKey = $state(), enterKey = $state(), shiftEnterKey = $state(), escKey = $state()
-  onMount(() => {
-    console.log("onMount")
-    const elemToFocus = ulElem.querySelector(
-      `[data-id='${tabIdToFocus}'] input`,
-    )
-    elemToFocus.click()
-    elemToFocus.scrollIntoView({ block: "center" })
-
-    document.addEventListener("keydown", (e) => {
-      // set keydownElem based on e.key
-      let keydownElem
-      switch (e.key) {
-        case "Tab": {
-          e.preventDefault()
-
-          if (e.shiftKey) {
-            keydownElem = shiftTabKey
-            focusPreviousElement()
-          } else {
-            keydownElem = tabKey
-            focusNextElement()
-          }
-          break
-        }
-        case "Enter": {
-          e.preventDefault()
-
-          if (e.ctrlKey) {
-            apply()
-          } else if (e.shiftKey) {
-            keydownElem = shiftEnterKey
-            focusPreviousElement()
-          } else {
-            keydownElem = enterKey
-            focusNextElement()
-          }
-          break
-        }
-        case "Escape": {
-          e.preventDefault()
-
-          keydownElem = escKey
-          ulElem.querySelector(`[data-id='${tabIdToFocus}'] input`).click()
-          break
-        }
-        default: {
-          if (e.ctrlKey) {
-            keydownElem = ctrlEnterBtn
-
-            console.log(tabInfoArray)
-          }
-        }
-      }
-
-      // if keydownElem isnt undefined, add keydown class to it
-      keydownElem && keydownElem.classList.add("keydown")
-    })
-
-    // remove keydown class on keyup
-    document.addEventListener("keyup", (e) => {
-      for (const keyElem of [
-        ctrlEnterBtn,
-        tabKey,
-        shiftTabKey,
-        enterKey,
-        shiftEnterKey,
-        escKey,
-      ]) {
-        keyElem.classList.remove("keydown")
-      }
-    })
-  })
-</script>
-
 <!-- HTML -->
+
+<svelte:document
+  onkeydown={(e) => {
+    /* Set keydownElem based on e.key */
+    switch (e.key) {
+      case "Tab": {
+        e.preventDefault()
+        if (e.shiftKey) {
+          keydownElem = elements.shiftTabKeyBtn
+          focusPreviousElement()
+        } else {
+          keydownElem = elements.tabKeyBtn
+          focusNextElement()
+        }
+        break
+      }
+      case "Enter": {
+        e.preventDefault()
+        if (e.ctrlKey) {
+          apply()
+        } else if (e.shiftKey) {
+          keydownElem = elements.shiftEnterKeyBtn
+          focusPreviousElement()
+        } else {
+          keydownElem = elements.enterKeyBtn
+          focusNextElement()
+        }
+        break
+      }
+      case "Escape": {
+        e.preventDefault()
+        keydownElem = elements.escKeyBtn
+        elements.initialFocusTabItem.click()
+        currentFocusInputIdx = initialFocusInputIdx
+        break
+      }
+      default: {
+        if (e.ctrlKey) {
+          keydownElem = elements.ctrlEnterBtn
+        } else {
+          keydownElem = null
+        }
+      }
+    }
+
+    keydownElem && keydownElem.classList.add("keydown")
+  }}
+  onkeyup={(e) => {
+    document.querySelectorAll("button.keydown").forEach((elem) => {
+      elem.classList.remove("keydown")
+    })
+  }}
+/>
 
 <main>
   <header>
     <span
       >{chrome.i18n.getMessage("header_focus_initial")} :
-      <button bind:this={escKey} class="key">ESC</button>
+      <button bind:this={elements.escKeyBtn} class="key">ESC</button>
     </span>
     <span
       >{chrome.i18n.getMessage("header_next")} :
-      <button bind:this={tabKey} class="key">Tab</button>
+      <button bind:this={elements.tabKeyBtn} class="key">Tab</button>
       /
-      <button bind:this={enterKey} class="key">Enter</button></span
+      <button bind:this={elements.enterKeyBtn} class="key">Enter</button></span
     >
     <span>
       <span>{chrome.i18n.getMessage("header_previous")} : </span>
-      <button bind:this={shiftTabKey} class="key">Shift + Tab</button>
+      <button bind:this={elements.shiftTabKeyBtn} class="key"
+        >Shift + Tab</button
+      >
       /
-      <button bind:this={shiftEnterKey} class="key">Shift + Enter</button>
+      <button bind:this={elements.shiftEnterKeyBtn} class="key"
+        >Shift + Enter</button
+      >
     </span>
   </header>
-  <ul bind:this={ulElem}>
-    {#each Object.values(tabIdToTabInfo) as tabInfo}
-      {#key tabInfo.index}
-        <TabItem
-          favIconUrl={tabInfo.favIconUrl || "/globe.svg"}
-          title={tabInfo.title}
-          id={tabInfo.id}
-          on:update={onTitleInputChange}
-        />
-      {/key}
+  <ul bind:this={elements.ulElem}>
+    {#each Object.values(tabIdToInfo) as tabInfo, idx}
+      <TabItem
+        {tabInfo}
+        setCurrentFocusInputIdx={() => {
+          currentFocusInputIdx = idx
+        }}
+      />
     {/each}
   </ul>
   <footer>
@@ -202,7 +177,7 @@
     <button
       id="ctrlEnterBtn"
       class="key pressable"
-      bind:this={ctrlEnterBtn}
+      bind:this={elements.ctrlEnterBtn}
       onclick={apply}>Ctrl + Enter</button
     >
   </footer>

@@ -1,32 +1,33 @@
 <script>
-  import { createEventDispatcher } from "svelte"
-  const dispatch = createEventDispatcher()
+  let { tabInfo, setCurrentFocusInputIdx } = $props()
 
-  let { favIconUrl, title = "", id } = $props()
-
-  function selectAll(e) {
-    e.target.select()
-  }
-
-  function onInputChange(e) {
-    dispatch("update", {
-      id,
-      title: e.target.value,
-    })
-  }
+  let localTitle = $state(tabInfo.title)
 </script>
 
-<li data-id={id}>
-  <label for={`tab-${id}`}>
-    <img src={favIconUrl} alt="" width="24" height="24" />
+<li>
+  <label for={`tab-${tabInfo.id}`}>
+    <img
+      src={tabInfo.favIconUrl || "/globe.svg"}
+      alt=""
+      width="24"
+      height="24"
+    />
     <input
       type="text"
       name=""
-      id={`tab-${id}`}
-      value={title}
+      id={`tab-${tabInfo.id}`}
+      bind:value={localTitle}
       spellcheck="false"
-      onclick={selectAll}
-      onchange={onInputChange}
+      onclick={(e) => {
+        e.target.select()
+        setCurrentFocusInputIdx()
+      }}
+      onchange={(e) => {
+        if (!tabInfo.hasChanged) {
+          tabInfo.title = localTitle
+          tabInfo.hasChanged = true
+        }
+      }}
     />
   </label>
 </li>

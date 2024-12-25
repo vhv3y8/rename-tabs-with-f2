@@ -3,7 +3,7 @@ let createdExtensionTabId
 
 chrome.runtime.onMessage.addListener(async (msg, sender, sendRes) => {
   switch (msg) {
-    case "RENAME": {
+    case "OPEN": {
       sendRes(chrome.runtime.id)
       Promise.all([
         // get active tab
@@ -27,6 +27,10 @@ chrome.runtime.onMessage.addListener(async (msg, sender, sendRes) => {
     case "TABID": {
       sendRes(activeTabId)
       break
+    }
+
+    case "FOCUS": {
+      chrome.tabs.update(activeTabId, { active: true }).then(() => sendRes())
     }
   }
 })
