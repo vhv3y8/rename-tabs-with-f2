@@ -11,5 +11,30 @@
 
   "footer_save_and_close": {
     "message": "Save & Close"
+  },
+
+  "settings": {
+    "message": "Settings"
+  },
+  "settings_darkmode": {
+    "message": "Darkmode"
+  },
+  "settings_larger_width": {
+    "message": "Larger Width"
+  },
+  "settings_shortcut": {
+    "message": "Shortcut"
+  },
+  "settings_shortcut_listening": {
+    "message": "Listening"
+  },
+  "settings_shortcut_reset_to_f2": {
+    "message": "Reset to F2"
+  },
+  "settings_shortcut_cancel": {
+    "message": "Cancel"
+  },
+  "settings_shortcut_ok": {
+    "message": "OK"
   }
 }

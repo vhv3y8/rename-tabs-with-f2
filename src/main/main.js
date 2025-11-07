@@ -2,6 +2,7 @@ import { mount } from "svelte"
 import App from "./App.svelte"
 import "./style/style.css"
 import "./style/fonts.css"
+import "./style/ds.css"
 
 const app = mount(App, {
   target: document.getElementById("app"),
@@ -14,12 +15,6 @@ const credits = [
     what: "Default favIcon Globe Svg",
     link: "https://www.svgrepo.com/svg/507722/globe-alt",
     author: "scarlab (https://www.svgrepo.com/author/scarlab/)",
-    license: "MIT License",
-  },
-  {
-    what: "Darkmode/Lightmode Svg",
-    link: "https://www.svgrepo.com/svg/361513/half-2",
-    author: "radix-ui (https://www.svgrepo.com/author/radix-ui/)",
     license: "MIT License",
   },
 ]

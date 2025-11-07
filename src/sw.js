@@ -1,36 +1,45 @@
-let activeTabId
-let createdExtensionTabId
+import * as chromeStorage from "./lib/chrome/storage"
+import * as chromeTabs from "./lib/chrome/tabs"
 
+let lastFocusTabId
+
+async function setInitialTabIdAndOpenPage() {
+  // get and set last focus tab id
+  await chromeTabs.getCurrentWindowActiveTab().then((tabs) => {
+    lastFocusTabId = tabs[0].id
+  })
+  // open extension main page
+  await chromeTabs.openMainPage()
+}
+
+// Icon Click
+chrome.action.onClicked.addListener(setInitialTabIdAndOpenPage)
+
+// Message
 chrome.runtime.onMessage.addListener(async (msg, sender, sendRes) => {
   switch (msg) {
     case "OPEN": {
-      sendRes(chrome.runtime.id)
-      Promise.all([
-        // get active tab
-        chrome.tabs
-          .query({ currentWindow: true, active: true })
-          .then((tabs) => {
-            activeTabId = tabs[0].id
-          }),
-        // open extension main page
-        chrome.tabs
-          .create({
-            url: chrome.runtime.getURL("main/index.html"),
-          })
-          .then((tab) => {
-            createdExtensionTabId = tab.id
-          }),
-      ])
+      setInitialTabIdAndOpenPage()
       break
     }
-
-    case "TABID": {
-      sendRes(activeTabId)
+    // from extension main page, for ui
+    case "LAST_FOCUS_TABID": {
+      sendRes(lastFocusTabId)
       break
     }
-
-    case "FOCUS": {
-      chrome.tabs.update(activeTabId, { active: true }).then(() => sendRes())
+    // focus last active tab
+    case "FOCUS_BACK": {
+      chromeTabs.focusTab(lastFocusTabId).then(sendRes)
+      break
     }
+  }
+})
+
+// Storage
+chrome.runtime.onInstalled.addListener(({ reason }) => {
+  if (reason === "install") {
+    chromeStorage.initializeStorage(chromeStorage.initialStorage)
+  } else if (reason === "update") {
+    chromeStorage.migrateStorage(chromeStorage.initialStorage)
   }
 })

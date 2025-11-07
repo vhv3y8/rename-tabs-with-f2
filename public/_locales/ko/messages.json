@@ -11,5 +11,30 @@
 
   "footer_save_and_close": {
     "message": "저장 & 닫기"
+  },
+
+  "settings": {
+    "message": "설정"
+  },
+  "settings_darkmode": {
+    "message": "다크모드"
+  },
+  "settings_larger_width": {
+    "message": "너비 크게"
+  },
+  "settings_shortcut": {
+    "message": "단축키"
+  },
+  "settings_shortcut_listening": {
+    "message": "듣는 중"
+  },
+  "settings_shortcut_reset_to_f2": {
+    "message": "F2로 초기화"
+  },
+  "settings_shortcut_cancel": {
+    "message": "취소"
+  },
+  "settings_shortcut_ok": {
+    "message": "확인"
   }
 }

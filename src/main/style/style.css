@@ -16,6 +16,8 @@ body {
   flex-direction: column;
 
   user-select: none;
+
+  color: var(--primary-9);
 }
 
 #app {
@@ -29,4 +31,25 @@ body {
 
 .keydown {
   background-color: cornflowerblue !important;
+}
+
+button.key {
+  position: relative;
+  box-shadow: 4px 4px var(--primary-8);
+  margin-right: 4px;
+
+  outline: none;
+  border: 2px solid var(--primary-8);
+  background: var(--bg);
+  color: inherit;
+
+  font-family: "Ubuntu Mono";
+
+  transition: background-color 0.06s ease-out;
+}
+
+button.pressable:active {
+  top: 4px;
+  left: 4px;
+  box-shadow: none;
 }

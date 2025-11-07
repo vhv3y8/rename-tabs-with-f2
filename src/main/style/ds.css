@@ -1,0 +1,25 @@
+:root {
+  --bg: #fff;
+  --shadow-1: #ddd;
+  --shadow-9: #666;
+
+  --primary-7: #444;
+  --primary-8: #333;
+  --primary-9: #000;
+
+  --selection-bg: initial;
+  --selection-text: initial;
+
+  --width-normal: 650px;
+  --width-large: 800px;
+}
+
+:root.dark {
+  --bg: #222;
+  --shadow-1: #333;
+  --shadow-9: #aaa;
+
+  --primary-7: #bbb;
+  --primary-8: #ccc;
+  --primary-9: #ddd;
+}
