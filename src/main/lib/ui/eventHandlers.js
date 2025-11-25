@@ -1,17 +1,17 @@
-import * as chromeRuntime from "../../../lib/chrome/runtime"
-import { apply } from "../usecases/apply"
+import { apply } from "../application/usecases/apply"
 
-// Keydown Handlers
+// Keydown handler factories
 // get local state/ui update functions as parameter
 
 export function createNormalKeydownHandler({
   elements,
   focusPreviousElement,
   focusNextElement,
-  setFocusIdxToInitial,
+  focusInitialElement,
   closeSettingsIfItsVisible,
 }) {
-  console.log("[createNormalKeydownHandler]")
+  if (import.meta.env.MODE === "development")
+    console.log("[createNormalKeydownHandler]")
   // keydown
   return function handleKeydown(e) {
     console.log("[handleKeydown]")
@@ -47,8 +47,7 @@ export function createNormalKeydownHandler({
         if (closeSettingsIfItsVisible()) break
 
         elements.keydownElem = elements.escKeyBtn
-        elements.initialFocusTabItem.click()
-        setFocusIdxToInitial()
+        focusInitialElement()
         break
       }
       default: {
@@ -60,13 +59,16 @@ export function createNormalKeydownHandler({
       }
     }
 
-    console.log("[elements.keydownElem]", elements.keydownElem)
-    elements.keydownElem && elements.keydownElem.classList.add("keydown")
+    if (import.meta.env.MODE === "development")
+      console.log("[elements.keydownElem]", elements.keydownElem)
+    if (elements.keydownElem !== null)
+      elements.keydownElem.classList.add("keydown")
   }
 }
 
 export function createListenShortcutKeydownHandler({ updateShortcutState }) {
-  console.log("[createListenShortcutKeydownHandler]")
+  if (import.meta.env.MODE === "development")
+    console.log("[createListenShortcutKeydownHandler]")
   return function handleListenShortut(e) {
     e.preventDefault()
     const shortcut = createShortcut(e)
@@ -74,7 +76,7 @@ export function createListenShortcutKeydownHandler({ updateShortcutState }) {
   }
 }
 
-function createShortcut(e) {
+export function createShortcut(e) {
   let key = e.key
   // if (key === "Control" || key === "Shift") key = ""
   return {
@@ -86,17 +88,10 @@ function createShortcut(e) {
   }
 }
 
-// keyup
+// Keyup
+
 export function removeAllKeydownClass() {
   document.querySelectorAll("button.keydown").forEach((elem) => {
     elem.classList.remove("keydown")
   })
-}
-
-// pagehide
-export async function pageCloseWithoutChangesOnHide(e) {
-  // when tab gets reloaded, basically its terminated and recreated.
-  // so instead of checking if pagehide is refresh or close here, lets just tabs.query() and focus extension page every time it is created.
-  // check onMount lifecycle using tabs focusExtensionPageTabForRefresh function
-  await chromeRuntime.fireFocusLastActiveTab()
 }

@@ -8,6 +8,7 @@ let { directionDown, onclose, children } = $props()
   {@render children?.()}
 </div>
 
+<!-- svelte-ignore a11y_consider_explicit_label -->
 <button type="button" class="popoverBackground" onclick={onclose}></button>
 
 <!-- Style -->

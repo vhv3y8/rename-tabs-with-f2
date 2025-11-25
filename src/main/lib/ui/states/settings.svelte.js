@@ -1,4 +1,4 @@
-import * as chromeStorage from "../../../lib/chrome/storage"
+import * as chromeStorage from "$$lib/chrome/storage"
 
 // Settings
 export let settings = $state(await chromeStorage.getSettings())

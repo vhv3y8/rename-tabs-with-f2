@@ -36,5 +36,17 @@
   },
   "settings_shortcut_ok": {
     "message": "OK"
+  },
+
+  "tips_cannot_connect_to_tab": {
+    "message": "Cannot connect to the tab.\nIt may be because of the browser policy, or try refreshing the tab and then this page to connect."
+  },
+  "tips_shortcut_updated": {
+    "message": "Shortcut has been updated to '$SHORTCUT$'.\nIf you want to test it at currently existing tabs, you have to refresh that tab. Otherwise, it's all set!",
+    "placeholders": {
+      "shortcut": {
+        "content": "$1"
+      }
+    }
   }
 }

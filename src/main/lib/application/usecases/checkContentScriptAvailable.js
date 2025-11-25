@@ -1,8 +1,10 @@
-import * as chromeTabs from "../../../lib/chrome/tabs"
-import { tabIdxToInfo } from "../domain/tabInfo.svelte"
+import * as chromeTabs from "$$lib/chrome/tabs"
+import { tabIdxToInfo } from "../tabInfo.svelte"
 
 export async function checkContentScriptAvailableAndUpdateAllInfo() {
-  console.log("[checkContentScriptAndUpdateAllInfo]")
+  if (import.meta.env.MODE === "development")
+    console.log("[checkContentScriptAndUpdateAllInfo]")
+
   let allTabIds = Object.values(tabIdxToInfo).map(({ id }) => id)
 
   // check
@@ -13,9 +15,9 @@ export async function checkContentScriptAvailableAndUpdateAllInfo() {
   )
 
   // update info
-  contentScriptAvailableBoolArr.forEach((available, idx) => {
+  for (const [idx, available] of contentScriptAvailableBoolArr.entries()) {
     if (!available) {
       tabIdxToInfo[idx]["contentScriptAvailable"] = false
     }
-  })
+  }
 }

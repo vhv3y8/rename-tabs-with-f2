@@ -36,5 +36,17 @@
   },
   "settings_shortcut_ok": {
     "message": "확인"
+  },
+
+  "tips_cannot_connect_to_tab": {
+    "message": "탭에 연결할 수 없습니다.\n브라우저 정책 때문일 수도 있으며, 또는 탭을 새로고침하고 이 페이지도 새로고침해서 연결을 재시도하세요."
+  },
+  "tips_shortcut_updated": {
+    "message": "단축키가 '$SHORTCUT$'로 업데이트 되었습니다.\n기존의 열려있는 탭에서 테스트해보고 싶다면, 그 탭을 새로고침하세요. 그 외에는 모두 준비되었습니다!",
+    "placeholders": {
+      "shortcut": {
+        "content": "$1"
+      }
+    }
   }
 }

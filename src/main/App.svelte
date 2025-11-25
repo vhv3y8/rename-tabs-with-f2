@@ -4,26 +4,34 @@ import TabItem from "./components/TabItem.svelte"
 import SettingsPopover from "./components/SettingsPopover.svelte"
 import * as chromeTabs from "../lib/chrome/tabs"
 
-import { destroySettingsEffect, settings } from "./lib/states/settings.svelte"
 import {
+  destroySettingsEffect,
+  settings,
+} from "./lib/ui/states/settings.svelte"
+import {
+  getLastFocusTabIdWritable,
   getTabInfoById,
-  lastFocusTabId,
   tabIdxToInfo,
-} from "./lib/domain/tabInfo.svelte"
-import { modes } from "./lib/states/modes.svelte"
+} from "./lib/application/tabInfo.svelte"
+import { modes } from "./lib/ui/states/modes.svelte"
 
 import {
   createNormalKeydownHandler,
-  pageCloseWithoutChangesOnHide,
   removeAllKeydownClass,
 } from "./lib/ui/eventHandlers"
 import * as view from "./lib/ui/view"
 
-import { checkContentScriptAvailableAndUpdateAllInfo } from "./lib/usecases/checkContentScriptAvailable"
-import { apply } from "./lib/usecases/apply"
+import { apply } from "./lib/application/usecases/apply"
+import { checkContentScriptAvailableAndUpdateAllInfo } from "./lib/application/usecases/checkContentScriptAvailable"
+import GlobalToastGrid from "./components/GlobalToastGrid.svelte"
+import {
+  initializeLastFocusTabId,
+  initializeTabIdxToInfo,
+} from "./lib/application/usecases/initializeTabInfos"
 
 function initializeViewFromSettings() {
-  console.log("[initializeViewFromSettings]")
+  if (import.meta.env.MODE === "development")
+    console.log("[initializeViewFromSettings]")
 
   view.applyDarkModeUI({ darkmode: settings.darkmode })
   view.applyLargerWidth({ largerWidth: settings.largerWidth })
@@ -45,14 +53,28 @@ let elements = {
 }
 
 function setInitialFocusElemAndFocus() {
-  console.log("[setInitialFocusElemAndFocus]")
+  if (import.meta.env.MODE === "development")
+    console.log("[setInitialFocusElemAndFocus]")
+
+  const lastFocusTabId = getLastFocusTabIdWritable()
+  let initialTabId =
+    lastFocusTabId !== null
+      ? lastFocusTabId
+      : Object.values(tabIdxToInfo).filter(
+          (tabInfo) => tabInfo.contentScriptAvailable,
+        )[0].id
 
   elements.initialFocusTabItem = elements.ulElem.querySelector(
-    `input#tab-${lastFocusTabId}`,
+    `input#tab-${initialTabId}`,
   )
 
-  console.log("[lastFocusTabId]", lastFocusTabId)
-  console.log("[tabIdxToInfo]", tabIdxToInfo)
+  if (import.meta.env.MODE === "development")
+    console.log(
+      "[lastFocusTabId, tabIdxToInfo, initialTabId]",
+      getLastFocusTabIdWritable(),
+      tabIdxToInfo,
+      initialTabId,
+    )
 
   elements.initialFocusTabItem.click()
   elements.initialFocusTabItem.scrollIntoView({ block: "center" })
@@ -62,18 +84,17 @@ function setInitialFocusElemAndFocus() {
 let focusableInputElements = $state(null)
 
 function initializeFocusableInputElementsThatsAvailable() {
-  console.log("[initializeFocusableInputElementsThatsAvailable]")
+  if (import.meta.env.MODE === "development")
+    console.log("[initializeFocusableInputElementsThatsAvailable]")
 
   focusableInputElements = Array.from(
     elements.ulElem.querySelectorAll("input"),
   ).filter(({ id }) => {
     let tabInfo = getTabInfoById(id.slice(4))
-    if (tabInfo) {
-      if (tabInfo.contentScriptAvailable) return true
-      else return false
-    }
+    return tabInfo && tabInfo.contentScriptAvailable
   })
-  console.log("[focusableInputElements]", focusableInputElements)
+  if (import.meta.env.MODE === "development")
+    console.log("[focusableInputElements]", focusableInputElements)
 }
 
 // focus indexes state
@@ -81,7 +102,7 @@ let currentFocusInputIdx = $state(null)
 let initialFocusInputIdx = $state(null)
 
 function initializeIndexes() {
-  console.log("[initializeIndexes]")
+  if (import.meta.env.MODE === "development") console.log("[initializeIndexes]")
 
   initialFocusInputIdx = focusableInputElements.indexOf(
     elements.initialFocusTabItem,
@@ -89,11 +110,11 @@ function initializeIndexes() {
   currentFocusInputIdx = initialFocusInputIdx
 }
 
-function focusInputElement({ next }) {
+function focusInputElement({ focusNext }) {
   const lastIdx = focusableInputElements.length - 1
 
   let nextFocusInputIdx
-  if (next) {
+  if (focusNext) {
     // next
     nextFocusInputIdx =
       currentFocusInputIdx === lastIdx ? 0 : currentFocusInputIdx + 1
@@ -119,8 +140,12 @@ $effect(() => {
 
 // lifecycle
 onMount(async () => {
-  console.log("[onMount]")
+  if (import.meta.env.MODE === "development") console.log("[onMount]")
   await chromeTabs.focusExtensionPageTabForRefresh()
+
+  // initialize application entities
+  await initializeTabIdxToInfo()
+  await initializeLastFocusTabId()
 
   // initialize view from storage
   initializeViewFromSettings()
@@ -128,7 +153,8 @@ onMount(async () => {
   // update global state
   await checkContentScriptAvailableAndUpdateAllInfo()
 
-  console.log("[tabIdxToInfo]", tabIdxToInfo)
+  if (import.meta.env.MODE === "development")
+    console.log("[tabIdxToInfo]", tabIdxToInfo)
 
   // initialize view stuff
   setInitialFocusElemAndFocus()
@@ -143,20 +169,20 @@ onDestroy(() => {
 
 <!-- Event Handlers -->
 
-<svelte:window onpagehide={pageCloseWithoutChangesOnHide} />
-
 <svelte:document
   onkeydown={(e) => {
     if (!modes.listenShortcutUpdate) {
+      // create and run keydown handler
       createNormalKeydownHandler({
         elements,
         focusPreviousElement: () => {
-          focusInputElement({ next: false })
+          focusInputElement({ focusNext: false })
         },
         focusNextElement: () => {
-          focusInputElement({ next: true })
+          focusInputElement({ focusNext: true })
         },
-        setFocusIdxToInitial: () => {
+        focusInitialElement: () => {
+          elements.initialFocusTabItem.click()
           currentFocusInputIdx = initialFocusInputIdx
         },
         closeSettingsIfItsVisible: () => {
@@ -210,6 +236,8 @@ onDestroy(() => {
       />
     {/each}
   </ul>
+
+  <GlobalToastGrid />
 
   <!-- Footer Bar -->
   <footer>

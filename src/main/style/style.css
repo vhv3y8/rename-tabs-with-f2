@@ -45,7 +45,7 @@ button.key {
 
   font-family: "Ubuntu Mono";
 
-  transition: background-color 0.06s ease-out;
+  transition: background-color 0.055s ease-out;
 }
 
 button.pressable:active {

@@ -1,9 +1,22 @@
 import * as chromeRuntime from "./runtime"
 
+export async function getCurrentWindowExtensionPageIds() {
+  return chrome.tabs
+    .query({
+      currentWindow: true,
+      url: chromeRuntime.getExtensionPageURL(),
+    })
+    .then((tabs) => tabs.map(({ id }) => id))
+}
+
+/**
+ * Service Worker
+ */
+
 // Create
 
 export async function openMainPage() {
-  // close existing extension pages on current window
+  // close all existing extension pages on current window
   await getCurrentWindowExtensionPageIds().then((tabIds) =>
     chrome.tabs.remove(tabIds),
   )
@@ -18,28 +31,27 @@ export async function focusTab(tabId) {
   return chrome.tabs.update(tabId, { active: true })
 }
 
-// instead of checking if its page close or refresh at pagehide handler alongside focusing last focus tab,
-// just focus extension page every time when page is created.
-export async function focusExtensionPageTabForRefresh() {
-  return chrome.tabs
-    .query({ url: chromeRuntime.getExtensionPageURL() })
-    .then((tabs) => chrome.tabs.update(tabs[0].id, { active: true }))
-}
-
 // Query
-
-async function getCurrentWindowExtensionPageIds() {
-  return chrome.tabs
-    .query({
-      currentWindow: true,
-      url: chromeRuntime.getExtensionPageURL(),
-    })
-    .then((tabs) => tabs.map(({ id }) => id))
-}
 
 export async function getCurrentWindowActiveTab() {
   return chrome.tabs.query({ currentWindow: true, active: true })
 }
+
+/**
+ * Extension Page
+ */
+
+// instead of checking if its page close or refresh at pagehide handler alongside focusing last focus tab,
+// just focus extension page every time when page is created.
+export async function focusExtensionPageTabForRefresh() {
+  if (import.meta.env.MODE === "development")
+    console.log("[focusExtensionPageTabForRefresh]")
+  return chrome.tabs
+    .query({ currentWindow: true, url: chromeRuntime.getExtensionPageURL() })
+    .then((tabs) => chrome.tabs.update(tabs[0].id, { active: true }))
+}
+
+// Query
 
 export async function getAllCurrentWindowTabsWithoutExtensionPage() {
   const allCurrentWindowTabs = await chrome.tabs.query({ currentWindow: true })

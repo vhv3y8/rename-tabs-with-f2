@@ -20,5 +20,6 @@
   ],
   "action": {
     "default_title": "Rename Tabs with F2"
-  }
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkLGEdq9ipU8mv2EwDWWHOebv+6BXqVBDvSCKNaNmrjUgFlikLYCM0WcoaPhgmFHHoamb9YnWSLENO6r1ixpmLFBs9CqhxCCNJYGvtlaK3LL9XiqzEY15lZ7JZYJyZb54zWw8JLCih49GsxUNLgIxYhR4ueG3hTvTVPdyffRc5TjPqftzLgW9M1V3BExDDG7Dk2du29LACYYu4omaiqiS3YrjRmvJufpXUGjfeq+ZQTg+VTJ0elJ1zZg4Fj4dbnmKo7dUozPDZRMtROkwh9YY8AaeUePY3GXBafoh8sYW3XqzGIN8NG2/MFZHSt0JfOCVYWMWttPJ0GvztspfzbZkjwIDAQAB"
 }

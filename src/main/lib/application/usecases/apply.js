@@ -1,9 +1,9 @@
-import * as chromeRuntime from "../../../lib/chrome/runtime"
-import * as chromeTabs from "../../../lib/chrome/tabs"
-import { tabIdxToInfo } from "../domain/tabInfo.svelte"
+// import * as chromeRuntime from "$$lib/chrome/runtime"
+import * as chromeTabs from "$$lib/chrome/tabs"
+import { tabIdxToInfo } from "../tabInfo.svelte"
 
 export async function apply() {
-  console.log("[apply]")
+  if (import.meta.env.MODE === "development") console.log("[apply]")
   // trigger change event for focused element to apply input changes
   document.activeElement.dispatchEvent(new Event("change", { bubbles: true }))
 
@@ -14,9 +14,8 @@ export async function apply() {
       .map(({ id, title }) =>
         chromeTabs.fireChangeTitleToContentScript({ id, title }),
       ),
-  ).then(console.log)
+  )
 
   // close window after focusing tab
-  await chromeRuntime.fireFocusLastActiveTab()
   window.close()
 }

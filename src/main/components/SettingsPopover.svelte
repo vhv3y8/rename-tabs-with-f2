@@ -2,17 +2,17 @@
 import { onMount } from "svelte"
 import Popover from "./common/Popover.svelte"
 import * as chromeStorage from "../../lib/chrome/storage"
-import { settings } from "../lib/states/settings.svelte"
-import { modes } from "../lib/states/modes.svelte"
+import { settings } from "../lib/ui/states/settings.svelte"
+import { modes } from "../lib/ui/states/modes.svelte"
 import * as view from "../lib/ui/view"
 import { createListenShortcutKeydownHandler } from "../lib/ui/eventHandlers"
 
 let { onclose } = $props()
 
-let globalShortcutText = $derived.by(() => stringifyShortcut(settings.shortcut))
+let globalShortcutText = $derived(stringifyShortcut(settings.shortcut))
 
 let localShortcut = $state(settings.shortcut)
-let localShortcutText = $derived.by(() => stringifyShortcut(localShortcut))
+let localShortcutText = $derived(stringifyShortcut(localShortcut))
 
 // Utils
 const isMac = navigator.platform?.startsWith("Mac") ?? false
