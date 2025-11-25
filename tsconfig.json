@@ -12,7 +12,8 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
 
-    "checkJs": true
+    "checkJs": false,
+    "allowJs": true
   },
 
   "include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.svelte"]

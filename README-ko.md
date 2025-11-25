@@ -1,5 +1,7 @@
 ## Rename Tabs with F2
 
+[EN](./README.md) | 한국어
+
 ![](/promo/rename-tabs-screenshot-1.png)
 
 탭 이름 재설정 페이지를 여는 F2 단축키를 추가하는 크롬 확장 프로그램입니다.

@@ -5,20 +5,34 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node vite-build.js",
+    "build": "MODE=development node vite-build.js",
     "build:zip": "MODE=production node vite-build.js",
-    "test": "vitest",
+    "test:unit": "vitest",
+    "storybook": "storybook dev -p 6006",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui --headed",
     "prettier": "prettier src --write",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build-storybook": "storybook build"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^4.0.0",
+    "@playwright/test": "^1.56.1",
+    "@storybook/addon-svelte-csf": "^5.0.10",
+    "@storybook/svelte-vite": "^10.0.7",
+    "@sveltejs/vite-plugin-svelte": "^4.0.4",
+    "@testing-library/svelte": "^5.2.9",
     "@types/chrome": "^0.0.279",
+    "@types/node": "^24.10.1",
+    "culori": "^4.0.2",
+    "jsdom": "^27.1.0",
+    "postcss": "^8.5.6",
     "prettier": "^3.3.3",
     "prettier-plugin-svelte": "^3.2.7",
-    "svelte": "^5.1.3",
-    "vite": "^5.4.10",
+    "storybook": "^10.0.7",
+    "svelte": "^5.43.6",
+    "typescript": "^5.9.3",
+    "vite": "^5.4.21",
     "vite-plugin-zip-pack": "^1.2.4",
-    "vitest": "^2.1.8"
+    "vitest": "^4.0.9"
   }
 }

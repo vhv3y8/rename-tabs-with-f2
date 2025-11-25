@@ -1,5 +1,7 @@
 ## Rename Tabs with F2
 
+EN | [한국어](./README-ko.md)
+
 ![](/promo/rename-tabs-screenshot-1.png)
 
 Chrome Extension that adds a F2 shortcut to open a Tab Rename Extension Page.
