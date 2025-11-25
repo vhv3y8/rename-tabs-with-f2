@@ -1,0 +1,8 @@
+- `scenarios/` : scenarios md files
+- `unit/` : vitest
+  - `pnpm test:unit`
+- `e2e/` : playwright
+  - `pnpm test:e2e`
+  - `pnpm test:e2e:ui` : `--ui` mode
+- `../stories` : storybook component preview
+  - `pnpm storybook`
