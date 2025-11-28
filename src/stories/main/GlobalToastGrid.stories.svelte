@@ -13,7 +13,7 @@ const { Story } = defineMeta({
       globalThis.chrome = {
         i18n: {
           getMessage: (messageName, substitutions) =>
-            `Shortcut has been updated to '${substitutions}'.\nIf you want to test it at currently existing tabs, you have to refresh that tab. Otherwise, it's all set!`,
+            `Shortcut is updated to '${substitutions}'.\nIf you want to use it at existing tabs, you have to refresh that tab!`,
         },
       }
       return Story

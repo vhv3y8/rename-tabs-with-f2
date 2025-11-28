@@ -9,22 +9,7 @@ import { initialStorage } from "../../../lib/chrome/storage"
 import { sleep } from "../helpers/utils"
 import { gotoPages } from "../helpers/playwright"
 
-test("default storage values", async ({ context, page, extensionSW }) => {
-  const fullStorage = await extensionSW.evaluate(() =>
-    chrome.storage.local.get(null),
-  )
-  console.log("[fullStorage]", fullStorage)
-  expect(initialStorage).toEqual(fullStorage)
-
-  const getSettingsResult = await extensionSW.evaluate(() =>
-    chrome.storage.local.get(["settings"]).then((db) => db.settings),
-  )
-  console.log("[getSettingsResult]", getSettingsResult)
-  expect(initialStorage.settings).toEqual(getSettingsResult)
-  expect(initialStorage.settings.shortcut).toEqual(getSettingsResult.shortcut)
-})
-
-test("can overwrite chrome.storage with extensionSW.evaluate()", async ({
+test("(for test) can overwrite chrome.storage with extensionSW.evaluate()", async ({
   extensionSW,
 }) => {
   let userStorage = await extensionSW.evaluate(() =>
@@ -68,6 +53,21 @@ test("can overwrite chrome.storage with extensionSW.evaluate()", async ({
   })
 })
 
+test("default storage values", async ({ context, page, extensionSW }) => {
+  const fullStorage = await extensionSW.evaluate(() =>
+    chrome.storage.local.get(null),
+  )
+  console.log("[fullStorage]", fullStorage)
+  expect(initialStorage).toEqual(fullStorage)
+
+  const getSettingsResult = await extensionSW.evaluate(() =>
+    chrome.storage.local.get(["settings"]).then((db) => db.settings),
+  )
+  console.log("[getSettingsResult]", getSettingsResult)
+  expect(initialStorage.settings).toEqual(getSettingsResult)
+  expect(initialStorage.settings.shortcut).toEqual(getSettingsResult.shortcut)
+})
+
 test("second version (dist2) only", async ({ createPersistentWithSW }) => {
   let { context, extensionSW } = await createPersistentWithSW({
     extensionFolder: extensionFolderV2,
@@ -96,6 +96,8 @@ test("second version (dist2) only", async ({ createPersistentWithSW }) => {
   await page2.goto("https://google.com")
   await page2.keyboard.press("F2")
   await page2.keyboard.press("Control+Alt+Meta+Shift+Q")
+
+  expect(true).toBe(false)
 })
 
 test("migration", async ({ createPersistentWithSW }) => {

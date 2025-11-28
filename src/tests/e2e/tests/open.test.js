@@ -36,4 +36,5 @@ test("open with default shortcut F2", async ({
 
 test("different shortcut", async ({}) => {
   // set different shortcut with evaluate
+  expect(true).toBe(false)
 })

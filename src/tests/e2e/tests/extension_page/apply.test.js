@@ -63,7 +63,11 @@ test.describe("basic", () => {
     expect(focusedTabTitle).toBe("hello world")
   })
 
-  test("click 'ctrl + enter' button", async ({ context, page }) => {
+  test("click 'ctrl + enter' button", async ({
+    context,
+    page,
+    extensionSW,
+  }) => {
     await extensionPage.keyboard.type("hello world")
     await extensionPage.keyboard.press("Shift+Enter")
     await extensionPage.keyboard.type("bye there")
@@ -145,7 +149,8 @@ test("last focus tab is content script unavailable", async ({
       .query({ currentWindow: true, active: true })
       .then((tabs) => tabs[0].title),
   )
-  expect(focusedTabTitle).toBe(await newTabPage.title())
+  const newTabPageTitle = await newTabPage.title()
+  expect(focusedTabTitle).toBe(newTabPageTitle)
 })
 
 test("multiple windows have extension page open", async ({ context, page }) => {

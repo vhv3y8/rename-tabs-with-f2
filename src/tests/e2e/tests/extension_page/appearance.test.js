@@ -38,6 +38,7 @@ test("darkmode", async ({ context, page, extensionSW }) => {
   })
   // reload extension page
   await extensionPage.reload()
+  await extensionPage.waitForLoadState("domcontentloaded")
 
   bgVar = await extensionPage.evaluate(() => {
     const rootStyle = getComputedStyle(document.documentElement)
