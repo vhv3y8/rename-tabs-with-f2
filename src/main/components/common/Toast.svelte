@@ -1,5 +1,5 @@
 <script>
-import { fade, scale } from "svelte/transition"
+import { fade, fly, scale } from "svelte/transition"
 import { removeToast } from "../../lib/ui/states/toasts.svelte"
 
 let { text, id } = $props()
@@ -9,13 +9,16 @@ let { text, id } = $props()
 
 <button
   type="button"
+  class="toast"
   onclick={(e) => {
     removeToast(id)
   }}
-  in:scale={{ start: 0.9 }}
-  out:fade={{ duration: 200 }}
+  in:fly={{ y: "5px" }}
+  out:fade={{ duration: 300 }}
 >
-  <p>{text}</p>
+  {#each text.split("\n") as line}
+    <p>{line}</p>
+  {/each}
 </button>
 
 <!-- CSS -->
@@ -24,8 +27,12 @@ let { text, id } = $props()
 button {
   pointer-events: auto;
 
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 0.4em;
+
   font-size: 1rem;
-  padding: 0.8em;
+  padding: 1em;
 
   text-align: left;
 
@@ -33,12 +40,13 @@ button {
   outline: none;
 
   background-color: var(--bg);
-  border: 2px solid var(--shadow-9);
+  border: 2px solid var(--primary-7);
   color: var(--primary-9);
+  box-shadow: 2px 2px var(--primary-7);
+}
 
-  &:hover {
-    cursor: pointer;
-  }
+button:hover {
+  cursor: pointer;
 }
 
 p {
@@ -46,7 +54,7 @@ p {
   padding: 0;
 
   font-family: "Ubuntu";
-  font-size: 1.1rem;
-  line-height: 1.6;
+  font-size: 1rem;
+  line-height: 1.4;
 }
 </style>

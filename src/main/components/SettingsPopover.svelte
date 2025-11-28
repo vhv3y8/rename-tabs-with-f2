@@ -6,6 +6,7 @@ import { settings } from "../lib/ui/states/settings.svelte"
 import { modes } from "../lib/ui/states/modes.svelte"
 import * as view from "../lib/ui/view"
 import { createListenShortcutKeydownHandler } from "../lib/ui/eventHandlers"
+import { appendToast, messages } from "../lib/ui/states/toasts.svelte"
 
 let { onclose } = $props()
 
@@ -13,6 +14,10 @@ let globalShortcutText = $derived(stringifyShortcut(settings.shortcut))
 
 let localShortcut = $state(settings.shortcut)
 let localShortcutText = $derived(stringifyShortcut(localShortcut))
+
+function pushToast() {
+  appendToast(messages.SHORTCUT_UPDATED(localShortcutText))
+}
 
 // Utils
 const isMac = navigator.platform?.startsWith("Mac") ?? false
@@ -123,6 +128,7 @@ function stringifyShortcut(shortcut) {
               localShortcut = chromeStorage.defaultShortcutF2
               settings.shortcut = localShortcut
               modes.listenShortcutUpdate = false
+              pushToast()
             }}>{chrome.i18n.getMessage("settings_shortcut_reset_to_f2")}</button
           >
         </div>
@@ -131,6 +137,7 @@ function stringifyShortcut(shortcut) {
         <div class="listenCancelOk">
           <button
             type="button"
+            id="cancelBtn"
             class="key pressable"
             onclick={() => {
               modes.listenShortcutUpdate = false
@@ -140,11 +147,13 @@ function stringifyShortcut(shortcut) {
 
           <button
             type="button"
+            id="okBtn"
             class="key pressable"
             onclick={() => {
               console.log("[localShortcut]", localShortcut)
               settings.shortcut = localShortcut
               modes.listenShortcutUpdate = false
+              pushToast()
             }}>{chrome.i18n.getMessage("settings_shortcut_ok")}</button
           >
         </div>

@@ -24,13 +24,13 @@
 
 - GIVEN when listening shortcut update
 - WHEN press valid shortcut AND click 'ok' button
-- THEN update storage settings shortcut AND update settings ui
+- THEN update storage settings shortcut AND update settings ui AND show i18n toast
 
 ---
 
 - GIVEN when listening shortcut update
 - WHEN click 'reset to f2' button
-- THEN update storage settings shortcut to F2 AND update settings ui
+- THEN update storage settings shortcut to F2 AND update settings ui AND show i18n toast
 
 ### Cancel
 

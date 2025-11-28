@@ -120,33 +120,204 @@ test.describe("update appearance on settings value change", () => {
     await darkmodeBtn.click()
 
     // check after updating
-    const bodyBg = await extensionPage.evaluate(
-      () => getComputedStyle(document.body).backgroundColor,
-    )
-    expect(normalizeColor(bodyBg)).toBe(
-      normalizeColor(
-        getDSVar({
-          postRoot,
-          varName: "bg",
-          darkmode: initialStorage.settings.darkmode,
-        }),
-      ),
-    )
+    // const bodyBg = await extensionPage.evaluate(
+    //   () => getComputedStyle(document.body).backgroundColor,
+    // )
+    // expect(normalizeColor(bodyBg)).toBe(
+    //   normalizeColor(
+    //     getDSVar({
+    //       postRoot,
+    //       varName: "bg",
+    //       darkmode: initialStorage.settings.darkmode,
+    //     }),
+    //   ),
+    // )
+    expect(true).toBe(false)
 
     // toggle darkmode again
 
     // check again
   })
 
-  test("larger width", async ({ context, page }) => {})
+  test("larger width", async ({ context, page }) => {
+    expect(true).toBe(false)
+  })
 })
 
 test.describe("update shortcut", () => {
-  test("listen keyboard input", async ({ context, page }) => {})
+  test("listen keyboard input", async ({ context, page }) => {
+    await page.goto("https://google.com")
+    // open extension page
+    const [extensionPage] = await Promise.all([
+      context.waitForEvent("page"),
+      page.keyboard.press("F2"),
+    ])
+    expect(extensionPage).toBeTruthy()
+    await extensionPage.waitForLoadState("domcontentloaded")
 
-  test("clicking ok button", async ({ context, page }) => {})
+    // open settings popup
+    const toggleSettingsBtn = extensionPage.locator("#settingsPopoverBtn")
+    await toggleSettingsBtn.click()
+    // click listen shortcut
+    const listenShortcutBtn = extensionPage.locator("#shortcutBtn")
+    await listenShortcutBtn.click()
 
-  test("clicking reset to f2 button", async ({ context, page }) => {})
+    const shortcutTextPTag = extensionPage.locator("#shortcutText")
+    let shortcutText
 
-  test("clicking cancel button", async ({ context, page }) => {})
+    await extensionPage.keyboard.press("A")
+    shortcutText = await shortcutTextPTag.evaluate((node) => node.textContent)
+    expect(shortcutText).toBe("A")
+
+    await extensionPage.keyboard.press("Shift+A")
+    shortcutText = await shortcutTextPTag.evaluate((node) => node.textContent)
+    expect(shortcutText).toBe("Shift + A")
+
+    await extensionPage.keyboard.press("1")
+    shortcutText = await shortcutTextPTag.evaluate((node) => node.textContent)
+    expect(shortcutText).toBe("1")
+
+    await extensionPage.keyboard.press("Shift+1")
+    shortcutText = await shortcutTextPTag.evaluate((node) => node.textContent)
+    // should it print like this?
+    // TODO: at test its shift + 1, at user its shift + !
+    expect(shortcutText).toBe("Shift + 1")
+
+    // should prevent default behavior
+
+    await extensionPage.keyboard.press("Escape")
+    shortcutText = await shortcutTextPTag.evaluate((node) => node.textContent)
+    expect(shortcutText).toBe("Escape")
+
+    await extensionPage.keyboard.press("F1")
+    shortcutText = await shortcutTextPTag.evaluate((node) => node.textContent)
+    expect(shortcutText).toBe("F1")
+
+    // filter and not listen
+
+    await extensionPage.keyboard.press("Control")
+    shortcutText = await shortcutTextPTag.evaluate((node) => node.textContent)
+    expect(shortcutText).toBe("F1")
+
+    await extensionPage.keyboard.press("Alt")
+    shortcutText = await shortcutTextPTag.evaluate((node) => node.textContent)
+    expect(shortcutText).toBe("F1")
+
+    await extensionPage.keyboard.press("Meta")
+    shortcutText = await shortcutTextPTag.evaluate((node) => node.textContent)
+    expect(shortcutText).toBe("F1")
+
+    await extensionPage.keyboard.press("Shift")
+    shortcutText = await shortcutTextPTag.evaluate((node) => node.textContent)
+    expect(shortcutText).toBe("F1")
+  })
+
+  test("clicking ok button", async ({ context, page, extensionSW }) => {
+    await page.goto("https://google.com")
+    // open extension page
+    const [extensionPage] = await Promise.all([
+      context.waitForEvent("page"),
+      page.keyboard.press("F2"),
+    ])
+    expect(extensionPage).toBeTruthy()
+    await extensionPage.waitForLoadState("domcontentloaded")
+
+    // open settings popup
+    const toggleSettingsBtn = extensionPage.locator("#settingsPopoverBtn")
+    await toggleSettingsBtn.click()
+    // click listen shortcut
+    const listenShortcutBtn = extensionPage.locator("#shortcutBtn")
+    await listenShortcutBtn.click()
+
+    // press key and click ok button
+    await extensionPage.keyboard.press("Control+Shift+Q")
+    const okBtn = extensionPage.locator("#okBtn")
+    await okBtn.click()
+
+    // should be applied at storage
+    const storageShortcut = await extensionSW.evaluate(async () => {
+      const storage = await chrome.storage.local.get(null)
+      return storage.settings.shortcut
+    })
+    expect(storageShortcut).toEqual({
+      ctrlKey: true,
+      altKey: false,
+      metaKey: false,
+      shiftKey: true,
+      key: "Q",
+    })
+
+    // toast should exist
+    const toast = extensionPage.locator("#globalToastGrid .toast").first()
+    const toastText = await toast.evaluate((node) => node.textContent)
+    console.log("[toastText]", toastText)
+    expect(toastText).toContain("Ctrl + Shift + Q")
+  })
+
+  test("clicking reset to f2 button", async ({
+    context,
+    page,
+    extensionSW,
+  }) => {
+    // set shortcut to ctrl+q
+    await extensionSW.evaluate(() =>
+      chrome.storage.local.set({
+        settings: {
+          darkmode: false,
+          largerWidth: false,
+          shortcut: {
+            ctrlKey: true,
+            altKey: false,
+            metaKey: false,
+            shiftKey: false,
+            key: "Q",
+          },
+        },
+      }),
+    )
+
+    await page.goto("https://google.com")
+    // open extension page
+    const [extensionPage] = await Promise.all([
+      context.waitForEvent("page"),
+      page.keyboard.press("Control+Q"),
+    ])
+    expect(extensionPage).toBeTruthy()
+    await extensionPage.waitForLoadState("domcontentloaded")
+
+    // open settings popup
+    const toggleSettingsBtn = extensionPage.locator("#settingsPopoverBtn")
+    await toggleSettingsBtn.click()
+
+    // click listen shortcut
+    const listenShortcutBtn = extensionPage.locator("#shortcutBtn")
+    await listenShortcutBtn.click()
+
+    const shortcutTextPTag = extensionPage.locator("#shortcutText")
+    const resetToF2Btn = extensionPage.locator("#resetToF2")
+
+    // give some other value to listen mode
+    await extensionPage.keyboard.press("Control+Alt+Meta+Shift+A")
+    let shortcutText = await shortcutTextPTag.evaluate(
+      (node) => node.textContent,
+    )
+    expect(shortcutText).toBe("Ctrl + Alt + Meta + Shift + A")
+
+    // click reset to f2 button
+    await resetToF2Btn.click()
+    let listenShortcutBtnText = await listenShortcutBtn.evaluate(
+      (node) => node.textContent,
+    )
+    expect(listenShortcutBtnText).toBe("F2")
+
+    // toast should exist
+    const toast = extensionPage.locator("#globalToastGrid .toast").first()
+    const toastText = await toast.evaluate((node) => node.textContent)
+    console.log("[toastText]", toastText)
+    expect(toastText).toContain("F2")
+  })
+
+  test("clicking cancel button", async ({ context, page }) => {
+    expect(true).toBe(false)
+  })
 })

@@ -39,10 +39,10 @@
   },
 
   "tips_cannot_connect_to_tab": {
-    "message": "Cannot connect to the tab.\nIt may be because of the browser policy, or try refreshing the tab and then this page to connect."
+    "message": "Cannot connect to the tab.\nIt might be because of the browser policy, or try refreshing the tab and this page to reconnect."
   },
   "tips_shortcut_updated": {
-    "message": "Shortcut has been updated to '$SHORTCUT$'.\nIf you want to test it at currently existing tabs, you have to refresh that tab. Otherwise, it's all set!",
+    "message": "Shortcut is updated to '$SHORTCUT$'.\nIf you want to use it at existing tabs, you have to refresh that tab!",
     "placeholders": {
       "shortcut": {
         "content": "$1"
