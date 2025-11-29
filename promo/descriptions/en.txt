@@ -9,4 +9,10 @@
 * You need to 'refresh' existing tabs to apply when 'first installed', because its only applied to tabs opened after extension was installed.
 * 'F2' and Renaming is not available at some pages due to security reasons of the browser.
 
+v1.1
+- Added settings
+  - Change shortcut
+  - Darkmode
+  - Adjust list width
+
 Feature Request, Language Support, Bug Report : vhv3y8@gmail.com
