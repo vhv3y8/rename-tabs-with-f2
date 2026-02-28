@@ -205,22 +205,79 @@ onDestroy(() => {
   <header>
     <span
       >{chrome.i18n.getMessage("header_focus_initial")} :
-      <button bind:this={elements.escKeyBtn} class="key">ESC</button>
+      <button
+        bind:this={elements.escKeyBtn}
+        class="key"
+        onclick={() => {
+          elements.initialFocusTabItem.click()
+          currentFocusInputIdx = initialFocusInputIdx
+        }}
+        onmousedown={() => {
+          elements.escKeyBtn.classList.add("keydown")
+        }}
+        onmouseup={() => {
+          elements.escKeyBtn.classList.remove("keydown")
+        }}>ESC</button
+      >
     </span>
     <span
       >{chrome.i18n.getMessage("header_next")} :
-      <button bind:this={elements.tabKeyBtn} class="key">Tab</button>
+      <button
+        bind:this={elements.tabKeyBtn}
+        class="key"
+        onclick={() => {
+          focusInputElement({ focusNext: true })
+        }}
+        onmousedown={() => {
+          elements.tabKeyBtn.classList.add("keydown")
+        }}
+        onmouseup={() => {
+          elements.tabKeyBtn.classList.remove("keydown")
+        }}>Tab</button
+      >
       /
-      <button bind:this={elements.enterKeyBtn} class="key">Enter</button></span
+      <button
+        bind:this={elements.enterKeyBtn}
+        class="key"
+        onclick={() => {
+          focusInputElement({ focusNext: true })
+        }}
+        onmousedown={() => {
+          elements.enterKeyBtn.classList.add("keydown")
+        }}
+        onmouseup={() => {
+          elements.enterKeyBtn.classList.remove("keydown")
+        }}>Enter</button
+      ></span
     >
     <span>
       <span>{chrome.i18n.getMessage("header_previous")} : </span>
-      <button bind:this={elements.shiftTabKeyBtn} class="key"
-        >Shift + Tab</button
+      <button
+        bind:this={elements.shiftTabKeyBtn}
+        class="key"
+        onclick={() => {
+          focusInputElement({ focusNext: false })
+        }}
+        onmousedown={() => {
+          elements.shiftTabKeyBtn.classList.add("keydown")
+        }}
+        onmouseup={() => {
+          elements.shiftTabKeyBtn.classList.remove("keydown")
+        }}>Shift + Tab</button
       >
       /
-      <button bind:this={elements.shiftEnterKeyBtn} class="key"
-        >Shift + Enter</button
+      <button
+        bind:this={elements.shiftEnterKeyBtn}
+        class="key"
+        onclick={() => {
+          focusInputElement({ focusNext: false })
+        }}
+        onmousedown={() => {
+          elements.shiftEnterKeyBtn.classList.add("keydown")
+        }}
+        onmouseup={() => {
+          elements.shiftEnterKeyBtn.classList.remove("keydown")
+        }}>Shift + Enter</button
       >
     </span>
   </header>
