@@ -9,12 +9,14 @@ export async function initializeTabIdxToInfo() {
 
   // reduce to appropriate format
   const reduced = tabsWithoutExtension.reduce(
-    (acc, { id, title, favIconUrl, index }) => {
+    (acc, { id, title, favIconUrl, url, index, status }) => {
       // key have to be index. index is tab's position on current window tabs array
       acc[index] = {
         id,
         title,
         favIconUrl,
+        url,
+        status,
         hasChanged: false,
         contentScriptAvailable: true,
       }

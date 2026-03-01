@@ -1,4 +1,7 @@
 import { apply } from "../application/usecases/apply"
+import { checkContentScriptAvailableAndUpdateAllInfo } from "../application/usecases/checkContentScriptAvailable"
+import { initializeTabIdxToInfo } from "../application/usecases/initializeTabInfos"
+import { reloadAllConnectableTabs } from "../application/usecases/reloadAllConnectableTabs"
 
 // Keydown handler factories
 // get local state/ui update functions as parameter
@@ -9,52 +12,80 @@ export function createNormalKeydownHandler({
   focusNextElement,
   focusInitialElement,
   closeSettingsIfItsVisible,
+  dismissUnavailableCard,
+  handleReload,
 }) {
   if (import.meta.env.MODE === "development")
     console.log("[createNormalKeydownHandler]")
+
   // keydown
-  return function handleKeydown(e) {
+  return async function handleKeydown(e) {
     console.log("[handleKeydown]")
     /* Set keydownElem based on e.key */
     elements.keydownElem = null
-    switch (e.key) {
-      case "Tab": {
-        e.preventDefault()
-        if (e.shiftKey) {
-          elements.keydownElem = elements.shiftTabKeyBtn
-          focusPreviousElement()
-        } else {
-          elements.keydownElem = elements.tabKeyBtn
-          focusNextElement()
-        }
-        break
-      }
-      case "Enter": {
-        e.preventDefault()
-        if (e.ctrlKey) {
-          apply()
-        } else if (e.shiftKey) {
-          elements.keydownElem = elements.shiftEnterKeyBtn
-          focusPreviousElement()
-        } else {
-          elements.keydownElem = elements.enterKeyBtn
-          focusNextElement()
-        }
-        break
-      }
-      case "Escape": {
-        e.preventDefault()
-        if (closeSettingsIfItsVisible()) break
 
-        elements.keydownElem = elements.escKeyBtn
-        focusInitialElement()
+    let handledByCode = true
+    switch (e.code) {
+      case "KeyW": {
+        if (e.shiftKey) {
+          console.log("[KeyW, shiftKey]")
+          dismissUnavailableCard(e)
+        }
+        break
+      }
+      case "KeyR": {
+        if (e.shiftKey) {
+          e.preventDefault()
+          console.log("[KeyR, shiftKey]")
+          await handleReload(e)
+        }
         break
       }
       default: {
-        if (e.ctrlKey) {
-          elements.keydownElem = elements.ctrlEnterBtn
-        } else {
-          elements.keydownElem = null
+        handledByCode = false
+      }
+    }
+
+    if (!handledByCode) {
+      switch (e.key) {
+        case "Tab": {
+          e.preventDefault()
+          if (e.shiftKey) {
+            elements.keydownElem = elements.shiftTabKeyBtn
+            focusPreviousElement()
+          } else {
+            elements.keydownElem = elements.tabKeyBtn
+            focusNextElement()
+          }
+          break
+        }
+        case "Enter": {
+          e.preventDefault()
+          if (e.ctrlKey) {
+            apply()
+          } else if (e.shiftKey) {
+            elements.keydownElem = elements.shiftEnterKeyBtn
+            focusPreviousElement()
+          } else {
+            elements.keydownElem = elements.enterKeyBtn
+            focusNextElement()
+          }
+          break
+        }
+        case "Escape": {
+          e.preventDefault()
+          if (closeSettingsIfItsVisible()) break
+
+          elements.keydownElem = elements.escKeyBtn
+          focusInitialElement()
+          break
+        }
+        default: {
+          if (e.ctrlKey) {
+            elements.keydownElem = elements.ctrlEnterBtn
+          } else {
+            elements.keydownElem = null
+          }
         }
       }
     }
@@ -91,7 +122,7 @@ export function createShortcut(e) {
 // Keyup
 
 export function removeAllKeydownClass() {
-  document.querySelectorAll("button.keydown").forEach((elem) => {
+  document.querySelectorAll(".keydown").forEach((elem) => {
     elem.classList.remove("keydown")
   })
 }

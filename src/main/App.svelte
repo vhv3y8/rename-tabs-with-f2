@@ -9,7 +9,11 @@ import {
   settings,
 } from "./lib/ui/states/settings.svelte"
 import {
+  filterUrlsBlockedByBrowser,
+  getAllTabStatus,
+  // getContentScriptUnavailableTabs,
   getLastFocusTabIdWritable,
+  getRefreshAndBrowserUnavailableTabs,
   getTabInfoById,
   tabIdxToInfo,
 } from "./lib/application/tabInfo.svelte"
@@ -28,6 +32,8 @@ import {
   initializeLastFocusTabId,
   initializeTabIdxToInfo,
 } from "./lib/application/usecases/initializeTabInfos"
+import Key from "./components/common/Key.svelte"
+import { reloadAllConnectableTabs } from "./lib/application/usecases/reloadAllConnectableTabs"
 
 function initializeViewFromSettings() {
   if (import.meta.env.MODE === "development")
@@ -52,13 +58,19 @@ let elements = {
   keydownElem: null,
 }
 
+$effect(() => {
+  console.log("[elements]", elements)
+})
+
 function setInitialFocusElemAndFocus() {
   if (import.meta.env.MODE === "development")
     console.log("[setInitialFocusElemAndFocus]")
 
   const lastFocusTabId = getLastFocusTabIdWritable()
   let initialTabId =
-    lastFocusTabId !== null
+    lastFocusTabId !== null &&
+    Object.values(tabIdxToInfo).filter(({ id }) => id === lastFocusTabId)[0]
+      .contentScriptAvailable !== false
       ? lastFocusTabId
       : Object.values(tabIdxToInfo).filter(
           (tabInfo) => tabInfo.contentScriptAvailable,
@@ -138,6 +150,98 @@ $effect(() => {
   if (!showSettings) modes.listenShortcutUpdate = false
 })
 
+// content script unavailable tabs
+let contentScriptUnavailableTabs = $derived(
+  Object.values(tabIdxToInfo)
+    .filter(({ contentScriptAvailable }) => !contentScriptAvailable)
+    .map(({ id, title, url, status }) => ({ id, title, url, status })),
+)
+
+let { browserUnavailableTabs, refreshUnavailableTabs } = $derived.by(() => {
+  const browserUnavailableTabs = []
+  const refreshUnavailableTabs = []
+
+  for (const info of contentScriptUnavailableTabs) {
+    if (filterUrlsBlockedByBrowser(info.url)) {
+      browserUnavailableTabs.push(info)
+    } else {
+      refreshUnavailableTabs.push(info)
+    }
+  }
+
+  if (import.meta.env.MODE === "development") {
+    console.log("{ browserUnavailableTabs, refreshUnavailableTabs }", {
+      browserUnavailableTabs,
+      refreshUnavailableTabs,
+    })
+  }
+
+  return {
+    browserUnavailableTabs,
+    refreshUnavailableTabs,
+  }
+})
+
+// tab status
+let allTabStatus = $derived(
+  Object.values(refreshUnavailableTabs).map(({ id, status }) => ({
+    id,
+    status,
+  })),
+)
+let everyTabStatusIsComplete = $derived(
+  allTabStatus.every(({ status }) => status === "complete"),
+)
+
+chrome.tabs.onUpdated.addListener((id, { status }, { index }) => {
+  console.log("[tabs.onUpdated]", { id, status })
+  tabIdxToInfo[index]["status"] = status
+})
+
+function waitUntil(getter, targetValue) {
+  return new Promise((resolve) => {
+    $effect.root(() => {
+      $effect(() => {
+        if (getter() === targetValue) {
+          resolve(getter())
+        }
+      })
+    })
+  })
+}
+
+async function handleReload() {
+  await reloadAllConnectableTabs()
+
+  const tabIds = refreshUnavailableTabs.map(({ id }) => id)
+  for (const [index, { contentScriptAvailable }] of Object.entries(
+    tabIdxToInfo,
+  )) {
+    if (!contentScriptAvailable) {
+      tabIdxToInfo[index]["status"] = "reloading"
+    }
+  }
+
+  if (import.meta.env.MODE === "development")
+    console.log("[everyTabStatusIsComplete: start]")
+
+  await waitUntil(() => everyTabStatusIsComplete, true)
+
+  if (import.meta.env.MODE === "development")
+    console.log("[everyTabStatusIsComplete: done]")
+
+  await initializeTabIdxToInfo()
+  await checkContentScriptAvailableAndUpdateAllInfo()
+
+  // ui
+  // showUnavailableCard = true
+  initializeFocusableInputElementsThatsAvailable()
+  setInitialFocusElemAndFocus()
+}
+
+// unavailable card state
+let showUnavailableCard = $state(true)
+
 // lifecycle
 onMount(async () => {
   if (import.meta.env.MODE === "development") console.log("[onMount]")
@@ -160,6 +264,14 @@ onMount(async () => {
   setInitialFocusElemAndFocus()
   initializeFocusableInputElementsThatsAvailable()
   initializeIndexes()
+
+  // switch binded components into html element with <Key> component function
+  elements.tabKeyBtn = elements.tabKeyBtn.getElem()
+  elements.ctrlEnterBtn = elements.ctrlEnterBtn.getElem()
+  elements.shiftTabKeyBtn = elements.shiftTabKeyBtn.getElem()
+  elements.enterKeyBtn = elements.enterKeyBtn.getElem()
+  elements.shiftEnterKeyBtn = elements.shiftEnterKeyBtn.getElem()
+  elements.escKeyBtn = elements.escKeyBtn.getElem()
 })
 
 onDestroy(() => {
@@ -183,6 +295,9 @@ onDestroy(() => {
         },
         focusInitialElement: () => {
           elements.initialFocusTabItem.click()
+          elements.initialFocusTabItem.scrollIntoView({
+            block: "center",
+          })
           currentFocusInputIdx = initialFocusInputIdx
         },
         closeSettingsIfItsVisible: () => {
@@ -191,6 +306,18 @@ onDestroy(() => {
             return true
           }
           return false
+        },
+        dismissUnavailableCard: (e) => {
+          if (showUnavailableCard) {
+            e.preventDefault()
+            showUnavailableCard = false
+          }
+        },
+        handleReload: (e) => {
+          if (showUnavailableCard) {
+            e.preventDefault()
+            handleReload()
+          }
         },
       })(e)
     }
@@ -205,11 +332,15 @@ onDestroy(() => {
   <header>
     <span
       >{chrome.i18n.getMessage("header_focus_initial")} :
-      <button
+      <Key
         bind:this={elements.escKeyBtn}
-        class="key"
+        cssPressable={false}
+        padding={"0.3em 0.5em"}
         onclick={() => {
           elements.initialFocusTabItem.click()
+          elements.initialFocusTabItem.scrollIntoView({
+            block: "center",
+          })
           currentFocusInputIdx = initialFocusInputIdx
         }}
         onmousedown={() => {
@@ -217,14 +348,15 @@ onDestroy(() => {
         }}
         onmouseup={() => {
           elements.escKeyBtn.classList.remove("keydown")
-        }}>ESC</button
+        }}>ESC</Key
       >
     </span>
     <span
       >{chrome.i18n.getMessage("header_next")} :
-      <button
+      <Key
         bind:this={elements.tabKeyBtn}
-        class="key"
+        cssPressable={false}
+        padding={"0.3em 0.5em"}
         onclick={() => {
           focusInputElement({ focusNext: true })
         }}
@@ -233,12 +365,13 @@ onDestroy(() => {
         }}
         onmouseup={() => {
           elements.tabKeyBtn.classList.remove("keydown")
-        }}>Tab</button
+        }}>Tab</Key
       >
       /
-      <button
+      <Key
         bind:this={elements.enterKeyBtn}
-        class="key"
+        cssPressable={false}
+        padding={"0.3em 0.5em"}
         onclick={() => {
           focusInputElement({ focusNext: true })
         }}
@@ -247,14 +380,15 @@ onDestroy(() => {
         }}
         onmouseup={() => {
           elements.enterKeyBtn.classList.remove("keydown")
-        }}>Enter</button
+        }}>Enter</Key
       ></span
     >
     <span>
       <span>{chrome.i18n.getMessage("header_previous")} : </span>
-      <button
+      <Key
         bind:this={elements.shiftTabKeyBtn}
-        class="key"
+        cssPressable={false}
+        padding={"0.3em 0.5em"}
         onclick={() => {
           focusInputElement({ focusNext: false })
         }}
@@ -263,12 +397,13 @@ onDestroy(() => {
         }}
         onmouseup={() => {
           elements.shiftTabKeyBtn.classList.remove("keydown")
-        }}>Shift + Tab</button
+        }}>Shift + Tab</Key
       >
       /
-      <button
+      <Key
         bind:this={elements.shiftEnterKeyBtn}
-        class="key"
+        cssPressable={false}
+        padding={"0.3em 0.5em"}
         onclick={() => {
           focusInputElement({ focusNext: false })
         }}
@@ -277,10 +412,97 @@ onDestroy(() => {
         }}
         onmouseup={() => {
           elements.shiftEnterKeyBtn.classList.remove("keydown")
-        }}>Shift + Enter</button
+        }}>Shift + Enter</Key
       >
     </span>
   </header>
+
+  <!-- <pre>
+    {JSON.stringify(
+      { browserUnavailableTabs, refreshUnavailableTabs },
+      null,
+      2,
+    )}
+  </pre>
+
+  <pre>
+    {JSON.stringify(allTabStatus, null, 2)}
+  </pre>
+
+  <pre>
+    {JSON.stringify(everyTabStatusIsComplete, null, 2)}
+  </pre> -->
+
+  <!-- Blurred Tabs Description -->
+  <div id="blurDescriptionContainer">
+    {#if contentScriptUnavailableTabs.length && showUnavailableCard}
+      <div id="blurDescription">
+        <div class="header">
+          <span style:font-size="1rem">
+            {chrome.i18n.getMessage("card_msg", [
+              contentScriptUnavailableTabs.length,
+              1 < contentScriptUnavailableTabs.length ? "s are" : " is",
+            ])}
+          </span>
+
+          <div class="close containsKeyBtn">
+            {chrome.i18n.getMessage("card_btn_dismiss")} : <Key
+              themeReversed={true}
+              largeShadow={false}
+              padding={"0.4em"}
+              fontSize={"15px"}
+              onclick={() => {
+                showUnavailableCard = false
+              }}>Shift + W</Key
+            >
+          </div>
+        </div>
+
+        <ul>
+          {#if 0 < refreshUnavailableTabs.length}
+            <li>
+              <p class="description">
+                {chrome.i18n.getMessage("card_connectable", [
+                  refreshUnavailableTabs.length,
+                  1 < refreshUnavailableTabs.length ? "s" : "",
+                ])} :
+              </p>
+
+              <p class="titles">
+                {refreshUnavailableTabs.map(({ title }) => title).join(" , ")}
+              </p>
+            </li>
+
+            <div style:text-align="right">
+              <div class="right containsKeyBtn" style:padding-block="4px 3px">
+                {chrome.i18n.getMessage("card_btn_reload_all")} : <Key
+                  themeReversed={true}
+                  largeShadow={false}
+                  padding={"0.4em"}
+                  fontSize={"15px"}
+                  onclick={handleReload}>Shift + R</Key
+                >
+              </div>
+            </div>
+          {/if}
+
+          {#if 0 < browserUnavailableTabs.length}
+            <li>
+              <p class="description">
+                {chrome.i18n.getMessage("card_blocked", [
+                  browserUnavailableTabs.length,
+                  1 < browserUnavailableTabs.length ? "s" : "",
+                ])} :
+              </p>
+              <p class="titles">
+                {browserUnavailableTabs.map(({ title }) => title).join(" , ")}
+              </p>
+            </li>
+          {/if}
+        </ul>
+      </div>
+    {/if}
+  </div>
 
   <!-- TabItem List -->
   <ul bind:this={elements.ulElem}>
@@ -300,16 +522,15 @@ onDestroy(() => {
   <footer>
     <!-- Settings -->
     <div class="settingsContainer">
-      <button
-        type="button"
-        id="settingsPopoverBtn"
-        class="key pressable"
+      <Key
+        id={"settingsPopoverBtn"}
+        padding={""}
         onclick={() => {
           showSettings = !showSettings
         }}
       >
         {chrome.i18n.getMessage("settings")}
-      </button>
+      </Key>
 
       <!-- Popover -->
       {#if showSettings}
@@ -323,11 +544,11 @@ onDestroy(() => {
 
     <!-- Save & Close -->
     <span>{chrome.i18n.getMessage("footer_save_and_close")} :</span>
-    <button
-      id="ctrlEnterBtn"
-      class="key pressable"
+    <Key
+      id={"ctrlEnterBtn"}
+      padding={""}
       bind:this={elements.ctrlEnterBtn}
-      onclick={apply}>Ctrl + Enter</button
+      onclick={apply}>Ctrl + Enter</Key
     >
   </footer>
 </main>
@@ -362,7 +583,7 @@ header {
 
   width: 100%;
   box-sizing: border-box;
-  margin-bottom: 2rem;
+  /* margin-bottom: 2rem; */
   border-bottom: 2px solid var(--primary-8);
   padding-bottom: 1.25rem;
 
@@ -376,9 +597,89 @@ header {
   row-gap: 0.7em;
 }
 
-header button {
+:global(header button) {
   font-size: 18px;
   padding: 0.3em 0.5em;
+}
+
+/* Blurred Tabs Description */
+div#blurDescriptionContainer {
+  margin-block: 1rem;
+}
+div#blurDescription {
+  /* color: var(--primary-8); */
+  font-family: "Ubuntu";
+
+  font-size: 14px;
+  background: var(--primary-8);
+  color: var(--bg);
+  padding: 0.8em;
+  padding-bottom: 1.3em;
+  border-radius: 4px;
+
+  position: relative;
+  /* margin-inline: 0.7em; */
+  box-shadow: 0 0 2px var(--primary-8);
+}
+div#blurDescription ul {
+  margin-top: 0.5em;
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  /* padding-left: 2rem; */
+  padding-right: 0;
+
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 0;
+
+  /* font-size: 0.9em; */
+}
+div#blurDescription p.description {
+  font-size: 15px;
+  margin-bottom: 0.7em;
+}
+div#blurDescription p.titles {
+  line-height: 1.5;
+  font-size: 0.95em;
+}
+
+/* button.key.reversed {
+  box-shadow: 2px 2px var(--bg);
+  margin-right: 2px;
+  background: var(--primary-8);
+  color: var(--bg);
+  border-color: var(--bg);
+}
+button.key.reversed:active {
+  top: 2px;
+  left: 2px;
+  box-shadow: none;
+} */
+
+div#blurDescription div.header {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1em;
+}
+
+div#blurDescription button.key {
+  font-size: 1em;
+  padding: 0.4em;
+}
+div#blurDescription div.close {
+  /* position: relati;
+  top: 0;
+  right: 0; */
+  /* padding-top: 4px;
+  padding-right: 2px; */
+}
+div#blurDescription div.right {
+  margin-left: auto;
+}
+div.containsKeyBtn {
+  font-size: 15px;
 }
 
 /* Tab List */
@@ -424,7 +725,7 @@ footer {
   font-size: 20px;
 }
 
-footer button {
+footer :global(.keyInner) {
   font-size: 18px;
   padding: 0.6em;
 
@@ -439,8 +740,8 @@ footer button {
   margin-right: auto;
 }
 
-#settingsPopoverBtn {
-  padding: 0.5em 0.4em;
+:global(#settingsPopoverBtn) {
+  /* padding: 0.5em 0.4em; */
   z-index: 100;
 
   &:hover {

@@ -48,5 +48,45 @@
         "content": "$1"
       }
     }
+  },
+
+  "card_msg": {
+    "message": "$TAB$ tab$PLURAL$ not connected.",
+    "placeholders": {
+      "tab": {
+        "content": "$1"
+      },
+      "plural": {
+        "content": "$2"
+      }
+    }
+  },
+  "card_btn_dismiss": {
+    "message": "Dismiss"
+  },
+  "card_btn_reload_all": {
+    "message": "Reload all connectable tabs"
+  },
+  "card_connectable": {
+    "message": "Connectable by reloading tab ($TAB$ tab$PLURAL$)",
+    "placeholders": {
+      "tab": {
+        "content": "$1"
+      },
+      "plural": {
+        "content": "$2"
+      }
+    }
+  },
+  "card_blocked": {
+    "message": "Blocked by browser policy ($TAB$ tab$PLURAL$)",
+    "placeholders": {
+      "tab": {
+        "content": "$1"
+      },
+      "plural": {
+        "content": "$2"
+      }
+    }
   }
 }

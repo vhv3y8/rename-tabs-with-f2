@@ -13,10 +13,7 @@ function applyLocalTitle() {
 
 <!-- HTML -->
 
-<li
-  class:unselectable={!tabInfo.contentScriptAvailable}
-  title={!tabInfo.contentScriptAvailable ? "Cannot connect to this tab." : ""}
->
+<li class:unselectable={!tabInfo.contentScriptAvailable}>
   <label for={`tab-${tabInfo.id}`}>
     <img
       src={tabInfo.favIconUrl || "/globe.svg"}

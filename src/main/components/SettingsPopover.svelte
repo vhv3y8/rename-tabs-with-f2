@@ -7,6 +7,7 @@ import { modes } from "../lib/ui/states/modes.svelte"
 import * as view from "../lib/ui/view"
 import { createListenShortcutKeydownHandler } from "../lib/ui/eventHandlers"
 import { appendToast, messages } from "../lib/ui/states/toasts.svelte"
+import Key from "./common/Key.svelte"
 
 let { onclose } = $props()
 
@@ -66,30 +67,29 @@ function stringifyShortcut(shortcut) {
 <!-- HTML -->
 
 <Popover {onclose} directionDown={false}>
-  <ul>
+  <ul id="settingsPopoverContent">
     <!-- Darkmode -->
     <li>
       <span>{chrome.i18n.getMessage("settings_darkmode")} :</span>
-      <button
-        type="button"
-        class="key pressable"
+      <!-- class="key pressable" -->
+      <Key
         onclick={async () => {
           settings.darkmode = !settings.darkmode
           view.applyDarkModeUI({ darkmode: settings.darkmode })
-        }}>{settings.darkmode}</button
+        }}>{settings.darkmode}</Key
       >
     </li>
 
     <!-- Larger Width -->
     <li>
       <span>{chrome.i18n.getMessage("settings_larger_width")} :</span>
-      <button
-        type="button"
-        class="key pressable"
+      <!-- type="button"
+        class="key pressable" -->
+      <Key
         onclick={async () => {
           settings.largerWidth = !settings.largerWidth
           view.applyLargerWidth({ largerWidth: settings.largerWidth })
-        }}>{settings.largerWidth}</button
+        }}>{settings.largerWidth}</Key
       >
     </li>
 
@@ -98,13 +98,12 @@ function stringifyShortcut(shortcut) {
       <p><span>{chrome.i18n.getMessage("settings_shortcut")} :</span></p>
 
       {#if !modes.listenShortcutUpdate}
-        <button
-          type="button"
-          id="shortcutBtn"
-          class="key pressable"
+        <Key
+          id={"shortcutBtn"}
+          padding={""}
           onclick={() => {
             modes.listenShortcutUpdate = true
-          }}>{globalShortcutText}</button
+          }}>{globalShortcutText}</Key
         >
       {:else}
         <!-- Listening / shortcutText -->
@@ -120,41 +119,38 @@ function stringifyShortcut(shortcut) {
 
         <!-- Reset to F2 -->
         <div class="resetToF2Container">
-          <button
-            type="button"
-            id="resetToF2"
-            class="key pressable"
+          <Key
+            id={"resetToF2"}
+            padding={"0.4em 0.5em"}
             onclick={() => {
               localShortcut = chromeStorage.defaultShortcutF2
               settings.shortcut = localShortcut
               modes.listenShortcutUpdate = false
               pushToast()
-            }}>{chrome.i18n.getMessage("settings_shortcut_reset_to_f2")}</button
+            }}>{chrome.i18n.getMessage("settings_shortcut_reset_to_f2")}</Key
           >
         </div>
 
         <!-- Cancel / OK -->
         <div class="listenCancelOk">
-          <button
-            type="button"
-            id="cancelBtn"
-            class="key pressable"
+          <Key
+            id={"cancelBtn"}
+            padding={"0.4em 0.5em"}
             onclick={() => {
               modes.listenShortcutUpdate = false
               localShortcut = settings.shortcut
-            }}>{chrome.i18n.getMessage("settings_shortcut_cancel")}</button
+            }}>{chrome.i18n.getMessage("settings_shortcut_cancel")}</Key
           >
 
-          <button
-            type="button"
-            id="okBtn"
-            class="key pressable"
+          <Key
+            id={"okBtn"}
+            padding={"0.4em 0.5em"}
             onclick={() => {
               console.log("[localShortcut]", localShortcut)
               settings.shortcut = localShortcut
               modes.listenShortcutUpdate = false
               pushToast()
-            }}>{chrome.i18n.getMessage("settings_shortcut_ok")}</button
+            }}>{chrome.i18n.getMessage("settings_shortcut_ok")}</Key
           >
         </div>
       {/if}
@@ -174,7 +170,7 @@ ul {
 
   display: flex;
   flex-flow: column nowrap;
-  gap: 0.8em;
+  gap: 0.55em;
 }
 
 ul li {
@@ -192,20 +188,26 @@ ul li span {
 ul li.col {
   flex-flow: column nowrap;
   align-items: flex-start;
-  gap: 0.6em;
+  gap: 0.55em;
 }
 
-ul li button {
+:global(ul#settingsPopoverContent li button.key) {
   font-size: 0.9em;
-  padding: 0.4em 0.5em;
 
   &:hover {
     cursor: pointer;
   }
 }
 
-#shortcutBtn {
+:global(button.key.small) {
+  padding: 0.4em 0.5em;
+}
+
+:global(button.key:has(#shortcutBtn)) {
   width: 100%;
+}
+:global(#shortcutBtn) {
+  box-sizing: border-box;
   padding: 0.7em 0.5em;
 }
 
@@ -221,13 +223,13 @@ ul li button {
 
   font-size: 0.9em;
 }
-.listenShortcutText #listening {
+.listenShortcutText :global(#listening) {
   margin-bottom: 0.5em;
   font-size: 0.85em;
   font-family: "Ubuntu";
   color: var(--primary-7);
 }
-.listenShortcutText #shortcutText {
+.listenShortcutText :global(#shortcutText) {
   font-size: 1.2em;
   font-family: "Ubuntu Mono";
 }
@@ -236,9 +238,15 @@ ul li button {
   width: 100%;
   display: flex;
 }
-button#resetToF2 {
+:global(button.key:has(#resetToF2)) {
   width: 100%;
-  font-size: 0.85em;
+  display: flex;
+}
+:global(#resetToF2) {
+  width: 100%;
+  box-sizing: border-box;
+  /* font-size: 0.85em; */
+  font-size: 0.95em;
   padding: 0.4em 0.5em;
 }
 
@@ -247,9 +255,14 @@ div.listenCancelOk {
   display: flex;
   gap: 0.3em;
 
-  button {
+  :global(button) {
     width: 50%;
-    font-size: 0.85em;
+    /* font-size: 0.85em; */
+    font-size: 0.95em;
   }
+}
+:global(#cancelBtn),
+:global(#okBtn) {
+  font-size: 0.95em;
 }
 </style>

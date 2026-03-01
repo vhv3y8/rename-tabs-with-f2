@@ -33,7 +33,7 @@ body {
   background-color: cornflowerblue !important;
 }
 
-button.key {
+/* button.key {
   position: relative;
   box-shadow: 4px 4px var(--primary-8);
   margin-right: 4px;
@@ -52,4 +52,4 @@ button.pressable:active {
   top: 4px;
   left: 4px;
   box-shadow: none;
-}
+} */
