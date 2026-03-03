@@ -63,9 +63,6 @@ $effect(() => {
 })
 
 function setInitialFocusElemAndFocus() {
-  if (import.meta.env.MODE === "development")
-    console.log("[setInitialFocusElemAndFocus]")
-
   const lastFocusTabId = getLastFocusTabIdWritable()
   let initialTabId =
     lastFocusTabId !== null &&
@@ -76,28 +73,46 @@ function setInitialFocusElemAndFocus() {
           (tabInfo) => tabInfo.contentScriptAvailable,
         )[0].id
 
+  if (import.meta.env.MODE === "development")
+    console.log("[setInitialFocusElemAndFocus] lastFocusTabId", lastFocusTabId)
+
   elements.initialFocusTabItem = elements.ulElem.querySelector(
     `input#tab-${initialTabId}`,
   )
 
   if (import.meta.env.MODE === "development")
     console.log(
-      "[lastFocusTabId, tabIdxToInfo, initialTabId]",
+      "[lastFocusTabId, elements.initialFocusTabItem, initialTabId]",
       getLastFocusTabIdWritable(),
-      tabIdxToInfo,
+      elements.initialFocusTabItem,
       initialTabId,
     )
 
+  // elements.initialFocusTabItem.click()
+  // elements.initialFocusTabItem.scrollIntoView({ block: "center" })
+  focusInitialFocusTabItem()
+}
+
+function focusInitialFocusTabItem() {
   elements.initialFocusTabItem.click()
   elements.initialFocusTabItem.scrollIntoView({ block: "center" })
+  currentFocusInputIdx = initialFocusInputIdx
+
+  if (import.meta.env.MODE === "development") {
+    console.log(
+      "[focusInitialFocusTabItem] initialFocusInputIdx elements.initialFocusTabItem",
+      initialFocusInputIdx,
+      elements.initialFocusTabItem,
+    )
+  }
 }
 
 // focusable input elements state
 let focusableInputElements = $state(null)
 
-function initializeFocusableInputElementsThatsAvailable() {
+function updateFocusableInputElements() {
   if (import.meta.env.MODE === "development")
-    console.log("[initializeFocusableInputElementsThatsAvailable]")
+    console.log("[updateFocusableInputElements]")
 
   focusableInputElements = Array.from(
     elements.ulElem.querySelectorAll("input"),
@@ -105,13 +120,27 @@ function initializeFocusableInputElementsThatsAvailable() {
     let tabInfo = getTabInfoById(id.slice(4))
     return tabInfo && tabInfo.contentScriptAvailable
   })
+
   if (import.meta.env.MODE === "development")
-    console.log("[focusableInputElements]", focusableInputElements)
+    console.log(
+      "[focusableInputElements]",
+      focusableInputElements,
+      currentFocusInputIdx,
+      focusableInputElements[currentFocusInputIdx],
+    )
 }
 
 // focus indexes state
 let currentFocusInputIdx = $state(null)
 let initialFocusInputIdx = $state(null)
+if (import.meta.env.MODE === "development") {
+  $effect(() => {
+    console.log("[currentFocusInputIdx]", currentFocusInputIdx)
+  })
+  $effect(() => {
+    console.log("[initialFocusInputIdx]", initialFocusInputIdx)
+  })
+}
 
 function initializeIndexes() {
   if (import.meta.env.MODE === "development") console.log("[initializeIndexes]")
@@ -136,6 +165,16 @@ function focusInputElement({ focusNext }) {
       currentFocusInputIdx === 0 ? lastIdx : currentFocusInputIdx - 1
   }
 
+  if (import.meta.env.MODE === "development") {
+    console.log(
+      `[focusInputElement: ${focusNext ? "next" : "previous"}] [focusableInputElements, currentFocusInputIdx, nextFocusInputIdx, focusableInputElements[nextFocusInputIdx]]`,
+      focusableInputElements,
+      currentFocusInputIdx,
+      nextFocusInputIdx,
+      focusableInputElements[nextFocusInputIdx],
+    )
+  }
+
   focusableInputElements[nextFocusInputIdx].click()
   focusableInputElements[nextFocusInputIdx].scrollIntoView({
     block: "center",
@@ -151,11 +190,34 @@ $effect(() => {
 })
 
 // content script unavailable tabs
-let contentScriptUnavailableTabs = $derived(
-  Object.values(tabIdxToInfo)
+let contentScriptUnavailableTabs = $derived.by(() => {
+  const tabs = Object.values(tabIdxToInfo)
     .filter(({ contentScriptAvailable }) => !contentScriptAvailable)
-    .map(({ id, title, url, status }) => ({ id, title, url, status })),
-)
+    .map(({ id, title, url, status }) => ({ id, title, url, status }))
+
+  if (import.meta.env.MODE === "development") {
+    console.log(
+      "[derived.by contentScriptUnavailableTabs] [tabIdxToInfo !contentScriptAvailable]",
+      Object.values(tabIdxToInfo).map(
+        ({ contentScriptAvailable }) => contentScriptAvailable,
+      ),
+      Object.values(tabIdxToInfo).filter(
+        ({ contentScriptAvailable }) => !contentScriptAvailable,
+      ),
+    )
+  }
+
+  return tabs
+})
+if (import.meta.env.MODE === "development") {
+  $effect(() => {
+    console.log(
+      "[contentScriptUnavailableTabs update]",
+      Object.values(tabIdxToInfo).length,
+      contentScriptUnavailableTabs,
+    )
+  })
+}
 
 let { browserUnavailableTabs, refreshUnavailableTabs } = $derived.by(() => {
   const browserUnavailableTabs = []
@@ -193,6 +255,8 @@ let everyTabStatusIsComplete = $derived(
   allTabStatus.every(({ status }) => status === "complete"),
 )
 
+let waitingReloadUI = $state(false)
+
 chrome.tabs.onUpdated.addListener((id, { status }, { index }) => {
   console.log("[tabs.onUpdated]", { id, status })
   tabIdxToInfo[index]["status"] = status
@@ -211,9 +275,20 @@ function waitUntil(getter, targetValue) {
 }
 
 async function handleReload() {
+  if (import.meta.env.MODE === "development")
+    console.log(
+      "[handleReload: refreshUnavailableTabs]",
+      refreshUnavailableTabs,
+    )
+
+  // show reloading ui
+  waitingReloadUI = true
+
+  // this just triggers reload and doesn't wait for it to end.
+  // its handled by allTabStatus, everyTabStatusIsComplete state and chrome.tabs.onUpdated.addListener above
   await reloadAllConnectableTabs()
 
-  const tabIds = refreshUnavailableTabs.map(({ id }) => id)
+  // initialize by changing global state field
   for (const [index, { contentScriptAvailable }] of Object.entries(
     tabIdxToInfo,
   )) {
@@ -225,18 +300,34 @@ async function handleReload() {
   if (import.meta.env.MODE === "development")
     console.log("[everyTabStatusIsComplete: start]")
 
-  await waitUntil(() => everyTabStatusIsComplete, true)
+  await waitForReloadAndUpdateUI({})
+  // retry waiting for 1 time and finish
+  if (!everyTabStatusIsComplete) {
+    await waitForReloadAndUpdateUI({})
+  }
+  waitingReloadUI = false
+}
+
+async function waitForReloadAndUpdateUI({ delay = 2000 }) {
+  // wait for reload to finish with time limit
+  await Promise.race([
+    waitUntil(() => everyTabStatusIsComplete, true),
+    new Promise((res) => setTimeout(res, delay)),
+  ])
 
   if (import.meta.env.MODE === "development")
-    console.log("[everyTabStatusIsComplete: done]")
+    console.log("[everyTabStatusIsComplete: done or time limit]")
 
+  if (everyTabStatusIsComplete) waitingReloadUI = false
+
+  // update global state
   await initializeTabIdxToInfo()
   await checkContentScriptAvailableAndUpdateAllInfo()
 
   // ui
-  // showUnavailableCard = true
-  initializeFocusableInputElementsThatsAvailable()
-  setInitialFocusElemAndFocus()
+  updateFocusableInputElements()
+  initializeIndexes()
+  focusInitialFocusTabItem()
 }
 
 // unavailable card state
@@ -262,7 +353,7 @@ onMount(async () => {
 
   // initialize view stuff
   setInitialFocusElemAndFocus()
-  initializeFocusableInputElementsThatsAvailable()
+  updateFocusableInputElements()
   initializeIndexes()
 
   // switch binded components into html element with <Key> component function
@@ -293,13 +384,7 @@ onDestroy(() => {
         focusNextElement: () => {
           focusInputElement({ focusNext: true })
         },
-        focusInitialElement: () => {
-          elements.initialFocusTabItem.click()
-          elements.initialFocusTabItem.scrollIntoView({
-            block: "center",
-          })
-          currentFocusInputIdx = initialFocusInputIdx
-        },
+        focusInitialElement: focusInitialFocusTabItem,
         closeSettingsIfItsVisible: () => {
           if (showSettings) {
             showSettings = false
@@ -336,13 +421,7 @@ onDestroy(() => {
         bind:this={elements.escKeyBtn}
         cssPressable={false}
         padding={"0.3em 0.5em"}
-        onclick={() => {
-          elements.initialFocusTabItem.click()
-          elements.initialFocusTabItem.scrollIntoView({
-            block: "center",
-          })
-          currentFocusInputIdx = initialFocusInputIdx
-        }}
+        onclick={focusInitialFocusTabItem}
         onmousedown={() => {
           elements.escKeyBtn.classList.add("keydown")
         }}
@@ -475,13 +554,23 @@ onDestroy(() => {
 
             <div style:text-align="right">
               <div class="right containsKeyBtn" style:padding-block="4px 3px">
-                {chrome.i18n.getMessage("card_btn_reload_all")} : <Key
-                  themeReversed={true}
-                  largeShadow={false}
-                  padding={"0.4em"}
-                  fontSize={"15px"}
-                  onclick={handleReload}>Shift + R</Key
-                >
+                {#if !waitingReloadUI}
+                  {chrome.i18n.getMessage("card_btn_reload_all")} : <Key
+                    themeReversed={true}
+                    largeShadow={false}
+                    padding={"0.4em"}
+                    fontSize={"15px"}
+                    onclick={handleReload}>Shift + R</Key
+                  >
+                {:else}
+                  <Key
+                    themeReversed={true}
+                    padding={"0.4em"}
+                    fontSize={"15px"}
+                    noShadow={true}
+                    >{chrome.i18n.getMessage("card_reloading")}</Key
+                  >
+                {/if}
               </div>
             </div>
           {/if}

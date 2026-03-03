@@ -7,6 +7,7 @@ let {
   themeReversed = false,
   padding = "0.5em",
   fontSize = "",
+  noShadow = false,
   children,
   id,
   onclick = () => {},
@@ -18,9 +19,15 @@ let elem = $state(null)
 const classes = ["key"]
 
 onMount(() => {
-  // padding
+  // css from props
   elem.style.padding = padding
   if (fontSize !== "") elem.style.fontSize = fontSize
+  if (noShadow) {
+    elem.style.boxShadow = "none"
+    elem.style.margin = "0"
+    elem.parentElement.style.pointerEvents = "none"
+  }
+
   // classes
   if (cssPressable) classes.push("pressable")
   if (largeShadow) classes.push("large")

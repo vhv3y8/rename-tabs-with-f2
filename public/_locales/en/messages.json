@@ -67,6 +67,9 @@
   "card_btn_reload_all": {
     "message": "Reload all connectable tabs"
   },
+  "card_reloading": {
+    "message": "Reloading..."
+  },
   "card_connectable": {
     "message": "Connectable by reloading tab ($TAB$ tab$PLURAL$)",
     "placeholders": {

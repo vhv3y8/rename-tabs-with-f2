@@ -8,11 +8,11 @@
   - 로직 작성 v
   - beforeunload들이 있을 때 처리 v
   - 페이지 새로고침 없이 연결 v
-  - 상태 업데이트 이후 focus elements
-  - 만약에 every가 true 안돼도 제대로 돌아가게
-  - 완료 후 탭/엔터 누르면 두칸 이동
+  - 만약에 every가 true 안돼도 제대로 돌아가게 v?
+  - 상태 업데이트 이후 focus elements : idx들 업데이트
+  - 완료 후 탭/엔터 누르면 두칸 이동 v
 - 클릭으로 열거나 했으면 index 첫번째 탭으로. v
-- 탭그룹일 때 연결 안되는 문제?
+- 탭그룹일 때 연결 안되는 문제? : reproduce x
 - 한국어 v
 - hasChanged 아이콘 border bottom
 - Reset : Ctrl + R (F5) x?

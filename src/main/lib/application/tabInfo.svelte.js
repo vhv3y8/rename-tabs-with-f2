@@ -4,12 +4,19 @@ import { writable } from "svelte/store"
 export let tabIdxToInfo = $state({})
 
 export function resetTabIdxToInfo(data) {
-  // empty
-  Object.keys(tabIdxToInfo).forEach((k) => delete tabIdxToInfo[k])
+  const previous = Object.keys(tabIdxToInfo)
+  const dataEntries = Object.entries(data)
+
   // set data
-  for (const [idx, info] of Object.entries(data)) {
-    tabIdxToInfo[idx] = info
+  // for (const [idx, info] of dataEntries) {
+  //   tabIdxToInfo[idx] = info
+  // }
+  Object.assign(tabIdxToInfo, data)
+
+  for (let i = previous.length; i < data.length; i++) {
+    delete tabIdxToInfo[i]
   }
+  // previous.forEach((k) => delete tabIdxToInfo[k])
 }
 
 export function getTabInfoById(tabId) {

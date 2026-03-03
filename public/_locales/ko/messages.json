@@ -67,6 +67,9 @@
   "card_btn_reload_all": {
     "message": "연결 가능한 탭들 모두 새로고침"
   },
+  "card_reloading": {
+    "message": "새로고침 하는 중..."
+  },
   "card_connectable": {
     "message": "탭 새로고침으로 연결 가능 (탭 $TAB$개)",
     "placeholders": {
