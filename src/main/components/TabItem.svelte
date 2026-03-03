@@ -1,7 +1,9 @@
 <script>
-let { tabInfo, setCurrentFocusInputIdx } = $props()
+let { tabInfo } = $props()
+// setCurrentFocusInputIdx
 
 let localTitle = $state(tabInfo.title)
+let elem = null
 
 function applyLocalTitle() {
   if (!tabInfo.hasChanged) {
@@ -9,27 +11,47 @@ function applyLocalTitle() {
     tabInfo.hasChanged = true
   }
 }
+
+export function focusTabInput() {
+  elem.click()
+  elem.scrollIntoView({ block: "center" })
+}
+
+export function isContentScriptAvailable() {
+  return tabInfo.contentScriptAvailable
+}
+
+export function tabId() {
+  return tabInfo.id
+}
+
+// debug
+export function getTabInfo() {
+  return tabInfo
+}
 </script>
 
 <!-- HTML -->
 
 <li class:unselectable={!tabInfo.contentScriptAvailable}>
-  <label for={`tab-${tabInfo.id}`}>
+  <!-- for={`tab-${tabInfo.id}`} -->
+  <label>
     <img
       src={tabInfo.favIconUrl || "/globe.svg"}
       alt=""
       width="24"
       height="24"
     />
+    <!-- id={`tab-${tabInfo.id}`} -->
     <input
       type="text"
       name=""
-      id={`tab-${tabInfo.id}`}
+      bind:this={elem}
       bind:value={localTitle}
       spellcheck="false"
       onclick={(e) => {
         e.target.select()
-        setCurrentFocusInputIdx()
+        // setCurrentFocusInputIdx()
       }}
       onchange={applyLocalTitle}
     />

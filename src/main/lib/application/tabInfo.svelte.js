@@ -30,48 +30,60 @@ export function getTabInfoById(tabId) {
 let contentScriptUnavailableTabs = $derived(
   Object.values(tabIdxToInfo)
     .filter(({ contentScriptAvailable }) => !contentScriptAvailable)
-    .map(({ id, title, url }) => ({ id, title, url })),
+    .map(({ id, title, url, index }) => ({ id, title, url, index })),
 )
 
-// export function getContentScriptUnavailableTabs() {
-//   return contentScriptUnavailableTabs
+export function getContentScriptUnavailableTabs() {
+  return contentScriptUnavailableTabs
+}
+
+if (import.meta.env.MODE === "development") {
+  $effect.root(() => {
+    $effect(() => {
+      console.log(
+        "[contentScriptUnavailableTabs update]",
+        Object.values(tabIdxToInfo).length,
+        contentScriptUnavailableTabs,
+      )
+    })
+  })
+}
+
+// export function getRefreshAndBrowserUnavailableTabs() {
+//   const browserUnavailableTabs = []
+//   const refreshUnavailableTabs = []
+
+//   for (const info of contentScriptUnavailableTabs) {
+//     if (filterUrlsBlockedByBrowser(info.url)) {
+//       browserUnavailableTabs.push(info)
+//     } else {
+//       refreshUnavailableTabs.push(info)
+//     }
+//   }
+
+//   if (import.meta.env.MODE === "development") {
+//     console.log("{ browserUnavailableTabs, refreshUnavailableTabs }", {
+//       browserUnavailableTabs,
+//       refreshUnavailableTabs,
+//     })
+//   }
+
+//   return {
+//     browserUnavailableTabs,
+//     refreshUnavailableTabs,
+//   }
 // }
 
-export function getRefreshAndBrowserUnavailableTabs() {
-  const browserUnavailableTabs = []
-  const refreshUnavailableTabs = []
+// const browserBlockedRegexes = [
+//   /chrome:\/\/.*/i,
+//   /chrome-extension:\/\/.*/i,
+//   /https:\/\/chrome.google.com\/webstore\/.*/i,
+//   /https:\/\/chromewebstore.google.com\/.*/i,
+// ]
 
-  for (const info of contentScriptUnavailableTabs) {
-    if (filterUrlsBlockedByBrowser(info.url)) {
-      browserUnavailableTabs.push(info)
-    } else {
-      refreshUnavailableTabs.push(info)
-    }
-  }
-
-  if (import.meta.env.MODE === "development") {
-    console.log("{ browserUnavailableTabs, refreshUnavailableTabs }", {
-      browserUnavailableTabs,
-      refreshUnavailableTabs,
-    })
-  }
-
-  return {
-    browserUnavailableTabs,
-    refreshUnavailableTabs,
-  }
-}
-
-const browserBlockedRegexes = [
-  /chrome:\/\/.*/i,
-  /chrome-extension:\/\/.*/i,
-  /https:\/\/chrome.google.com\/webstore\/.*/i,
-  /https:\/\/chromewebstore.google.com\/.*/i,
-]
-
-export function filterUrlsBlockedByBrowser(url) {
-  return browserBlockedRegexes.some((filter) => filter.test(url))
-}
+// export function filterUrlsBlockedByBrowser(url) {
+//   return browserBlockedRegexes.some((filter) => filter.test(url))
+// }
 
 // Reloading statuses
 // let allTabStatus = $derived(
@@ -95,14 +107,24 @@ export function filterUrlsBlockedByBrowser(url) {
 
 // Last focus tab id
 // reassignment is not available with runes state
-let lastFocusTabId = writable(-1)
+// let lastFocusTabId = writable(-1)
+let lastFocusTabId = $state(-1)
 
-export function getLastFocusTabIdWritable() {
-  let val
-  lastFocusTabId.subscribe((v) => (val = v))()
-  return val
+export function getLastFocusTabId() {
+  return lastFocusTabId
 }
 
-export function setLastFocusTabIdWritable(id) {
-  lastFocusTabId.set(id)
+export function setLastFocusTabId(id) {
+  lastFocusTabId = id
 }
+
+//
+// export function getLastFocusTabIdWritable() {
+//   let val
+//   lastFocusTabId.subscribe((v) => (val = v))()
+//   return val
+// }
+
+// export function setLastFocusTabIdWritable(id) {
+//   lastFocusTabId.set(id)
+// }

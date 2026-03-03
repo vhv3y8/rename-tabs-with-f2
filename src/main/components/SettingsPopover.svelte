@@ -1,17 +1,29 @@
 <script>
 import { onMount } from "svelte"
-import Popover from "./common/Popover.svelte"
-import * as chromeStorage from "../../lib/chrome/storage"
-import { settings } from "../lib/ui/states/settings.svelte"
-import { modes } from "../lib/ui/states/modes.svelte"
-import * as view from "../lib/ui/view"
-import { createListenShortcutKeydownHandler } from "../lib/ui/eventHandlers"
-import { appendToast, messages } from "../lib/ui/states/toasts.svelte"
+
 import Key from "./common/Key.svelte"
+import Popover from "./common/Popover.svelte"
+
+import * as chromeStorage from "../../lib/chrome/storage"
+
+import {
+  endShortcutListen,
+  getGlobalShortcutText,
+  setShortcutListeningMode,
+  settings,
+  settingsState,
+  startShortcutListen,
+} from "../lib/ui/states/settings.svelte"
+// import { modes } from "../lib/ui/states/modes.svelte"
+import * as view from "../lib/ui/view"
+// import { createListenShortcutKeydownHandler } from "../lib/ui/eventHandlers"
+import { appendToast, messages } from "../lib/ui/states/toasts.svelte"
+import { createListenShortcutKeydownHandler } from "../lib/ui/keyboard"
+import { stringifyShortcut } from "../lib/ui/shortcut"
 
 let { onclose } = $props()
 
-let globalShortcutText = $derived(stringifyShortcut(settings.shortcut))
+// let globalShortcutText = $derived(stringifyShortcut(settings.shortcut))
 
 let localShortcut = $state(settings.shortcut)
 let localShortcutText = $derived(stringifyShortcut(localShortcut))
@@ -21,30 +33,30 @@ function pushToast() {
 }
 
 // Utils
-const isMac = navigator.platform?.startsWith("Mac") ?? false
-const metaKeyText = isMac ? "Cmd" : "Meta"
-function isAlphabet(key) {
-  return /^[a-zA-Z]$/.test(key)
-}
-function stringifyShortcut(shortcut) {
-  let stack = []
-  if (shortcut.ctrlKey) stack.push("Ctrl")
-  if (shortcut.altKey) stack.push("Alt")
-  if (shortcut.metaKey) stack.push(metaKeyText)
-  if (shortcut.shiftKey) stack.push("Shift")
+// const isMac = navigator.platform?.startsWith("Mac") ?? false
+// const metaKeyText = isMac ? "Cmd" : "Meta"
+// function isAlphabet(key) {
+//   return /^[a-zA-Z]$/.test(key)
+// }
+// function stringifyShortcut(shortcut) {
+//   let stack = []
+//   if (shortcut.ctrlKey) stack.push("Ctrl")
+//   if (shortcut.altKey) stack.push("Alt")
+//   if (shortcut.metaKey) stack.push(metaKeyText)
+//   if (shortcut.shiftKey) stack.push("Shift")
 
-  let key = shortcut.key
-  if (key === " ") key = "Enter"
-  else if (isAlphabet(key)) key = key.toUpperCase()
-  stack.push(key)
+//   let key = shortcut.key
+//   if (key === " ") key = "Enter"
+//   else if (isAlphabet(key)) key = key.toUpperCase()
+//   stack.push(key)
 
-  return stack.join(" + ")
-}
+//   return stack.join(" + ")
+// }
 </script>
 
 <!-- Event Handlers -->
 
-<svelte:document
+<!-- <svelte:document
   onkeydown={(e) => {
     if (modes.listenShortcutUpdate) {
       createListenShortcutKeydownHandler({
@@ -56,6 +68,28 @@ function stringifyShortcut(shortcut) {
             shortcutFromEvent.key === "Shift"
           )
             return
+
+          localShortcut = shortcutFromEvent
+        },
+      })(e)
+    }
+  }}
+/> -->
+
+<svelte:document
+  onkeydown={(e) => {
+    if (settingsState.listeningShortcut) {
+      // to put keydown logic at outer module
+      createListenShortcutKeydownHandler({
+        updateShortcutState: (shortcutFromEvent) => {
+          // listen shortcut only filter?
+          // if (
+          //   shortcutFromEvent.key === "Control" ||
+          //   shortcutFromEvent.key === "Alt" ||
+          //   shortcutFromEvent.key === "Meta" ||
+          //   shortcutFromEvent.key === "Shift"
+          // )
+          //   return
 
           localShortcut = shortcutFromEvent
         },
@@ -97,13 +131,13 @@ function stringifyShortcut(shortcut) {
     <li class="col">
       <p><span>{chrome.i18n.getMessage("settings_shortcut")} :</span></p>
 
-      {#if !modes.listenShortcutUpdate}
+      {#if !settingsState.listeningShortcut}
         <Key
           id={"shortcutBtn"}
           padding={""}
           onclick={() => {
-            modes.listenShortcutUpdate = true
-          }}>{globalShortcutText}</Key
+            startShortcutListen()
+          }}>{getGlobalShortcutText()}</Key
         >
       {:else}
         <!-- Listening / shortcutText -->
@@ -125,7 +159,7 @@ function stringifyShortcut(shortcut) {
             onclick={() => {
               localShortcut = chromeStorage.defaultShortcutF2
               settings.shortcut = localShortcut
-              modes.listenShortcutUpdate = false
+              endShortcutListen()
               pushToast()
             }}>{chrome.i18n.getMessage("settings_shortcut_reset_to_f2")}</Key
           >
@@ -137,7 +171,7 @@ function stringifyShortcut(shortcut) {
             id={"cancelBtn"}
             padding={"0.4em 0.5em"}
             onclick={() => {
-              modes.listenShortcutUpdate = false
+              endShortcutListen()
               localShortcut = settings.shortcut
             }}>{chrome.i18n.getMessage("settings_shortcut_cancel")}</Key
           >
@@ -148,7 +182,7 @@ function stringifyShortcut(shortcut) {
             onclick={() => {
               console.log("[localShortcut]", localShortcut)
               settings.shortcut = localShortcut
-              modes.listenShortcutUpdate = false
+              endShortcutListen()
               pushToast()
             }}>{chrome.i18n.getMessage("settings_shortcut_ok")}</Key
           >

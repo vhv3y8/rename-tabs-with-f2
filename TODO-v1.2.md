@@ -16,3 +16,20 @@
 - 한국어 v
 - hasChanged 아이콘 border bottom
 - Reset : Ctrl + R (F5) x?
+
+---
+
+리로드 시 원하는 흐름 :
+
+- 리로드 트리거. 상태로 status를 체크 및 기록한다.
+- status가 모두 complete 또는 시간 지나면, tabIdxToInfo에 덮어쓰기를 한다. (check)
+- tabIdxToInfo에 덮어쓰는 타이밍을 조절한다. 그 순간 모든 UI에 반영된다.
+
+탭 element들, 탭 idx의 초기화 및 수정 타이밍과 관리
+
+- 탭 컴포넌트는 tabIdxToInfo로부터 #each로 그려지며, bind:this로 모든 탭 아이템을 $state로 저장한다.
+- 탭 idx는 오직 화면에 그려진 UI만을 기준으로 한다? 이때, contentScriptAvailable = true여야만 불이 들어오며 그들만을 리스트로 따로 $derived로 담아야 함.
+- 이때 element들을 담을건지 객체들을 담을건지? -> element가 맞는듯.
+
+- 탭 idx initial: 초기 로직으로 last focus tab id 읽기, 조건부로 걔의 idx 또는 리스트의 0번 idx
+- 탭 current idx: 초기화 시 intial에서 시작, 이후 수정. 그런데 리로드 업데이트 시 다시 수정되어야 한다? -> 컴포넌트 개수에 derived?

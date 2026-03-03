@@ -8,6 +8,7 @@ let {
   padding = "0.5em",
   fontSize = "",
   noShadow = false,
+  keydown = false,
   children,
   id,
   onclick = () => {},
@@ -43,7 +44,14 @@ export function getElem() {
 
 <!-- HTML -->
 
-<button type="button" class="key" {onclick} {onmousedown} {onmouseup}>
+<button
+  type="button"
+  class="key"
+  class:keydown
+  {onclick}
+  {onmousedown}
+  {onmouseup}
+>
   <div bind:this={elem} {id} class="keyInner">
     {@render children?.()}
   </div>
