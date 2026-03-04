@@ -28,6 +28,7 @@ import { focusTabItem } from "../lib/ui/states/tabs/tabItems.svelte"
       cssPressable={false}
       padding={"0.3em 0.5em"}
       keydown={keydowns.tab}
+      mousedownRepeat={true}
       onclick={() => {
         focusTabItem({ next: true })
       }}
@@ -43,6 +44,7 @@ import { focusTabItem } from "../lib/ui/states/tabs/tabItems.svelte"
       cssPressable={false}
       padding={"0.3em 0.5em"}
       keydown={keydowns.enter}
+      mousedownRepeat={true}
       onclick={() => {
         focusTabItem({ next: true })
       }}
@@ -60,6 +62,7 @@ import { focusTabItem } from "../lib/ui/states/tabs/tabItems.svelte"
       cssPressable={false}
       padding={"0.3em 0.5em"}
       keydown={keydowns.shiftTab}
+      mousedownRepeat={true}
       onclick={() => {
         focusTabItem({ next: false })
       }}
@@ -75,6 +78,7 @@ import { focusTabItem } from "../lib/ui/states/tabs/tabItems.svelte"
       cssPressable={false}
       padding={"0.3em 0.5em"}
       keydown={keydowns.shiftEnter}
+      mousedownRepeat={true}
       onclick={() => {
         focusTabItem({ next: false })
       }}

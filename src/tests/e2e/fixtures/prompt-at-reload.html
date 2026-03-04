@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Refresh Prompt Page</title>
+</head>
+
+<body>
+
+  <h1>Try reloading</h1>
+  <p>Reloading or Closing this page will show prompt.</p>
+
+  <script>
+    window.addEventListener('beforeunload', (event) => {
+      event.preventDefault();
+      event.returnValue = '';
+    });
+  </script>
+
+</body>
+
+</html>

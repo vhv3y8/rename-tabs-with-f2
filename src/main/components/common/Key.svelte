@@ -13,6 +13,7 @@ let {
   keydown = false,
   children,
   id,
+  mousedownRepeat = false,
   onclick = () => {},
   onmousedown = () => {},
   onmouseup = () => {},
@@ -54,21 +55,33 @@ export function getElem() {
   class="key"
   class:keydown
   onclick={() => {
-    if (movedByMousedownCount === 0) onclick()
+    if (mousedownRepeat) {
+      if (movedByMousedownCount === 0) onclick()
+    } else {
+      onclick()
+    }
   }}
   onmousedown={() => {
-    mousedownTimer = setInterval(() => {
-      console.log("[running mousedown]")
-      movedByMousedownCount += 1
-      onclick()
-    }, mousedownThreshold)
-    onmousedown()
+    if (mousedownRepeat) {
+      mousedownTimer = setInterval(() => {
+        console.log("[running mousedown]")
+        movedByMousedownCount += 1
+        onclick()
+      }, mousedownThreshold)
+      onmousedown()
+    } else {
+      onmousedown()
+    }
   }}
   onmouseup={() => {
-    clearInterval(mousedownTimer)
-    mousedownTimer = null
-    movedByMousedownCount = 0
-    onmouseup()
+    if (mousedownRepeat) {
+      clearInterval(mousedownTimer)
+      mousedownTimer = null
+      movedByMousedownCount = 0
+      onmouseup()
+    } else {
+      onmouseup()
+    }
   }}
 >
   <div bind:this={elem} {id} class="keyInner">

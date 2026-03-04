@@ -7,6 +7,7 @@ import {
 import { fireReload } from "./states/tabs/reload.svelte"
 import { focusTabItem } from "./states/tabs/tabItems.svelte"
 import {
+  getRefreshAndBrowserUnavailableTabs,
   getShowUnavailableCard,
   hideUnavailableCardIfItsVisible,
 } from "./states/tabs/unavailable.svelte"
@@ -20,7 +21,7 @@ export async function keydownHandler(e) {
   let handledByCode = true
   switch (e.code) {
     case "KeyW": {
-      if (e.shiftKey) {
+      if (e.shiftKey && getShowUnavailableCard()) {
         e.preventDefault()
         hideUnavailableCardIfItsVisible()
 
@@ -30,7 +31,11 @@ export async function keydownHandler(e) {
       break
     }
     case "KeyR": {
-      if (e.shiftKey) {
+      if (
+        e.shiftKey &&
+        getShowUnavailableCard() &&
+        0 < getRefreshAndBrowserUnavailableTabs().refreshUnavailableTabs.length
+      ) {
         e.preventDefault()
         await fireReload()
 
