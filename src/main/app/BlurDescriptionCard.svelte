@@ -5,45 +5,36 @@ import {
   fireReload,
   isWaitingReload,
 } from "../lib/ui/states/tabs/reload.svelte"
+import { focusTabItem } from "../lib/ui/states/tabs/tabItems.svelte"
 import {
-  // getContentScriptUnavailableTabs,
   getRefreshAndBrowserUnavailableTabs,
   getShowUnavailableCard,
   hideUnavailableCardIfItsVisible,
-} from "../lib/ui/states/tabs/unavailableCard.svelte"
+} from "../lib/ui/states/tabs/unavailable.svelte"
 
-// let { refreshUnavailableTabs, browserUnavailableTabs } = $derived(
-//   getRefreshAndBrowserUnavailableTabs(),
-// )
-// let refreshCount = $derived(refreshUnavailableTabs.length)
-// let browserCount = $derived(browserUnavailableTabs.length)
+// content script unavailable tabs count
+let allCount = $derived(getContentScriptUnavailableTabs().length)
+
+// classified unavailable tabs and counts
+let { refreshUnavailableTabs, browserUnavailableTabs } = $derived(
+  getRefreshAndBrowserUnavailableTabs(),
+)
+let { refreshCount, browserCount } = $derived({
+  refreshCount: refreshUnavailableTabs.length,
+  browserCount: browserUnavailableTabs.length,
+})
 </script>
 
-<!-- Blurred Tabs Description -->
+<!-- HTML -->
+
 <div id="blurDescriptionContainer">
-  <!-- {JSON.stringify(
-    {
-      refreshCount:
-        getRefreshAndBrowserUnavailableTabs().refreshUnavailableTabs.length,
-      getShowUnavailableCard: getShowUnavailableCard(),
-    },
-    null,
-    2,
-  )} / {JSON.stringify(
-    [
-      getRefreshAndBrowserUnavailableTabs().refreshUnavailableTabs.length,
-      getRefreshAndBrowserUnavailableTabs().browserUnavailableTabs.length,
-    ],
-    null,
-    2,
-  )} -->
-  {#if getContentScriptUnavailableTabs().length && getShowUnavailableCard()}
+  {#if allCount && getShowUnavailableCard()}
     <div id="blurDescription">
       <div class="header">
         <span style:font-size="1rem">
           {chrome.i18n.getMessage("card_msg", [
-            getContentScriptUnavailableTabs().length,
-            1 < getContentScriptUnavailableTabs().length ? "s are" : " is",
+            allCount,
+            1 < allCount ? "s are" : " is",
           ])}
         </span>
 
@@ -55,34 +46,24 @@ import {
             fontSize={"15px"}
             onclick={() => {
               hideUnavailableCardIfItsVisible()
+              focusTabItem({ current: true })
             }}>Shift + W</Key
           >
         </div>
       </div>
 
       <ul>
-        {#if 0 < getRefreshAndBrowserUnavailableTabs().refreshUnavailableTabs.length}
+        {#if 0 < refreshCount}
           <li>
             <p class="description">
-              <!-- {chrome.i18n.getMessage("card_connectable", [
-                browserCount,
-                1 < browserCount ? "s" : "",
-              ])} : -->
               {chrome.i18n.getMessage("card_connectable", [
-                getRefreshAndBrowserUnavailableTabs().refreshUnavailableTabs
-                  .length,
-                1 <
-                getRefreshAndBrowserUnavailableTabs().refreshUnavailableTabs
-                  .length
-                  ? "s"
-                  : "",
+                refreshCount,
+                1 < refreshCount ? "s" : "",
               ])} :
             </p>
 
             <p class="titles">
-              {getRefreshAndBrowserUnavailableTabs()
-                .refreshUnavailableTabs.map(({ title }) => title)
-                .join(" , ")}
+              {refreshUnavailableTabs.map(({ title }) => title).join(" , ")}
             </p>
           </li>
 
@@ -109,27 +90,16 @@ import {
           </div>
         {/if}
 
-        {#if 0 < getRefreshAndBrowserUnavailableTabs().browserUnavailableTabs.length}
+        {#if 0 < browserCount}
           <li>
             <p class="description">
-              <!-- {chrome.i18n.getMessage("card_blocked", [
+              {chrome.i18n.getMessage("card_blocked", [
                 browserCount,
                 1 < browserCount ? "s" : "",
-              ])} : -->
-              {chrome.i18n.getMessage("card_blocked", [
-                getRefreshAndBrowserUnavailableTabs().browserUnavailableTabs
-                  .length,
-                1 <
-                getRefreshAndBrowserUnavailableTabs().browserUnavailableTabs
-                  .length
-                  ? "s"
-                  : "",
               ])} :
             </p>
             <p class="titles">
-              {getRefreshAndBrowserUnavailableTabs()
-                .browserUnavailableTabs.map(({ title }) => title)
-                .join(" , ")}
+              {browserUnavailableTabs.map(({ title }) => title).join(" , ")}
             </p>
           </li>
         {/if}
@@ -141,12 +111,10 @@ import {
 <!-- Style -->
 
 <style>
-/* Blurred Tabs Description */
 div#blurDescriptionContainer {
   margin-block: 1rem;
 }
 div#blurDescription {
-  /* color: var(--primary-8); */
   font-family: "Ubuntu";
 
   font-size: 14px;

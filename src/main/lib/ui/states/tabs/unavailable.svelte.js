@@ -30,7 +30,7 @@ function filterUrlsBlockedByBrowser(url) {
 }
 
 // classified unavailable tabs
-let { browserUnavailableTabs, refreshUnavailableTabs } = $derived.by(() => {
+let refreshAndBrowserUnavailableTabs = $derived.by(() => {
   const browserUnavailableTabs = []
   const refreshUnavailableTabs = []
 
@@ -49,16 +49,16 @@ let { browserUnavailableTabs, refreshUnavailableTabs } = $derived.by(() => {
 })
 
 export function getRefreshAndBrowserUnavailableTabs() {
-  return { browserUnavailableTabs, refreshUnavailableTabs }
+  return refreshAndBrowserUnavailableTabs
 }
 
 if (import.meta.env.MODE === "development") {
   $effect.root(() => {
     $effect(() => {
-      console.log("{ browserUnavailableTabs, refreshUnavailableTabs }", {
-        browserUnavailableTabs,
-        refreshUnavailableTabs,
-      })
+      console.log(
+        "{ browserUnavailableTabs, refreshUnavailableTabs }",
+        refreshAndBrowserUnavailableTabs,
+      )
     })
   })
 }

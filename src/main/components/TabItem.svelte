@@ -1,9 +1,14 @@
 <script>
-let { tabInfo } = $props()
-// setCurrentFocusInputIdx
+import {
+  findFocusableItemsIdxFromTabId,
+  setCurrentFocusIdxFromClick,
+} from "../lib/ui/states/tabs/tabItems.svelte"
 
-let localTitle = $state(tabInfo.title)
 let elem = null
+
+let { tabInfo } = $props()
+let localTitle = $state(tabInfo.title)
+let focusableItemsIdx = $derived(findFocusableItemsIdxFromTabId(tabInfo.id))
 
 function applyLocalTitle() {
   if (!tabInfo.hasChanged) {
@@ -13,7 +18,8 @@ function applyLocalTitle() {
 }
 
 export function focusTabInput() {
-  elem.click()
+  // elem.click()
+  elem.select()
   elem.scrollIntoView({ block: "center" })
 }
 
@@ -34,7 +40,6 @@ export function getTabInfo() {
 <!-- HTML -->
 
 <li class:unselectable={!tabInfo.contentScriptAvailable}>
-  <!-- for={`tab-${tabInfo.id}`} -->
   <label>
     <img
       src={tabInfo.favIconUrl || "/globe.svg"}
@@ -42,7 +47,6 @@ export function getTabInfo() {
       width="24"
       height="24"
     />
-    <!-- id={`tab-${tabInfo.id}`} -->
     <input
       type="text"
       name=""
@@ -50,8 +54,8 @@ export function getTabInfo() {
       bind:value={localTitle}
       spellcheck="false"
       onclick={(e) => {
-        e.target.select()
-        // setCurrentFocusInputIdx()
+        focusTabInput()
+        setCurrentFocusIdxFromClick(focusableItemsIdx)
       }}
       onchange={applyLocalTitle}
     />

@@ -1,6 +1,8 @@
 <script>
 import { onMount } from "svelte"
 
+let elem = null
+
 let {
   cssPressable = true,
   largeShadow = true,
@@ -15,7 +17,9 @@ let {
   onmousedown = () => {},
   onmouseup = () => {},
 } = $props()
-let elem = $state(null)
+
+const mousedownThreshold = 500
+let mousedownable = $state(true)
 
 const classes = ["key"]
 
@@ -49,7 +53,16 @@ export function getElem() {
   class="key"
   class:keydown
   {onclick}
-  {onmousedown}
+  onmousedown={() => {
+    if (mousedownable) {
+      mousedownable = false
+      setTimeout(() => {
+        mousedownable = true
+      }, mousedownThreshold)
+
+      onmousedown()
+    }
+  }}
   {onmouseup}
 >
   <div bind:this={elem} {id} class="keyInner">
@@ -68,6 +81,7 @@ button.key {
   border: 0;
   box-shadow: none;
   background-color: inherit;
+  outline: none;
 }
 
 :global(.keyInner) {

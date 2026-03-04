@@ -5,13 +5,11 @@ import {
 } from "./states/settings.svelte"
 
 import { fireReload } from "./states/tabs/reload.svelte"
-import { focusTabItem } from "./states/tabs/tabElems.svelte"
+import { focusTabItem } from "./states/tabs/tabItems.svelte"
 import {
   getShowUnavailableCard,
   hideUnavailableCardIfItsVisible,
-  // setShowUnavailableCard,
-  // toggleShowUnavailableCard,
-} from "./states/tabs/unavailableCard.svelte"
+} from "./states/tabs/unavailable.svelte"
 import { createShortcut, isValidShortcut } from "./shortcut"
 import { apply } from "../application/usecases/apply"
 
@@ -23,21 +21,21 @@ export async function keydownHandler(e) {
   switch (e.code) {
     case "KeyW": {
       if (e.shiftKey) {
-        console.log("[KeyW, shiftKey]")
-        // dismissUnavailableCard(e)
-        // if (getShowUnavailableCard()) {
-        //   setShowUnavailableCard(false)
-        // }
+        e.preventDefault()
         hideUnavailableCardIfItsVisible()
+
+        if (import.meta.env.MODE === "development")
+          console.log("[KeyW, shiftKey]")
       }
       break
     }
     case "KeyR": {
       if (e.shiftKey) {
         e.preventDefault()
-        console.log("[KeyR, shiftKey]")
-        // await handleReload(e)
         await fireReload()
+
+        if (import.meta.env.MODE === "development")
+          console.log("[KeyR, shiftKey]")
       }
       break
     }
@@ -51,14 +49,10 @@ export async function keydownHandler(e) {
       case "Tab": {
         e.preventDefault()
         if (e.shiftKey) {
-          // elements.keydownElem = elements.shiftTabKeyBtn
           keydowns.shiftTab = true
-          // focusPreviousElement()
           focusTabItem({ next: false })
         } else {
-          // elements.keydownElem = elements.tabKeyBtn
           keydowns.tab = true
-          // focusNextElement()
           focusTabItem({ next: true })
         }
         break
@@ -68,14 +62,10 @@ export async function keydownHandler(e) {
         if (e.ctrlKey) {
           apply()
         } else if (e.shiftKey) {
-          // elements.keydownElem = elements.shiftEnterKeyBtn
           keydowns.shiftEnter = true
-          // focusPreviousElement()
           focusTabItem({ next: false })
         } else {
-          // elements.keydownElem = elements.enterKeyBtn
           keydowns.enter = true
-          // focusNextElement()
           focusTabItem({ next: true })
         }
         break
@@ -84,18 +74,14 @@ export async function keydownHandler(e) {
         e.preventDefault()
         if (closeSettingsIfItsVisible()) break
 
-        // elements.keydownElem = elements.escKeyBtn
         keydowns.esc = true
-        // focusInitialElement()
         focusTabItem({ initial: true })
         break
       }
       default: {
         if (e.ctrlKey) {
-          // elements.keydownElem = elements.ctrlEnterBtn
           keydowns.ctrlEnter = true
         } else {
-          // elements.keydownElem = null
           cancelAllKeydowns()
         }
       }

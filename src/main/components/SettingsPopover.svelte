@@ -9,21 +9,16 @@ import * as chromeStorage from "../../lib/chrome/storage"
 import {
   endShortcutListen,
   getGlobalShortcutText,
-  setShortcutListeningMode,
   settings,
   settingsState,
   startShortcutListen,
 } from "../lib/ui/states/settings.svelte"
-// import { modes } from "../lib/ui/states/modes.svelte"
 import * as view from "../lib/ui/view"
-// import { createListenShortcutKeydownHandler } from "../lib/ui/eventHandlers"
 import { appendToast, messages } from "../lib/ui/states/toasts.svelte"
 import { createListenShortcutKeydownHandler } from "../lib/ui/keyboard"
 import { stringifyShortcut } from "../lib/ui/shortcut"
 
 let { onclose } = $props()
-
-// let globalShortcutText = $derived(stringifyShortcut(settings.shortcut))
 
 let localShortcut = $state(settings.shortcut)
 let localShortcutText = $derived(stringifyShortcut(localShortcut))
@@ -31,50 +26,9 @@ let localShortcutText = $derived(stringifyShortcut(localShortcut))
 function pushToast() {
   appendToast(messages.SHORTCUT_UPDATED(localShortcutText))
 }
-
-// Utils
-// const isMac = navigator.platform?.startsWith("Mac") ?? false
-// const metaKeyText = isMac ? "Cmd" : "Meta"
-// function isAlphabet(key) {
-//   return /^[a-zA-Z]$/.test(key)
-// }
-// function stringifyShortcut(shortcut) {
-//   let stack = []
-//   if (shortcut.ctrlKey) stack.push("Ctrl")
-//   if (shortcut.altKey) stack.push("Alt")
-//   if (shortcut.metaKey) stack.push(metaKeyText)
-//   if (shortcut.shiftKey) stack.push("Shift")
-
-//   let key = shortcut.key
-//   if (key === " ") key = "Enter"
-//   else if (isAlphabet(key)) key = key.toUpperCase()
-//   stack.push(key)
-
-//   return stack.join(" + ")
-// }
 </script>
 
 <!-- Event Handlers -->
-
-<!-- <svelte:document
-  onkeydown={(e) => {
-    if (modes.listenShortcutUpdate) {
-      createListenShortcutKeydownHandler({
-        updateShortcutState: (shortcutFromEvent) => {
-          if (
-            shortcutFromEvent.key === "Control" ||
-            shortcutFromEvent.key === "Alt" ||
-            shortcutFromEvent.key === "Meta" ||
-            shortcutFromEvent.key === "Shift"
-          )
-            return
-
-          localShortcut = shortcutFromEvent
-        },
-      })(e)
-    }
-  }}
-/> -->
 
 <svelte:document
   onkeydown={(e) => {
@@ -82,15 +36,6 @@ function pushToast() {
       // to put keydown logic at outer module
       createListenShortcutKeydownHandler({
         updateShortcutState: (shortcutFromEvent) => {
-          // listen shortcut only filter?
-          // if (
-          //   shortcutFromEvent.key === "Control" ||
-          //   shortcutFromEvent.key === "Alt" ||
-          //   shortcutFromEvent.key === "Meta" ||
-          //   shortcutFromEvent.key === "Shift"
-          // )
-          //   return
-
           localShortcut = shortcutFromEvent
         },
       })(e)
@@ -105,7 +50,6 @@ function pushToast() {
     <!-- Darkmode -->
     <li>
       <span>{chrome.i18n.getMessage("settings_darkmode")} :</span>
-      <!-- class="key pressable" -->
       <Key
         onclick={async () => {
           settings.darkmode = !settings.darkmode
@@ -117,8 +61,6 @@ function pushToast() {
     <!-- Larger Width -->
     <li>
       <span>{chrome.i18n.getMessage("settings_larger_width")} :</span>
-      <!-- type="button"
-        class="key pressable" -->
       <Key
         onclick={async () => {
           settings.largerWidth = !settings.largerWidth

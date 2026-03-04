@@ -5,8 +5,8 @@ import {
 import { checkContentScriptAvailableAndUpdateAllInfo } from "../../../application/usecases/checkContentScriptAvailable"
 import { initializeTabIdxToInfo } from "../../../application/usecases/initializeTabInfos"
 import { reloadAllConnectableTabs } from "../../../application/usecases/reloadAllConnectableTabs"
-import { focusTabItem, resetCurrentFocusInputIdx } from "./tabElems.svelte"
-import { getRefreshAndBrowserUnavailableTabs } from "./unavailableCard.svelte"
+import { focusTabItem, resetCurrentFocusInputIdx } from "./tabItems.svelte"
+import { getRefreshAndBrowserUnavailableTabs } from "./unavailable.svelte"
 
 let waitingReload = $state(false)
 export function isWaitingReload() {
@@ -24,20 +24,13 @@ let everyTabStatusIsComplete = $derived(
   ),
 )
 
+// tabs update listener
 chrome.tabs.onUpdated.addListener((id, { status }, { index }) => {
+  allReloadingTabStatus[index]["status"] = status
+
   if (import.meta.env.MODE === "development")
     console.log("[tabs.onUpdated]", { id, status })
-  allReloadingTabStatus[index]["status"] = status
 })
-
-// debug
-export function getAllReloadingTabStatus() {
-  return allReloadingTabStatus
-}
-export function getEveryTabStatusIsComplete() {
-  return everyTabStatusIsComplete
-}
-// debug
 
 export async function fireReload() {
   if (import.meta.env.MODE === "development")
@@ -49,19 +42,6 @@ export async function fireReload() {
   // show reloading ui
   waitingReload = true
 
-  // this just triggers reload and doesn't wait for it to end.
-  // its handled by allTabStatus, everyTabStatusIsComplete state and chrome.tabs.onUpdated.addListener above
-  await reloadAllConnectableTabs()
-
-  // initialize by changing global state field
-  // for (const [index, { contentScriptAvailable }] of Object.entries(
-  //   tabIdxToInfo,
-  // )) {
-  //   if (!contentScriptAvailable) {
-  //     tabIdxToInfo[index]["status"] = "reloading"
-  //   }
-  // }
-
   // initialize reload local state
   Object.assign(allReloadingTabStatus, {})
   for (const { index, id } of getContentScriptUnavailableTabs()) {
@@ -71,9 +51,11 @@ export async function fireReload() {
     }
   }
 
-  if (import.meta.env.MODE === "development")
-    console.log("[everyTabStatusIsComplete: start]")
+  // this just triggers reload and doesn't wait for it to end.
+  // its handled by state and chrome.tabs.onUpdated.addListener above
+  await reloadAllConnectableTabs()
 
+  // wait and update ui
   await waitForReloadAndUpdateUI({})
   // retry waiting for 1 time and finish
   if (!everyTabStatusIsComplete) {
@@ -83,26 +65,26 @@ export async function fireReload() {
 }
 
 async function waitForReloadAndUpdateUI({ delay = 2000 }) {
+  if (import.meta.env.MODE === "development")
+    console.log("[everyTabStatusIsComplete: start]")
+
   // wait for reload to finish with time limit
   await Promise.race([
     waitUntil(() => everyTabStatusIsComplete, true),
     new Promise((res) => setTimeout(res, delay)),
   ])
-
-  if (import.meta.env.MODE === "development")
-    console.log("[everyTabStatusIsComplete: done or time limit]")
-
   if (everyTabStatusIsComplete) endWaitingReload()
 
-  // update global state
-  // await initializeTabIdxToInfo()
-  await checkContentScriptAvailableAndUpdateAllInfo()
-  focusTabItem({ initial: true })
+  if (import.meta.env.MODE === "development")
+    console.log(
+      "[everyTabStatusIsComplete] ",
+      everyTabStatusIsComplete ? "[done]" : "[time limit]",
+    )
 
-  // ui
-  // updateFocusableInputElements()
-  // initializeIndexes()
-  // focusInitialFocusTabItem()
+  // update global state
+  await checkContentScriptAvailableAndUpdateAllInfo()
+  // update ui
+  focusTabItem({ initial: true })
 }
 
 function waitUntil(getter, targetValue) {

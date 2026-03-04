@@ -11,13 +11,18 @@ export const destroySettingsEffect = $effect.root(() => {
   })
 })
 
-// ui
+// settings shortcut text
+let globalShortcutText = $derived(stringifyShortcut(settings.shortcut))
+
+export function getGlobalShortcutText() {
+  return globalShortcutText
+}
+
+// state
 export let settingsState = $state({
   showSettings: false,
   listeningShortcut: false,
 })
-
-// let showSettings = $state(false)
 
 $effect.root(() => {
   $effect(() => {
@@ -42,19 +47,10 @@ export function closeSettingsIfItsVisible() {
   return false
 }
 
-// Listening shortcut
-// export let isListeningShortcut = $state(false)
-
 export function startShortcutListen() {
   settingsState.listeningShortcut = true
 }
 
 export function endShortcutListen() {
   settingsState.listeningShortcut = false
-}
-
-let globalShortcutText = $derived(stringifyShortcut(settings.shortcut))
-
-export function getGlobalShortcutText() {
-  return globalShortcutText
 }

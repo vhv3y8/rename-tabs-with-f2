@@ -38,7 +38,6 @@ import {
 
   <!-- Save & Close -->
   <span>{chrome.i18n.getMessage("footer_save_and_close")} :</span>
-  <!-- bind:this={elements.ctrlEnterBtn} -->
   <Key
     id={"ctrlEnterBtn"}
     keydown={keydowns.ctrlEnter}

@@ -1,57 +1,29 @@
 <script>
 import { onDestroy, onMount } from "svelte"
+
+import HeaderBar from "./app/HeaderBar.svelte"
+import BlurDescriptionCard from "./app/BlurDescriptionCard.svelte"
 import TabItem from "./components/TabItem.svelte"
-import SettingsPopover from "./components/SettingsPopover.svelte"
+import FooterBar from "./app/FooterBar.svelte"
+import GlobalToastGrid from "./components/GlobalToastGrid.svelte"
+import Debug from "./app/Debug.svelte"
+
 import * as chromeTabs from "../lib/chrome/tabs"
 
-import {
-  destroySettingsEffect,
-  settings,
-} from "./lib/ui/states/settings.svelte"
-import {
-  filterUrlsBlockedByBrowser,
-  getAllTabStatus,
-  // getContentScriptUnavailableTabs,
-  getRefreshAndBrowserUnavailableTabs,
-  getTabInfoById,
-  tabIdxToInfo,
-} from "./lib/application/tabInfo.svelte"
-// import { modes } from "./lib/ui/states/modes.svelte"
-
-import {
-  createNormalKeydownHandler,
-  removeAllKeydownClass,
-} from "./lib/ui/eventHandlers"
-import * as view from "./lib/ui/view"
-
-import { apply } from "./lib/application/usecases/apply"
 import { checkContentScriptAvailableAndUpdateAllInfo } from "./lib/application/usecases/checkContentScriptAvailable"
-import GlobalToastGrid from "./components/GlobalToastGrid.svelte"
 import {
   initializeLastFocusTabId,
   initializeTabIdxToInfo,
 } from "./lib/application/usecases/initializeTabInfos"
-import Key from "./components/common/Key.svelte"
-import { reloadAllConnectableTabs } from "./lib/application/usecases/reloadAllConnectableTabs"
-import FooterBar from "./app/FooterBar.svelte"
-import HeaderBar from "./app/HeaderBar.svelte"
-import {
-  allTabItems,
-  // bindGlobalULElem,
-  focusableInputElements,
-  focusableTabItems,
-  focusTabItem,
-  // resetCurrentFocusInputIdx,
-  // tabsElems,
-  // ulElem,
-} from "./lib/ui/states/tabs/tabElems.svelte"
-import { keydownHandler, keyupHandler } from "./lib/ui/keyboard"
-import BlurDescriptionCard from "./app/BlurDescriptionCard.svelte"
-import Debug from "./app/Debug.svelte"
+import { allTabItems, focusTabItem } from "./lib/ui/states/tabs/tabItems.svelte"
 
-// function bindULElem(node) {
-//   bindGlobalULElem(node)
-// }
+import * as view from "./lib/ui/view"
+import {
+  destroySettingsEffect,
+  settings,
+} from "./lib/ui/states/settings.svelte"
+import { tabIdxToInfo } from "./lib/application/tabInfo.svelte"
+import { keydownHandler, keyupHandler } from "./lib/ui/keyboard"
 
 // lifecycle
 onMount(async () => {
@@ -67,69 +39,20 @@ onMount(async () => {
 
   // update global state
   await checkContentScriptAvailableAndUpdateAllInfo()
+
+  // initialize view
   focusTabItem({ initial: true })
 
   if (import.meta.env.MODE === "development")
-    console.log("[tabIdxToInfo]", tabIdxToInfo)
-
-  // initialize view stuff
-  // setInitialFocusElemAndFocus()
-  // updateFocusableInputElements()
-  // initializeIndexes()
-
-  // switch binded components into html element with <Key> component function
-  // elements.tabKeyBtn = elements.tabKeyBtn.getElem()
-  // elements.ctrlEnterBtn = elements.ctrlEnterBtn.getElem()
-  // elements.shiftTabKeyBtn = elements.shiftTabKeyBtn.getElem()
-  // elements.enterKeyBtn = elements.enterKeyBtn.getElem()
-  // elements.shiftEnterKeyBtn = elements.shiftEnterKeyBtn.getElem()
-  // elements.escKeyBtn = elements.escKeyBtn.getElem()
+    console.log("[onMount] [tabIdxToInfo]", tabIdxToInfo)
 })
 
-// onDestroy(() => {
-//   destroySettingsEffect()
-// })
+onDestroy(() => {
+  destroySettingsEffect()
+})
 </script>
 
 <!-- Event Handlers -->
-
-<!-- <svelte:document
-  onkeydown={(e) => {
-    if (!modes.listenShortcutUpdate) {
-      // create and run keydown handler
-      createNormalKeydownHandler({
-        elements,
-        focusPreviousElement: () => {
-          focusInputElement({ focusNext: false })
-        },
-        focusNextElement: () => {
-          focusInputElement({ focusNext: true })
-        },
-        focusInitialElement: focusInitialFocusTabItem,
-        closeSettingsIfItsVisible: () => {
-          if (showSettings) {
-            showSettings = false
-            return true
-          }
-          return false
-        },
-        dismissUnavailableCard: (e) => {
-          if (showUnavailableCard) {
-            e.preventDefault()
-            showUnavailableCard = false
-          }
-        },
-        handleReload: (e) => {
-          if (showUnavailableCard) {
-            e.preventDefault()
-            handleReload()
-          }
-        },
-      })(e)
-    }
-  }}
-  onkeyup={removeAllKeydownClass}
-/> -->
 
 <svelte:document onkeydown={keydownHandler} onkeyup={keyupHandler} />
 
@@ -145,11 +68,7 @@ onMount(async () => {
   <!-- TabItem List -->
   <ul>
     {#each Object.values(tabIdxToInfo) as tabInfo, idx}
-      <!-- {JSON.stringify({ tabInfo, idx }, null, 2)} -->
       <TabItem bind:this={allTabItems[idx]} {tabInfo} />
-      <!-- setCurrentFocusInputIdx={() => {
-          currentFocusInputIdx = idx
-        }} -->
     {/each}
   </ul>
 

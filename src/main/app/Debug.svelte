@@ -3,11 +3,7 @@ import {
   getContentScriptUnavailableTabs,
   tabIdxToInfo,
 } from "../lib/application/tabInfo.svelte"
-import {
-  getAllReloadingTabStatus,
-  getAllTabStatus,
-} from "../lib/ui/states/tabs/reload.svelte"
-import { getRefreshAndBrowserUnavailableTabs } from "../lib/ui/states/tabs/unavailableCard.svelte"
+import { getRefreshAndBrowserUnavailableTabs } from "../lib/ui/states/tabs/unavailable.svelte"
 </script>
 
 <!-- <pre>
