@@ -82,7 +82,7 @@ import { focusTabItem } from "../lib/ui/states/tabs/tabItems.svelte"
         keydowns.shiftEnter = true
       }}
       onmouseup={() => {
-        keydowns.shiftEnter = true
+        keydowns.shiftEnter = false
       }}>Shift + Enter</Key
     >
   </span>

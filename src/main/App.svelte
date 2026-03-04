@@ -44,7 +44,7 @@ onMount(async () => {
   focusTabItem({ initial: true })
 
   if (import.meta.env.MODE === "development")
-    console.log("[onMount] [tabIdxToInfo]", tabIdxToInfo)
+    console.log("[onMount] [tabIdxToInfo]", Object.values(tabIdxToInfo))
 })
 
 onDestroy(() => {

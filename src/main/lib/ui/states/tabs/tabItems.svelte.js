@@ -13,13 +13,13 @@ if (import.meta.env.MODE === "development") {
   $effect.root(() => {
     $effect(() => {
       console.log(
-        "[allTabItems]",
+        "[tabItems] [effect] [allTabItems]",
         allTabItems.map((item) => item.getTabInfo().title),
       )
     })
     $effect(() => {
       console.log(
-        "[focusableTabItems]",
+        "[tabItems] [effect] [focusableTabItems]",
         focusableTabItems.map((item) => item.getTabInfo().title),
       )
     })
@@ -31,6 +31,13 @@ let currentFocusInputIdx = $state(null)
 let initialFocusInputIdx = $derived.by(() => {
   const lastFocusTabId = getLastFocusTabId()
   if (lastFocusTabId === -1) return 0
+
+  if (import.meta.env.MODE === "development") {
+    console.log(
+      "[tabItems] [initialFocusInputIdx derived.by] [lastFocusTabId]",
+      lastFocusTabId,
+    )
+  }
 
   const lastFocusTabInfo = Object.values(tabIdxToInfo).find(
     ({ id }) => id === lastFocusTabId,
@@ -44,7 +51,7 @@ let initialFocusInputIdx = $derived.by(() => {
 export function findFocusableItemsIdxFromTabId(tabIdToFind) {
   for (let i = 0; i < focusableTabItems.length; i++) {
     console.log(
-      "[findFocusableItemsIdxFromTabId] [focusableTabItems[i].tabId()]",
+      "[tabItems] [findFocusableItemsIdxFromTabId] [focusableTabItems[i].tabId()]",
       focusableTabItems[i].tabId(),
     )
     if (focusableTabItems[i].tabId() === tabIdToFind) {
@@ -67,13 +74,23 @@ let initialFocusTabItem = $derived(
 if (import.meta.env.MODE === "development") {
   $effect.root(() => {
     $effect(() => {
-      console.log("[initialFocusInputIdx]", initialFocusInputIdx)
+      console.log(
+        "[tabItems] [effect] [initialFocusInputIdx]",
+        initialFocusInputIdx,
+      )
     })
     $effect(() => {
-      console.log("[currentFocusInputIdx]", currentFocusInputIdx)
+      console.log(
+        "[tabItems] [effect] [currentFocusInputIdx]",
+        currentFocusInputIdx,
+      )
     })
     $effect(() => {
-      console.log("[initialFocusTabItem]", initialFocusTabItem.getTabInfo())
+      console.log(
+        "[tabItems] [effect] [initialFocusTabItem]",
+        initialFocusTabItem,
+        initialFocusTabItem?.getTabInfo(),
+      )
     })
   })
 }
@@ -85,13 +102,12 @@ export function focusTabItem({
   current = false,
 }) {
   const lastIdx = Object.keys(focusableTabItems).length - 1
+  if (lastIdx === -1) return
 
   let idxToFocus
   if (initial) {
     // initial
     idxToFocus = initialFocusInputIdx
-    if (import.meta.env.MODE === "development")
-      console.log("[focusTabItem] [initialFocusInputIdx]", initialFocusInputIdx)
   } else if (current) {
     // current
     idxToFocus = currentFocusInputIdx
@@ -103,12 +119,16 @@ export function focusTabItem({
     idxToFocus = currentFocusInputIdx === 0 ? lastIdx : currentFocusInputIdx - 1
   }
 
-  if (import.meta.env.MODE === "development")
+  if (import.meta.env.MODE === "development") {
+    console.log("[tabItems] [focusTabItem] [idxToFocus]", idxToFocus)
     console.log(
-      "[focusTabItem] [focusableTabItems]",
-      focusableTabItems.map((item) => item.getTabInfo()),
-      focusableTabItems[idxToFocus],
+      "[tabItems] [focusTabItem] [focusableTabItems[idxToFocus].getTabInfo()]",
+      focusableTabItems[idxToFocus].getTabInfo(),
     )
-  focusableTabItems[idxToFocus].focusTabInput()
-  currentFocusInputIdx = idxToFocus
+  }
+
+  if (0 < focusableTabItems.length) {
+    focusableTabItems[idxToFocus].focusTabInput()
+    currentFocusInputIdx = idxToFocus
+  }
 }

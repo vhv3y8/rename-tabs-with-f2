@@ -37,7 +37,7 @@ if (import.meta.env.MODE === "development") {
   $effect.root(() => {
     $effect(() => {
       console.log(
-        "[contentScriptUnavailableTabs update]",
+        "[tabInfo] [effect] [tabIdxToInfo length] [contentScriptUnavailableTabs]",
         Object.values(tabIdxToInfo).length,
         contentScriptUnavailableTabs,
       )

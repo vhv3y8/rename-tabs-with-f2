@@ -16,15 +16,15 @@
 - 한국어 v
 - hasChanged 아이콘 border bottom
 - Reset : Ctrl + R (F5) x?
-- cornflowerblue 버튼에 걸림 / 버튼 outline
-- 버튼 꾹 누르면 똑같이 트리거되게?
-- 안되는 탭에서 아이콘 클릭 -> 첫 번째 탭 선택되어야함,
-- 첫 번째 탭도 없으면? 그리고 탭 하나만 있는 경우?
-- ctrl enter 시 눌러지는 이펙트?
-- errors:
+- cornflowerblue 버튼에 걸림 / 버튼 outline v
+- 버튼 꾹 누르면 똑같이 트리거되게? v
+- 안되는 탭에서 아이콘 클릭 -> 첫 번째 탭 선택되어야함, v
+- 첫 번째 탭도 없으면? 그리고 탭 하나만 있는 경우? v
+- ctrl enter 시 눌러지는 이펙트? x
+- errors: v
   - status, focusTabInput, cannot establish connection, contentScriptAvailable,
-- 카드 닫았는데 Shift + W 되는 문제
-- W, R 입력되는 문제
+- 카드 닫았는데 Shift + R 되는 문제 -> 돼야할듯?
+- W, R 입력되는 문제 -> 영어 ok, KeyW KeyR X
 
 ---
 

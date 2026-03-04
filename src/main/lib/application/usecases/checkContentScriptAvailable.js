@@ -7,15 +7,9 @@ export async function checkContentScriptAvailableAndUpdateAllInfo() {
   // check
   let contentScriptAvailableBoolArr = await Promise.allSettled(
     allTabIds.map((id) => chromeTabs.contentScriptIsAvailable({ id })),
-  ).then((arr) => {
-    if (import.meta.env.MODE === "development")
-      console.log(
-        "[checkContentScriptAvailableAndUpdateAllInfo] contentScriptIsAvailable === true",
-        arr,
-      )
-
-    return arr.map((item) => item.status === "fulfilled" && item.value == true)
-  })
+  ).then((arr) =>
+    arr.map((item) => item.status === "fulfilled" && item.value == true),
+  )
 
   // update info
   for (const [idx, available] of contentScriptAvailableBoolArr.entries()) {
@@ -24,10 +18,11 @@ export async function checkContentScriptAvailableAndUpdateAllInfo() {
 
   if (import.meta.env.MODE === "development")
     console.log(
-      "[checkContentScriptAndUpdateAllInfo] tabIdxToInfo",
+      "[checkContentScriptAvailableAndUpdateAllInfo] tabIdxToInfo",
       JSON.stringify(
         Object.values(tabIdxToInfo).map(
-          ({ title, contentScriptAvailable }) => ({
+          ({ id, title, contentScriptAvailable }) => ({
+            id,
             title,
             contentScriptAvailable,
           }),

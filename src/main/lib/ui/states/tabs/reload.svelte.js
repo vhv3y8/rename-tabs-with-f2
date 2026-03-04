@@ -26,16 +26,16 @@ let everyTabStatusIsComplete = $derived(
 
 // tabs update listener
 chrome.tabs.onUpdated.addListener((id, { status }, { index }) => {
-  allReloadingTabStatus[index]["status"] = status
+  if (waitingReload) allReloadingTabStatus[index]["status"] = status
 
   if (import.meta.env.MODE === "development")
-    console.log("[tabs.onUpdated]", { id, status })
+    console.log("[reload] [tabs.onUpdated]", { id, status })
 })
 
 export async function fireReload() {
   if (import.meta.env.MODE === "development")
     console.log(
-      "[fireReload: getRefreshAndBrowserUnavailableTabs]",
+      "[reload] [fireReload: getRefreshAndBrowserUnavailableTabs]",
       getRefreshAndBrowserUnavailableTabs(),
     )
 
@@ -44,7 +44,8 @@ export async function fireReload() {
 
   // initialize reload local state
   Object.assign(allReloadingTabStatus, {})
-  for (const { index, id } of getContentScriptUnavailableTabs()) {
+  for (const { index, id } of getRefreshAndBrowserUnavailableTabs()
+    .refreshUnavailableTabs) {
     allReloadingTabStatus[index] = {
       id,
       status: "reloading",
@@ -56,9 +57,14 @@ export async function fireReload() {
   await reloadAllConnectableTabs()
 
   // wait and update ui
+  if (import.meta.env.MODE === "development")
+    console.log("[reload] [first wait]")
   await waitForReloadAndUpdateUI({})
+
   // retry waiting for 1 time and finish
   if (!everyTabStatusIsComplete) {
+    if (import.meta.env.MODE === "development")
+      console.log("[reload] [second wait]")
     await waitForReloadAndUpdateUI({})
   }
   endWaitingReload()
@@ -66,7 +72,7 @@ export async function fireReload() {
 
 async function waitForReloadAndUpdateUI({ delay = 2000 }) {
   if (import.meta.env.MODE === "development")
-    console.log("[everyTabStatusIsComplete: start]")
+    console.log("[reload] [everyTabStatusIsComplete: start]")
 
   // wait for reload to finish with time limit
   await Promise.race([
@@ -77,7 +83,7 @@ async function waitForReloadAndUpdateUI({ delay = 2000 }) {
 
   if (import.meta.env.MODE === "development")
     console.log(
-      "[everyTabStatusIsComplete] ",
+      "[reload] [everyTabStatusIsComplete] ",
       everyTabStatusIsComplete ? "[done]" : "[time limit]",
     )
 

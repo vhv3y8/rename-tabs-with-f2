@@ -18,8 +18,9 @@ let {
   onmouseup = () => {},
 } = $props()
 
-const mousedownThreshold = 500
-let mousedownable = $state(true)
+const mousedownThreshold = 100
+let mousedownTimer = null
+let movedByMousedownCount = 0
 
 const classes = ["key"]
 
@@ -52,18 +53,23 @@ export function getElem() {
   type="button"
   class="key"
   class:keydown
-  {onclick}
-  onmousedown={() => {
-    if (mousedownable) {
-      mousedownable = false
-      setTimeout(() => {
-        mousedownable = true
-      }, mousedownThreshold)
-
-      onmousedown()
-    }
+  onclick={() => {
+    if (movedByMousedownCount === 0) onclick()
   }}
-  {onmouseup}
+  onmousedown={() => {
+    mousedownTimer = setInterval(() => {
+      console.log("[running mousedown]")
+      movedByMousedownCount += 1
+      onclick()
+    }, mousedownThreshold)
+    onmousedown()
+  }}
+  onmouseup={() => {
+    clearInterval(mousedownTimer)
+    mousedownTimer = null
+    movedByMousedownCount = 0
+    onmouseup()
+  }}
 >
   <div bind:this={elem} {id} class="keyInner">
     {@render children?.()}

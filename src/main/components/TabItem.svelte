@@ -18,7 +18,6 @@ function applyLocalTitle() {
 }
 
 export function focusTabInput() {
-  // elem.click()
   elem.select()
   elem.scrollIntoView({ block: "center" })
 }

@@ -50,12 +50,6 @@ chrome.runtime.onMessage.addListener(async (msg, sender, sendRes) => {
   }
 })
 
-if (import.meta.env.MODE === "development") {
-  chrome.tabs.onCreated.addListener(() => {
-    chrome.runtime.sendMessage("hihihihihihi")
-  })
-}
-
 // Handle extension page close
 chrome.tabs.onRemoved.addListener(async (tabId, { windowId }) => {
   if (extensionTabIdSet.has(tabId) && winIdLastFocusTabIdMap.has(windowId)) {
