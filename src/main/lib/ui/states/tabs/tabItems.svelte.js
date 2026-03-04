@@ -50,10 +50,12 @@ let initialFocusInputIdx = $derived.by(() => {
 
 export function findFocusableItemsIdxFromTabId(tabIdToFind) {
   for (let i = 0; i < focusableTabItems.length; i++) {
-    console.log(
-      "[tabItems] [findFocusableItemsIdxFromTabId] [focusableTabItems[i].tabId()]",
-      focusableTabItems[i].tabId(),
-    )
+    if (import.meta.env.MODE === "development")
+      console.log(
+        "[tabItems] [findFocusableItemsIdxFromTabId] [focusableTabItems[i].tabId()]",
+        focusableTabItems[i].tabId(),
+      )
+
     if (focusableTabItems[i].tabId() === tabIdToFind) {
       return i
     }

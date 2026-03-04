@@ -4,11 +4,11 @@
 - 'Tab' or 'Enter' / 'Shift+Tab' or 'Shift+Enter' to Move around tab titles
 - 'Ctrl+Enter' to Apply changes and Close
 - 'Shift+R' to reload connectable tabs
-- 'F5' or 'Ctrl+R' to Reset changes (browser original shortcut)
-- 'Ctrl+W' or 'Ctrl+F4' to Close without applying (browser original shortcut)
+- 'F5' or 'Ctrl+R' to Reset changes (browser original)
+- 'Ctrl+W' or 'Ctrl+F4' to Close without applying (browser original)
 
-* You need to 'refresh' existing tabs to apply when 'first installed', because its only applied to tabs opened after extension was installed.
-* 'F2' and Renaming is not available at some pages due to security reasons of the browser.
+📌 'F2' shortcut and Renaming is ⚠️not available⚠️ at some pages (e.g. ⚠️ chrome web store page ⚠️, chrome:// pages, new tab page, etc) due to security reasons of the browser.
+📌 When extension is 'first installed ⬇️', you need to 'refresh 🔄' tab to use 'F2' shortcut because extension cannot connect to tabs that are created before its installed.
 
 v1.2
 - Added descriptions about unavailable tabs

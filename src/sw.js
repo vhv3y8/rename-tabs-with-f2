@@ -75,7 +75,9 @@ chrome.tabs.onRemoved.addListener(async (tabId, { windowId }) => {
 chrome.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
     console.log("[installed]")
-    chromeStorage.initializeStorage(chromeStorage.initialStorage)
+    chromeStorage.initializeStorage(chromeStorage.initialStorage).then(() => {
+      chromeTabs.openMainPage()
+    })
   } else if (reason === "update") {
     console.log("[updated]")
     chromeStorage.migrateStorage(chromeStorage.initialStorage)
