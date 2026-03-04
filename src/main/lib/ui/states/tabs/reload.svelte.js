@@ -66,18 +66,18 @@ export async function fireReload() {
     if (import.meta.env.MODE === "development")
       console.log("[reload] [second wait]")
     await waitForReloadAndUpdateUI({})
+    endWaitingReload()
   }
-  endWaitingReload()
 }
 
-async function waitForReloadAndUpdateUI({ delay = 2000 }) {
+async function waitForReloadAndUpdateUI({ limit = 2000 }) {
   if (import.meta.env.MODE === "development")
     console.log("[reload] [everyTabStatusIsComplete: start]")
 
   // wait for reload to finish with time limit
   await Promise.race([
     waitUntil(() => everyTabStatusIsComplete, true),
-    new Promise((res) => setTimeout(res, delay)),
+    new Promise((res) => setTimeout(res, limit)),
   ])
   if (everyTabStatusIsComplete) endWaitingReload()
 
