@@ -1,4 +1,4 @@
-import * as chromeTabs from "$$lib/chrome/tabs"
+import * as chromeTabs from "@chrome/tabs"
 import { tabIdxToInfo } from "../tabInfo.svelte"
 
 export async function checkContentScriptAvailableAndUpdateAllInfo() {

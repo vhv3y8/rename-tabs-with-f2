@@ -49,7 +49,7 @@ describe("apply", () => {
       },
     }))
     const { apply } = await import(
-      "../../../../../main/lib/application/usecases/apply"
+      "../../../../../main/application/usecases/apply"
     )
 
     console.log("[document]", document)
@@ -95,7 +95,7 @@ describe("apply", () => {
       },
     }))
     const { apply } = await import(
-      "../../../../../main/lib/application/usecases/apply"
+      "../../../../../main/application/usecases/apply"
     )
 
     console.log("[document]", document)
@@ -139,7 +139,7 @@ describe("apply", () => {
       },
     }))
     const { apply } = await import(
-      "../../../../../main/lib/application/usecases/apply"
+      "../../../../../main/application/usecases/apply"
     )
 
     console.log("[document]", document)

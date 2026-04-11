@@ -1,5 +1,5 @@
-import * as chromeTabs from "$$lib/chrome/tabs"
-import { getRefreshAndBrowserUnavailableTabs } from "../../ui/states/tabs/unavailable.svelte"
+import * as chromeTabs from "@chrome/tabs"
+import { getRefreshAndBrowserUnavailableTabs } from "../../lib/ui/states/tabs/unavailable.svelte"
 
 export async function reloadAllConnectableTabs() {
   const { refreshUnavailableTabs } = getRefreshAndBrowserUnavailableTabs()

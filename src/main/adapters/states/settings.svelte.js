@@ -1,4 +1,4 @@
-import * as chromeStorage from "$$lib/chrome/storage"
+import * as chromeStorage from "@chrome/storage"
 import { stringifyShortcut } from "../shortcut"
 
 // Settings

@@ -1,7 +1,7 @@
 <script>
 import Key from "../components/common/Key.svelte"
 import SettingsPopover from "../components/SettingsPopover.svelte"
-import { apply } from "../lib/application/usecases/apply"
+import { apply } from "../application/usecases/apply"
 
 import { keydowns } from "../lib/ui/states/keys.svelte"
 import {

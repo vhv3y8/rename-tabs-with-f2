@@ -1,5 +1,5 @@
-// import * as chromeRuntime from "$$lib/chrome/runtime"
-import * as chromeTabs from "$$lib/chrome/tabs"
+// import * as chromeRuntime from "@chrome/runtime"
+import * as chromeTabs from "@chrome/tabs"
 import { tabIdxToInfo } from "../tabInfo.svelte"
 
 export async function apply() {

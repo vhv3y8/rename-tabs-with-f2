@@ -4,7 +4,7 @@ import {
   createListenShortcutKeydownHandler,
   createShortcut,
   removeAllKeydownClass,
-} from "../../../../main/lib/ui/eventHandlers"
+} from "../../../../main/adapters/eventHandlers"
 import { preventDefault } from "svelte/legacy"
 
 describe("keydown factories", () => {

@@ -1,29 +1,32 @@
 <script>
 import { onDestroy, onMount } from "svelte"
 
-import HeaderBar from "./app/HeaderBar.svelte"
-import BlurDescriptionCard from "./app/BlurDescriptionCard.svelte"
-import TabItem from "./components/TabItem.svelte"
-import FooterBar from "./app/FooterBar.svelte"
-import GlobalToastGrid from "./components/GlobalToastGrid.svelte"
-import Debug from "./app/Debug.svelte"
+import HeaderBar from "./sections/HeaderBar.svelte"
+import BlurDescriptionCard from "./BlurDescriptionCard.svelte"
+import TabItem from "../components/TabItem.svelte"
+import FooterBar from "./FooterBar.svelte"
+import GlobalToastGrid from "../components/GlobalToastGrid.svelte"
+import Debug from "./Debug.svelte"
 
-import * as chromeTabs from "../lib/chrome/tabs"
+import * as chromeTabs from "../../lib/chrome/tabs"
 
-import { checkContentScriptAvailableAndUpdateAllInfo } from "./lib/application/usecases/checkContentScriptAvailable"
+import { checkContentScriptAvailableAndUpdateAllInfo } from "../application/usecases/checkContentScriptAvailable"
 import {
   initializeLastFocusTabId,
   initializeTabIdxToInfo,
-} from "./lib/application/usecases/initializeTabInfos"
-import { allTabItems, focusTabItem } from "./lib/ui/states/tabs/tabItems.svelte"
+} from "../application/usecases/initializeTabInfos"
+import {
+  allTabItems,
+  focusTabItem,
+} from "../lib/ui/states/tabs/tabItems.svelte"
 
-import * as view from "./lib/ui/view"
+import * as view from "../lib/ui/view"
 import {
   destroySettingsEffect,
   settings,
-} from "./lib/ui/states/settings.svelte"
+} from "../lib/ui/states/settings.svelte"
 import { tabIdxToInfo } from "./lib/application/tabInfo.svelte"
-import { keydownHandler, keyupHandler } from "./lib/ui/keyboard"
+import { keydownHandler, keyupHandler } from "../lib/ui/keyboard"
 
 // lifecycle
 onMount(async () => {
