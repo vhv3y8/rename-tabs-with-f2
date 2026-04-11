@@ -15,16 +15,6 @@ import Toast from "./common/Toast.svelte"
   {/each}
 </ul>
 
-<!-- <button
-  type="button"
-  onclick={() => {
-    console.log("CLICK!")
-    appendToast(messages.SHORTCUT_UPDATED("Ctrl + Shift + F2"))
-  }}
->
-  Click
-</button> -->
-
 <!-- Style -->
 
 <style>

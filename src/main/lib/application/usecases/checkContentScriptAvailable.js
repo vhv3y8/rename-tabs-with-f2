@@ -2,9 +2,6 @@ import * as chromeTabs from "$$lib/chrome/tabs"
 import { tabIdxToInfo } from "../tabInfo.svelte"
 
 export async function checkContentScriptAvailableAndUpdateAllInfo() {
-  if (import.meta.env.MODE === "development")
-    console.log("[checkContentScriptAndUpdateAllInfo]")
-
   let allTabIds = Object.values(tabIdxToInfo).map(({ id }) => id)
 
   // check
@@ -16,8 +13,22 @@ export async function checkContentScriptAvailableAndUpdateAllInfo() {
 
   // update info
   for (const [idx, available] of contentScriptAvailableBoolArr.entries()) {
-    if (!available) {
-      tabIdxToInfo[idx]["contentScriptAvailable"] = false
-    }
+    tabIdxToInfo[idx]["contentScriptAvailable"] = available
   }
+
+  if (import.meta.env.MODE === "development")
+    console.log(
+      "[checkContentScriptAvailableAndUpdateAllInfo] tabIdxToInfo",
+      JSON.stringify(
+        Object.values(tabIdxToInfo).map(
+          ({ id, title, contentScriptAvailable }) => ({
+            id,
+            title,
+            contentScriptAvailable,
+          }),
+        ),
+        null,
+        2,
+      ),
+    )
 }

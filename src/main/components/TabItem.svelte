@@ -1,7 +1,14 @@
 <script>
-let { tabInfo, setCurrentFocusInputIdx } = $props()
+import {
+  findFocusableItemsIdxFromTabId,
+  setCurrentFocusIdxFromClick,
+} from "../lib/ui/states/tabs/tabItems.svelte"
 
+let elem = null
+
+let { tabInfo } = $props()
 let localTitle = $state(tabInfo.title)
+let focusableItemsIdx = $derived(findFocusableItemsIdxFromTabId(tabInfo.id))
 
 function applyLocalTitle() {
   if (!tabInfo.hasChanged) {
@@ -9,15 +16,30 @@ function applyLocalTitle() {
     tabInfo.hasChanged = true
   }
 }
+
+export function focusTabInput() {
+  elem.select()
+  elem.scrollIntoView({ block: "center" })
+}
+
+export function isContentScriptAvailable() {
+  return tabInfo.contentScriptAvailable
+}
+
+export function tabId() {
+  return tabInfo.id
+}
+
+// debug
+export function getTabInfo() {
+  return tabInfo
+}
 </script>
 
 <!-- HTML -->
 
-<li
-  class:unselectable={!tabInfo.contentScriptAvailable}
-  title={!tabInfo.contentScriptAvailable ? "Cannot connect to this tab." : ""}
->
-  <label for={`tab-${tabInfo.id}`}>
+<li class:unselectable={!tabInfo.contentScriptAvailable}>
+  <label>
     <img
       src={tabInfo.favIconUrl || "/globe.svg"}
       alt=""
@@ -27,12 +49,12 @@ function applyLocalTitle() {
     <input
       type="text"
       name=""
-      id={`tab-${tabInfo.id}`}
+      bind:this={elem}
       bind:value={localTitle}
       spellcheck="false"
       onclick={(e) => {
-        e.target.select()
-        setCurrentFocusInputIdx()
+        focusTabInput()
+        setCurrentFocusIdxFromClick(focusableItemsIdx)
       }}
       onchange={applyLocalTitle}
     />

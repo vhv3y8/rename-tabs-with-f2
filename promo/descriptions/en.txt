@@ -3,11 +3,17 @@
 - Press 'F2' to Open Rename Page at any tab
 - 'Tab' or 'Enter' / 'Shift+Tab' or 'Shift+Enter' to Move around tab titles
 - 'Ctrl+Enter' to Apply changes and Close
+- 'Shift+R' to reload connectable tabs
 - 'F5' or 'Ctrl+R' to Reset changes (browser original shortcut)
 - 'Ctrl+W' or 'Ctrl+F4' to Close without applying (browser original shortcut)
 
 * You need to 'refresh' existing tabs to apply when 'first installed', because its only applied to tabs opened after extension was installed.
 * 'F2' and Renaming is not available at some pages due to security reasons of the browser.
+
+v1.2
+- Added descriptions about unavailable tabs
+- Reload all reconnectable tabs with 'Shift+R' shortcut
+- All buttons are now clickable
 
 v1.1
 - Added settings
@@ -15,4 +21,5 @@ v1.1
   - Darkmode
   - Adjust list width
 
-Feature Request, Language Support, Bug Report : vhv3y8@gmail.com
+Source code of this extension is opened : https://github.com/vhv3y8/rename-tabs-with-f2
+Feature Request, Language Support, Bug Report : Github Issue or vhv3y8@gmail.com

@@ -4,11 +4,14 @@ import { writable } from "svelte/store"
 export let tabIdxToInfo = $state({})
 
 export function resetTabIdxToInfo(data) {
-  // empty
-  Object.keys(tabIdxToInfo).forEach((k) => delete tabIdxToInfo[k])
+  const previous = Object.keys(tabIdxToInfo)
+  const dataEntries = Object.entries(data)
+
   // set data
-  for (const [idx, info] of Object.entries(data)) {
-    tabIdxToInfo[idx] = info
+  Object.assign(tabIdxToInfo, data)
+
+  for (let i = previous.length; i < data.length; i++) {
+    delete tabIdxToInfo[i]
   }
 }
 
@@ -19,16 +22,36 @@ export function getTabInfoById(tabId) {
   return filtered.length === 0 ? null : filtered[0]
 }
 
-// Last focus tab id
-// reassignment is not available with runes state
-let lastFocusTabId = writable(-1)
+// Content script unavailable tabs
+let contentScriptUnavailableTabs = $derived(
+  Object.values(tabIdxToInfo)
+    .filter(({ contentScriptAvailable }) => !contentScriptAvailable)
+    .map(({ id, title, url, index }) => ({ id, title, url, index })),
+)
 
-export function getLastFocusTabIdWritable() {
-  let val
-  lastFocusTabId.subscribe((v) => (val = v))()
-  return val
+export function getContentScriptUnavailableTabs() {
+  return contentScriptUnavailableTabs
 }
 
-export function setLastFocusTabIdWritable(id) {
-  lastFocusTabId.set(id)
+if (import.meta.env.MODE === "development") {
+  $effect.root(() => {
+    $effect(() => {
+      console.log(
+        "[tabInfo] [effect] [tabIdxToInfo length] [contentScriptUnavailableTabs]",
+        Object.values(tabIdxToInfo).length,
+        contentScriptUnavailableTabs,
+      )
+    })
+  })
+}
+
+// Last focus tab id
+let lastFocusTabId = $state(-1)
+
+export function getLastFocusTabId() {
+  return lastFocusTabId
+}
+
+export function setLastFocusTabId(id) {
+  lastFocusTabId = id
 }

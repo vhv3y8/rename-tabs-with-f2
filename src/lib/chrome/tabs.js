@@ -31,6 +31,12 @@ export async function focusTab(tabId) {
   return chrome.tabs.update(tabId, { active: true })
 }
 
+// Reload
+
+export async function reloadTab(tabId) {
+  return chrome.tabs.reload(tabId)
+}
+
 // Query
 
 export async function getCurrentWindowActiveTab() {
@@ -56,6 +62,9 @@ export async function focusExtensionPageTabForRefresh() {
 export async function getAllCurrentWindowTabsWithoutExtensionPage() {
   const allCurrentWindowTabs = await chrome.tabs.query({ currentWindow: true })
   const currentWindowExtensionTabIds = await getCurrentWindowExtensionPageIds()
+
+  if (import.meta.env.MODE === "development")
+    console.log("[allCurrentWindowTabs]", allCurrentWindowTabs)
 
   return allCurrentWindowTabs.filter(
     ({ id }) => !currentWindowExtensionTabIds.includes(id),

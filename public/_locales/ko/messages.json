@@ -48,5 +48,48 @@
         "content": "$1"
       }
     }
+  },
+
+  "card_msg": {
+    "message": "$TAB$개의 탭이 연결되지 않았습니다.",
+    "placeholders": {
+      "tab": {
+        "content": "$1"
+      },
+      "plural": {
+        "content": "$2"
+      }
+    }
+  },
+  "card_btn_dismiss": {
+    "message": "숨기기"
+  },
+  "card_btn_reload_all": {
+    "message": "연결 가능한 탭들 모두 새로고침"
+  },
+  "card_reloading": {
+    "message": "새로고침 하는 중..."
+  },
+  "card_connectable": {
+    "message": "탭 새로고침으로 연결 가능 (탭 $TAB$개)",
+    "placeholders": {
+      "tab": {
+        "content": "$1"
+      },
+      "plural": {
+        "content": "$2"
+      }
+    }
+  },
+  "card_blocked": {
+    "message": "브라우저 정책으로 막힘 (탭 $TAB$개)",
+    "placeholders": {
+      "tab": {
+        "content": "$1"
+      },
+      "plural": {
+        "content": "$2"
+      }
+    }
   }
 }
