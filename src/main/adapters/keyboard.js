@@ -1,16 +1,16 @@
-import { cancelAllKeydowns, keydowns } from "./states/keys.svelte"
+import { cancelAllKeydowns, keydowns } from "./keys/keys.svelte"
 import {
   closeSettingsIfItsVisible,
   settingsState,
-} from "./states/settings.svelte"
+} from "./settings/settings.svelte"
 
-import { fireReload } from "./states/tabs/reload.svelte"
-import { focusTabItem } from "./states/tabs/tabItems.svelte"
+import { fireReload } from "./tabs/states/reload.svelte"
+import { focusTabItem } from "./tabs/states/tabItems.svelte"
 import {
   getRefreshAndBrowserUnavailableTabs,
   getShowUnavailableCard,
   hideUnavailableCardIfItsVisible,
-} from "./states/tabs/unavailable.svelte"
+} from "./tabs/states/unavailable.svelte"
 import { createShortcut, isValidShortcut } from "./shortcut"
 import { apply } from "../application/usecases/apply"
 

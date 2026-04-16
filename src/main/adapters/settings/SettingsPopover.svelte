@@ -1,8 +1,8 @@
 <script>
 import { onMount } from "svelte"
 
-import Key from "./common/Key.svelte"
-import Popover from "./common/Popover.svelte"
+import Key from "../../infra/ui/components/Key.svelte"
+import Popover from "../../infra/ui/components/common/Popover.svelte"
 
 import * as chromeStorage from "../../lib/chrome/storage"
 

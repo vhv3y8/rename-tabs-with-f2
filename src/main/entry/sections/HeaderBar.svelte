@@ -1,5 +1,5 @@
 <script>
-import Key from "../components/common/Key.svelte"
+import Key from "../../../infra/ui/components/common/Key.svelte"
 import { keydowns } from "../lib/ui/states/keys.svelte"
 import { focusTabItem } from "../lib/ui/states/tabs/tabItems.svelte"
 </script>

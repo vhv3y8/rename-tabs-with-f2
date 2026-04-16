@@ -15,16 +15,26 @@
     "checkJs": false,
     "allowJs": true,
 
-    "types": ["chrome"],
+    "allowArbitraryExtensions": true,
+    "types": ["chrome", "svelte"],
     "typeRoots": ["node_modules/@types"],
     "paths": {
+      // global
       "@chrome/*": ["./src/lib/chrome/*"],
-
-      "@domain/*": ["./src/main/lib/domain/*"],
+      // main
+      "@domain/*": ["./src/main/domain/*"],
       "@application/*": ["./src/main/application/*"],
-      "@ui/*": ["./src/main/ui/*"]
+      "@adapters/*": ["./src/main/adapters/*"],
+      "@infra/*": ["./src/main/infra/*"],
+      "@ui/*": ["./src/main/infra/ui/*"]
     }
   },
 
-  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.js", "src/**/*.svelte"]
+  "include": [
+    "src/**/*.d.ts",
+    "src/**/*.ts",
+    "src/**/*.js",
+    "src/**/*.svelte",
+    "dev/test-bridge.js"
+  ]
 }

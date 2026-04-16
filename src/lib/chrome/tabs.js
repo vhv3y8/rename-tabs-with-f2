@@ -80,6 +80,6 @@ export async function fireChangeTitleToContentScript({ id, title }) {
   })
 }
 
-export async function contentScriptIsAvailable({ id }) {
+export async function isContentScriptConnected({ id }) {
   return chrome.tabs.sendMessage(id, "SEND_TRUE_CONTENT_SCRIPT")
 }

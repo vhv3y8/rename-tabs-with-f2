@@ -1,5 +1,5 @@
 <script>
-import Key from "../components/common/Key.svelte"
+import Key from "../../../infra/ui/components/common/Key.svelte"
 import { getContentScriptUnavailableTabs } from "../lib/application/tabInfo.svelte"
 import {
   fireReload,

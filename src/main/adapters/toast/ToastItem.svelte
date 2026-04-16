@@ -1,6 +1,7 @@
 <script>
 import { fade, fly, scale } from "svelte/transition"
-import { removeToast } from "../../lib/ui/states/toasts.svelte"
+import { toasts } from "./toasts.svelte"
+// import { removeToast } from "../../lib/ui/states/toasts.svelte"
 
 let { text, id } = $props()
 </script>
@@ -11,7 +12,8 @@ let { text, id } = $props()
   type="button"
   class="toast"
   onclick={(e) => {
-    removeToast(id)
+    // removeToast(id)
+    toasts.removeToast(id)
   }}
   in:fly={{ y: "5px" }}
   out:fade={{ duration: 300 }}

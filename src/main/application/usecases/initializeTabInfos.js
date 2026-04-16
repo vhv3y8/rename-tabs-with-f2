@@ -34,6 +34,6 @@ export async function initializeLastFocusTabId() {
   // get id and set state
   const lastFocusTabId = await chromeRuntime.getLastFocusTabId()
   if (lastFocusTabId) setLastFocusTabId(lastFocusTabId)
-  if (import.meta.env.MODE === "development")
-    console.log("[initializeLastFocusTabId] lastFocusTabId", lastFocusTabId)
+  // if (import.meta.env.MODE === "development")
+  //   console.log("[initializeLastFocusTabId] lastFocusTabId", lastFocusTabId)
 }

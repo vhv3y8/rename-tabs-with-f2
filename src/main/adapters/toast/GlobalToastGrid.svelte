@@ -1,17 +1,19 @@
-<script>
-import {
-  appendToast,
-  toastList,
-  messages,
-} from "../lib/ui/states/toasts.svelte"
-import Toast from "./common/Toast.svelte"
+<script lang="ts">
+// import {
+//   appendToast,
+//   toastList,
+//   messages,
+// } from "../lib/ui/states/toasts.svelte"
+// import Toast from "../components/components/common/Toast.svelte"
+import ToastItem from "./ToastItem.svelte"
+import { toasts } from "./toasts.svelte"
 </script>
 
 <!-- HTML -->
 
 <ul id="globalToastGrid">
-  {#each toastList as toastItem (toastItem.id)}
-    <Toast text={toastItem.text} id={toastItem.id} />
+  {#each toasts.list as toastItem (toastItem.id)}
+    <ToastItem text={toastItem.text} id={toastItem.id} />
   {/each}
 </ul>
 

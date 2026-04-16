@@ -1,12 +1,13 @@
-<script>
-import {
-  findFocusableItemsIdxFromTabId,
-  setCurrentFocusIdxFromClick,
-} from "../lib/ui/states/tabs/tabItems.svelte"
+<script lang="ts">
+// import {
+//   findFocusableItemsIdxFromTabId,
+//   setCurrentFocusIdxFromClick,
+// } from "../lib/ui/states/tabs/tabItems.svelte"
+import type { TabInfoState } from "./impl/tabInfo.svelte"
 
 let elem = null
 
-let { tabInfo } = $props()
+let { tabInfo }: { tabInfo: TabInfoState } = $props()
 let localTitle = $state(tabInfo.title)
 let focusableItemsIdx = $derived(findFocusableItemsIdxFromTabId(tabInfo.id))
 
@@ -17,19 +18,16 @@ function applyLocalTitle() {
   }
 }
 
-export function focusTabInput() {
+export function focusTabInput(): void {
   elem.select()
   elem.scrollIntoView({ block: "center" })
 }
-
-export function isContentScriptAvailable() {
-  return tabInfo.contentScriptAvailable
+export function isContentScriptConnected(): boolean {
+  return tabInfo.connected
 }
-
-export function tabId() {
+export function tabId(): number {
   return tabInfo.id
 }
-
 // debug
 export function getTabInfo() {
   return tabInfo
@@ -38,7 +36,7 @@ export function getTabInfo() {
 
 <!-- HTML -->
 
-<li class:unselectable={!tabInfo.contentScriptAvailable}>
+<li class:unselectable={!tabInfo.connected}>
   <label>
     <img
       src={tabInfo.favIconUrl || "/globe.svg"}

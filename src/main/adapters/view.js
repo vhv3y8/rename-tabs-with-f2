@@ -1,4 +1,4 @@
-import { settings } from "./states/settings.svelte"
+import { settings } from "./settings/settings.svelte"
 
 export function initializeViewFromSettings() {
   if (import.meta.env.MODE === "development")

@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "MODE=development node vite-build.js",
-    "build:zip": "MODE=production node vite-build.js",
+    "build": "MODE=development node scripts/build.js",
+    "build:zip": "MODE=production node scripts/build.js",
     "test:unit": "vitest",
     "storybook": "storybook dev -p 6006",
     "test:e2e": "playwright test",

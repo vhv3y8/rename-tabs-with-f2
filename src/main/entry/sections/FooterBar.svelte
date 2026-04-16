@@ -1,5 +1,5 @@
 <script>
-import Key from "../components/common/Key.svelte"
+import Key from "../../../infra/ui/components/common/Key.svelte"
 import SettingsPopover from "../components/SettingsPopover.svelte"
 import { apply } from "../application/usecases/apply"
 

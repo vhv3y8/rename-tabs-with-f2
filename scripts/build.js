@@ -1,7 +1,7 @@
 import { build } from "vite"
 import { svelte } from "@sveltejs/vite-plugin-svelte"
 import zipPack from "vite-plugin-zip-pack"
-import manifest from "./public/manifest.json" with { type: "json" }
+import manifest from "../public/manifest.json" with { type: "json" }
 import path from "node:path"
 import fs from "node:fs/promises"
 
@@ -45,7 +45,7 @@ const commonConfig = {
 
 const createSvelteConfig = (input, last = false) => {
   return deepMerge(commonConfig, {
-    publicDir: "../public",
+    // publicDir: "../public",
     build: {
       assetsDir: ".", // if not set to ".", js/css files are created at dist/assets/
       target: "esnext", // to use top level await
