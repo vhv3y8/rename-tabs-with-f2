@@ -1,5 +1,5 @@
 import { tabIdxInfoStore } from "@adapters/tabs/impl/tabInfo.svelte"
-import { ChromeMainFacadeImpl } from "../../infra/chrome/ChromeMainFacade"
+import { ChromeMainFacadeImpl } from "../../infra/ChromeMainFacade"
 
 export async function apply() {
   if (import.meta.env.MODE === "development") console.log("[apply]")
@@ -11,7 +11,7 @@ export async function apply() {
       .getTabInfosToApply()
       // send changed title to each content script
       .map(({ id, title }) =>
-        ChromeMainFacadeImpl.fireChangeTitleToContentScript({
+        ChromeMainFacadeImpl.renameTabTitle({
           // why this can be null/undefined??
           id: id!,
           title: title!,

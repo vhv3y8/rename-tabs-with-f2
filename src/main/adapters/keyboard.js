@@ -1,8 +1,8 @@
-import { cancelAllKeydowns, keydowns } from "./keys/keys.svelte"
+import { cancelAllKeydowns, keydowns } from "./keys.svelte"
 import {
   closeSettingsIfItsVisible,
   settingsState,
-} from "./settings/settings.svelte"
+} from "./settings/states/settings.svelte"
 
 import { fireReload } from "./tabs/states/reload.svelte"
 import { focusTabItem } from "./tabs/states/tabItems.svelte"
@@ -94,20 +94,20 @@ export async function keydownHandler(e) {
   }
 }
 
-// shortcut listen keydown
-export function createListenShortcutKeydownHandler({ updateShortcutState }) {
-  if (import.meta.env.MODE === "development")
-    console.log("[createListenShortcutKeydownHandler]")
+// // shortcut listen keydown
+// export function createListenShortcutKeydownHandler({ updateShortcutState }) {
+//   if (import.meta.env.MODE === "development")
+//     console.log("[createListenShortcutKeydownHandler]")
 
-  return function handleListenShortcut(e) {
-    e.preventDefault()
-    // do nothing if shortcut is not valid
-    if (!isValidShortcut(e)) return
+//   return function handleListenShortcut(e) {
+//     e.preventDefault()
+//     // do nothing if shortcut is not valid
+//     if (!isValidShortcut(e)) return
 
-    const shortcut = createShortcut(e)
-    updateShortcutState(shortcut)
-  }
-}
+//     const shortcut = createShortcut(e)
+//     updateShortcutState(shortcut)
+//   }
+// }
 
 // global keyup
 export function keyupHandler() {

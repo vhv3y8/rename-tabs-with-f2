@@ -3,14 +3,13 @@ import {
   type TabInfoState,
 } from "@adapters/tabs/impl/tabInfo.svelte"
 import { tabComponents } from "@adapters/tabs/states/tabComponents.svelte"
-import { ChromeMainFacadeImpl } from "@infra/chrome/ChromeMainFacade"
+import { ChromeMainFacadeImpl } from "@infra/ChromeMainFacade"
 
 export async function initializeTabIdxToInfo() {
   // get tabs
-  const tabsWithoutExtensionPage =
-    await ChromeMainFacadeImpl.getAllCurrentWindowTabsWithoutExtensionPage()
+  const tabsToInitialize = await ChromeMainFacadeImpl.getTabEntries()
   // reduce to appropriate format
-  const tabIdxInfoRecord = tabsWithoutExtensionPage.reduce(
+  const tabIdxInfoRecord = tabsToInitialize.reduce(
     (
       acc: Record<number, TabInfoState>,
       { id, title, favIconUrl, url, index, status },
@@ -34,9 +33,9 @@ export async function initializeTabIdxToInfo() {
   tabIdxInfoStore.clearAndSetTabInfos(tabIdxInfoRecord)
 }
 
-export async function initializeLastFocusTabId() {
-  const lastFocusTabId = await ChromeMainFacadeImpl.getLastFocusTabId()
-  tabComponents.setLastFocusTabId(lastFocusTabId)
-  // if (import.meta.env.MODE === "development")
-  //   console.log("[initializeLastFocusTabId] lastFocusTabId", lastFocusTabId)
-}
+// export async function initializeLastFocusTabId() {
+//   const lastFocusTabId = await ChromeMainFacadeImpl.getLastFocusTabId()
+//   tabComponents.setLastFocusTabId(lastFocusTabId)
+//   // if (import.meta.env.MODE === "development")
+//   //   console.log("[initializeLastFocusTabId] lastFocusTabId", lastFocusTabId)
+// }

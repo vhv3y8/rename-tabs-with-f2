@@ -1,10 +1,4 @@
 <script lang="ts">
-// import {
-//   appendToast,
-//   toastList,
-//   messages,
-// } from "../lib/ui/states/toasts.svelte"
-// import Toast from "../components/components/common/Toast.svelte"
 import ToastItem from "./ToastItem.svelte"
 import { toasts } from "./toasts.svelte"
 </script>

@@ -1,7 +1,7 @@
-<script>
-import Key from "../../../infra/ui/components/common/Key.svelte"
-import { keydowns } from "../lib/ui/states/keys.svelte"
-import { focusTabItem } from "../lib/ui/states/tabs/tabItems.svelte"
+<script lang="ts">
+import { keydowns } from "@adapters/keys.svelte"
+import { tabComponents } from "@adapters/tabs/states/tabComponents.svelte"
+import Key from "../Key.svelte"
 </script>
 
 <header>
@@ -12,7 +12,7 @@ import { focusTabItem } from "../lib/ui/states/tabs/tabItems.svelte"
       padding={"0.3em 0.5em"}
       keydown={keydowns.esc}
       onclick={() => {
-        focusTabItem({ initial: true })
+        tabComponents.focusInitialItem()
       }}
       onmousedown={() => {
         keydowns.esc = true
@@ -30,7 +30,7 @@ import { focusTabItem } from "../lib/ui/states/tabs/tabItems.svelte"
       keydown={keydowns.tab}
       mousedownRepeat={true}
       onclick={() => {
-        focusTabItem({ next: true })
+        tabComponents.focusNextItem()
       }}
       onmousedown={() => {
         keydowns.tab = true
@@ -46,7 +46,7 @@ import { focusTabItem } from "../lib/ui/states/tabs/tabItems.svelte"
       keydown={keydowns.enter}
       mousedownRepeat={true}
       onclick={() => {
-        focusTabItem({ next: true })
+        tabComponents.focusNextItem()
       }}
       onmousedown={() => {
         keydowns.enter = true
@@ -64,7 +64,7 @@ import { focusTabItem } from "../lib/ui/states/tabs/tabItems.svelte"
       keydown={keydowns.shiftTab}
       mousedownRepeat={true}
       onclick={() => {
-        focusTabItem({ next: false })
+        tabComponents.focusPreviousItem()
       }}
       onmousedown={() => {
         keydowns.shiftTab = true
@@ -80,7 +80,7 @@ import { focusTabItem } from "../lib/ui/states/tabs/tabItems.svelte"
       keydown={keydowns.shiftEnter}
       mousedownRepeat={true}
       onclick={() => {
-        focusTabItem({ next: false })
+        tabComponents.focusPreviousItem()
       }}
       onmousedown={() => {
         keydowns.shiftEnter = true

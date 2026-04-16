@@ -1,15 +1,16 @@
 import { tabIdxInfoStore } from "@adapters/tabs/impl/tabInfo.svelte"
-import { ChromeMainFacadeImpl } from "../../infra/chrome/ChromeMainFacade"
+import { ChromeMainFacadeImpl } from "../../infra/ChromeMainFacade"
 
-export async function checkContentScriptAvailableAndUpdateAllInfo() {
+export async function checkTabConnectionAndUpdateStoreFlags() {
   let allTabIds = tabIdxInfoStore.getAllTabIds()
 
   // check
   let tabConnectedFlags = await Promise.allSettled(
     allTabIds.map((id) =>
-      ChromeMainFacadeImpl.isContentScriptConnected({ id }),
+      ChromeMainFacadeImpl.checkContentScriptConnection({ id }),
     ),
   ).then((arr) =>
+    // TODO: fix
     arr.map((item) => item.status === "fulfilled" && item.value == true),
   )
 

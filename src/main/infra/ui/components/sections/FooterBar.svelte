@@ -1,14 +1,9 @@
-<script>
-import Key from "../../../infra/ui/components/common/Key.svelte"
-import SettingsPopover from "../components/SettingsPopover.svelte"
-import { apply } from "../application/usecases/apply"
-
-import { keydowns } from "../lib/ui/states/keys.svelte"
-import {
-  hideSettingsPopover,
-  settingsState,
-  toggleShowSettings,
-} from "../lib/ui/states/settings.svelte"
+<script lang="ts">
+import { keydowns } from "@adapters/keys.svelte"
+import SettingsPopover from "@adapters/settings/SettingsPopover.svelte"
+import { settingState } from "@adapters/settings/states/settings.svelte"
+import { apply } from "@application/usecases/apply"
+import Key from "../Key.svelte"
 </script>
 
 <!-- HTML -->
@@ -20,17 +15,17 @@ import {
       id={"settingsPopoverBtn"}
       padding={""}
       onclick={() => {
-        toggleShowSettings()
+        settingState.toggleShow()
       }}
     >
       {chrome.i18n.getMessage("settings")}
     </Key>
 
     <!-- Popover -->
-    {#if settingsState.showSettings}
+    {#if settingState.show}
       <SettingsPopover
         onclose={() => {
-          hideSettingsPopover()
+          settingState.hide()
         }}
       />
     {/if}

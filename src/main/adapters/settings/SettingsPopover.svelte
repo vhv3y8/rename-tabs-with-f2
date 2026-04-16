@@ -1,30 +1,21 @@
-<script>
-import { onMount } from "svelte"
-
+<script lang="ts">
 import Key from "../../infra/ui/components/Key.svelte"
-import Popover from "../../infra/ui/components/common/Popover.svelte"
+import { settingState } from "./states/settings.svelte"
+import { stringifyShortcut } from "@adapters/shortcut"
+import { toastMessages, toasts } from "@adapters/toast/toasts.svelte"
+import Popover from "@infra/ui/components/Popover.svelte"
 
-import * as chromeStorage from "../../lib/chrome/storage"
-
-import {
-  endShortcutListen,
-  getGlobalShortcutText,
-  settings,
-  settingsState,
-  startShortcutListen,
-} from "../lib/ui/states/settings.svelte"
-import * as view from "../lib/ui/view"
-import { appendToast, messages } from "../lib/ui/states/toasts.svelte"
-import { createListenShortcutKeydownHandler } from "../lib/ui/keyboard"
-import { stringifyShortcut } from "../lib/ui/shortcut"
+import * as view from "../view"
+import { createListenShortcutKeydownHandler } from "./input/keyboard"
+import { ChromeMainFacadeImpl } from "@infra/ChromeMainFacade"
 
 let { onclose } = $props()
 
-let localShortcut = $state(settings.shortcut)
+let localShortcut = $state(settingState.settings.shortcut)
 let localShortcutText = $derived(stringifyShortcut(localShortcut))
 
 function pushToast() {
-  appendToast(messages.SHORTCUT_UPDATED(localShortcutText))
+  toasts.appendToast(toastMessages.SHORTCUT_UPDATED(localShortcutText))
 }
 </script>
 
@@ -32,7 +23,7 @@ function pushToast() {
 
 <svelte:document
   onkeydown={(e) => {
-    if (settingsState.listeningShortcut) {
+    if (settingState.listen) {
       // to put keydown logic at outer module
       createListenShortcutKeydownHandler({
         updateShortcutState: (shortcutFromEvent) => {
@@ -52,9 +43,9 @@ function pushToast() {
       <span>{chrome.i18n.getMessage("settings_darkmode")} :</span>
       <Key
         onclick={async () => {
-          settings.darkmode = !settings.darkmode
-          view.applyDarkModeUI({ darkmode: settings.darkmode })
-        }}>{settings.darkmode}</Key
+          settingState.settings.darkmode = !settingState.settings.darkmode
+          view.applyDarkModeUI({ darkmode: settingState.settings.darkmode })
+        }}>{settingState.settings.darkmode}</Key
       >
     </li>
 
@@ -63,9 +54,11 @@ function pushToast() {
       <span>{chrome.i18n.getMessage("settings_larger_width")} :</span>
       <Key
         onclick={async () => {
-          settings.largerWidth = !settings.largerWidth
-          view.applyLargerWidth({ largerWidth: settings.largerWidth })
-        }}>{settings.largerWidth}</Key
+          settingState.settings.largerWidth = !settingState.settings.largerWidth
+          view.applyLargerWidth({
+            largerWidth: settingState.settings.largerWidth,
+          })
+        }}>{settingState.settings.largerWidth}</Key
       >
     </li>
 
@@ -73,13 +66,13 @@ function pushToast() {
     <li class="col">
       <p><span>{chrome.i18n.getMessage("settings_shortcut")} :</span></p>
 
-      {#if !settingsState.listeningShortcut}
+      {#if !settingState.listen}
         <Key
           id={"shortcutBtn"}
           padding={""}
           onclick={() => {
-            startShortcutListen()
-          }}>{getGlobalShortcutText()}</Key
+            settingState.startListening()
+          }}>{settingState.shortcutText}</Key
         >
       {:else}
         <!-- Listening / shortcutText -->
@@ -99,9 +92,9 @@ function pushToast() {
             id={"resetToF2"}
             padding={"0.4em 0.5em"}
             onclick={() => {
-              localShortcut = chromeStorage.defaultShortcutF2
-              settings.shortcut = localShortcut
-              endShortcutListen()
+              localShortcut = ChromeMainFacadeImpl.defaultShortcutF2
+              settingState.settings.shortcut = localShortcut
+              settingState.endListening()
               pushToast()
             }}>{chrome.i18n.getMessage("settings_shortcut_reset_to_f2")}</Key
           >
@@ -113,8 +106,8 @@ function pushToast() {
             id={"cancelBtn"}
             padding={"0.4em 0.5em"}
             onclick={() => {
-              endShortcutListen()
-              localShortcut = settings.shortcut
+              settingState.endListening()
+              localShortcut = settingState.settings.shortcut
             }}>{chrome.i18n.getMessage("settings_shortcut_cancel")}</Key
           >
 
@@ -123,8 +116,8 @@ function pushToast() {
             padding={"0.4em 0.5em"}
             onclick={() => {
               console.log("[localShortcut]", localShortcut)
-              settings.shortcut = localShortcut
-              endShortcutListen()
+              settingState.settings.shortcut = localShortcut
+              settingState.endListening()
               pushToast()
             }}>{chrome.i18n.getMessage("settings_shortcut_ok")}</Key
           >

@@ -1,32 +1,34 @@
-<script>
+<script lang="ts">
+import { settingState } from "@adapters/settings/states/settings.svelte"
+import NotConnectedCard from "@adapters/tabs/NotConnectedCard.svelte"
 import { onDestroy, onMount } from "svelte"
 
-import HeaderBar from "./sections/HeaderBar.svelte"
-import BlurDescriptionCard from "./BlurDescriptionCard.svelte"
-import TabItem from "../components/TabItem.svelte"
-import FooterBar from "./FooterBar.svelte"
-import GlobalToastGrid from "../components/GlobalToastGrid.svelte"
-import Debug from "./Debug.svelte"
+// import HeaderBar from "./infra/ui/components/sections/HeaderBar.svelte"
+// import BlurDescriptionCard from "./BlurDescriptionCard.svelte"
+// import TabItem from "../components/TabItem.svelte"
+// import FooterBar from "./FooterBar.svelte"
+// import GlobalToastGrid from "../components/GlobalToastGrid.svelte"
+// import Debug from "./Debug.svelte"
 
-import * as chromeTabs from "../../lib/chrome/tabs"
+// import * as chromeTabs from "../lib/chrome/tabs"
 
-import { checkContentScriptAvailableAndUpdateAllInfo } from "../application/usecases/checkContentScriptAvailable"
-import {
-  initializeLastFocusTabId,
-  initializeTabIdxToInfo,
-} from "../application/usecases/initializeTabInfos"
-import {
-  allTabItems,
-  focusTabItem,
-} from "../lib/ui/states/tabs/tabItems.svelte"
+// import { checkContentScriptAvailableAndUpdateAllInfo } from "./application/usecases/checkTabConnection"
+// import {
+//   initializeLastFocusTabId,
+//   initializeTabIdxToInfo,
+// } from "./application/usecases/initializeTabInfos"
+// import {
+//   allTabItems,
+//   focusTabItem,
+// } from "../lib/ui/states/tabs/tabItems.svelte"
 
-import * as view from "../lib/ui/view"
-import {
-  destroySettingsEffect,
-  settings,
-} from "../lib/ui/states/settings.svelte"
-import { tabIdxToInfo } from "./lib/application/tabInfo.svelte"
-import { keydownHandler, keyupHandler } from "../lib/ui/keyboard"
+// import * as view from "../lib/ui/view"
+// import {
+//   destroySettingsEffect,
+//   settings,
+// } from "../lib/ui/states/settings.svelte"
+// import { tabIdxToInfo } from "./lib/application/tabInfo.svelte"
+// import { keydownHandler, keyupHandler } from "../lib/ui/keyboard"
 
 // lifecycle
 onMount(async () => {
@@ -61,25 +63,26 @@ onDestroy(() => {
 
 <!-- HTML -->
 
-<main class:large={settings.largerWidth}>
-  <HeaderBar />
+<main class:large={settingState.settings.largerWidth}>
+  <NotConnectedCard />
+  <!-- <HeaderBar /> -->
 
   <!-- <Debug /> -->
 
-  <BlurDescriptionCard />
+  <!-- <BlurDescriptionCard /> -->
 
   <!-- TabItem List -->
-  <ul>
+  <!-- <ul>
     {#each Object.values(tabIdxToInfo) as tabInfo, idx}
       <TabItem bind:this={allTabItems[idx]} {tabInfo} />
-    {/each}
-  </ul>
+    {/each} -->
+  <!-- </ul> -->
 
-  <FooterBar />
+  <!-- <FooterBar /> -->
 
   <!-- Fixed -->
 
-  <GlobalToastGrid />
+  <!-- <GlobalToastGrid /> -->
 </main>
 
 <!-- Style -->

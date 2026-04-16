@@ -1,5 +1,5 @@
 import { notConnectedTabLists } from "@adapters/tabs/states/notConnected.svelte"
-import { ChromeMainFacadeImpl } from "@infra/chrome/ChromeMainFacade"
+import { ChromeMainFacadeImpl } from "@infra/ChromeMainFacade"
 
 export async function reloadAllConnectableTabs() {
   const tabIdsToReload = notConnectedTabLists.reloadConnectableTabs.map(
