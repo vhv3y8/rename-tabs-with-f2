@@ -4,7 +4,7 @@ import {
   notConnectedTabLists,
 } from "./states/notConnected.svelte"
 import { fireReload, reloadState } from "./states/reload.svelte"
-import { tabComponents } from "./states/tabComponents.svelte"
+import { tabItemComponents } from "./states/tabItemComponents.svelte"
 
 // content script unavailable tabs count
 let allCount = $derived(notConnectedTabLists.allTabs.length)
@@ -42,7 +42,7 @@ let { refreshCount, browserCount } = $derived({
             onclick={() => {
               // hideUnavailableCardIfItsVisible()
               // focusTabItem({ current: true })
-              tabComponents.focusNextItem()
+              tabItemComponents.focusNextItem()
             }}>Shift + W</Key
           >
         </div>

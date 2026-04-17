@@ -4,7 +4,7 @@ import { tabIdxInfoStore } from "../impl/tabInfo.svelte"
 import { ChromeMainFacadeImpl } from "@infra/ChromeMainFacade"
 
 type TabItemComponent = ReturnType<typeof TabItem>
-export class TabComponents {
+export class TabItemComponents {
   // components are set by <TabItem> bind:this
   components: TabItemComponent[] = $state([])
   private focusableComponents: TabItemComponent[]
@@ -48,7 +48,7 @@ export class TabComponents {
   // use this method to create instance
   static async build(tabIdxInfoStore: TabInfoStore) {
     const lastFocusTabId = await ChromeMainFacadeImpl.getLastFocusTabId()
-    return new TabComponents(tabIdxInfoStore, lastFocusTabId)
+    return new TabItemComponents(tabIdxInfoStore, lastFocusTabId)
   }
 
   // mouse click
@@ -87,4 +87,4 @@ export class TabComponents {
   }
 }
 //
-export const tabComponents = await TabComponents.build(tabIdxInfoStore)
+export const tabItemComponents = await TabItemComponents.build(tabIdxInfoStore)

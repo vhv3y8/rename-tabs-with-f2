@@ -8,4 +8,6 @@ export interface TabInfoStore {
 
   getAllTabIds(): number[]
   getTabInfosToApply(): TabInfo[]
+
+  getTabIdsToReload(): number[]
 }

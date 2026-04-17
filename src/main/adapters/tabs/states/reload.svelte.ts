@@ -1,6 +1,6 @@
 import { waitUntil } from "@adapters/util.svelte"
 import { notConnectedTabLists } from "./notConnected.svelte"
-import { tabComponents } from "./tabComponents.svelte"
+import { tabItemComponents } from "./tabItemComponents.svelte"
 import { reloadAllConnectableTabs } from "@application/usecases/reloadAllConnectableTabs"
 import { checkTabConnectionAndUpdateStoreFlags } from "@application/usecases/checkTabConnection"
 
@@ -33,7 +33,7 @@ class ReloadState {
     this.waiting = false
   }
 }
-export const reloadState = new ReloadState()
+export const reload = new ReloadState()
 
 export async function fireReload() {
   const reloadEntries = {} as Record<number, ReloadingTabStatus>
@@ -45,7 +45,7 @@ export async function fireReload() {
     }
   }
   // update ui
-  reloadState.startReload(reloadEntries)
+  reload.startReload(reloadEntries)
 
   // run use case
   // this just triggers reload and doesn't wait for it to end.
@@ -57,11 +57,11 @@ export async function fireReload() {
     console.log("[reload] [first wait]")
   await waitForReloadAndUpdateUI({})
   // retry waiting for 1 time and finish
-  if (!reloadState.allComplete) {
+  if (!reload.allComplete) {
     if (import.meta.env.MODE === "development")
       console.log("[reload] [second wait]")
     await waitForReloadAndUpdateUI({})
-    reloadState.endWaiting()
+    reload.endWaiting()
   }
 }
 
@@ -71,18 +71,18 @@ async function waitForReloadAndUpdateUI({ limit = 2000 }) {
 
   // wait for reload to finish with time limit
   await Promise.race([
-    waitUntil(() => reloadState.allComplete, true),
+    waitUntil(() => reload.allComplete, true),
     new Promise((res) => setTimeout(res, limit)),
   ])
-  if (reloadState.allComplete) reloadState.endWaiting()
+  if (reload.allComplete) reload.endWaiting()
 
   if (import.meta.env.MODE === "development")
     console.log(
       "[reload] [everyTabStatusIsComplete] ",
-      reloadState.allComplete ? "[done]" : "[time limit]",
+      reload.allComplete ? "[done]" : "[time limit]",
     )
 
   // run use case
   await checkTabConnectionAndUpdateStoreFlags()
-  tabComponents.focusInitialItem()
+  tabItemComponents.focusInitialItem()
 }

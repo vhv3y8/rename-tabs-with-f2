@@ -13,13 +13,13 @@ function isBrowserPolicyBlockedURL(url: string) {
 }
 
 type NotConnectedTab = Pick<TabInfo, "id" | "title" | "url" | "index">
-class NotConnectedTabLists {
+export class NotConnectedTabLists implements Partial<TabInfoStore> {
   allTabs: NotConnectedTab[]
   policyBlockedTabs: NotConnectedTab[]
   reloadConnectableTabs: NotConnectedTab[]
   constructor(private tabInfoStore: TabInfoStore) {
     this.allTabs = $derived(
-      Object.values(this.tabInfoStore)
+      Object.values(this.tabInfoStore.getAllTabInfos())
         .filter(({ connected }) => !connected)
         .map(({ id, title, url, index }) => ({ id, title, url, index })),
     )
@@ -30,8 +30,13 @@ class NotConnectedTabLists {
       this.allTabs.filter(({ url }) => url && !isBrowserPolicyBlockedURL(url)),
     )
   }
+  getTabIdsToReload() {
+    return this.reloadConnectableTabs
+      .map(({ id }) => id)
+      .filter((id) => id !== undefined)
+  }
 }
-export const notConnectedTabLists = new NotConnectedTabLists(tabIdxInfoStore)
+// export const notConnectedTabLists = new NotConnectedTabLists(tabIdxInfoStore)
 
 class NotConnectedCardState {
   show = $state(true)
@@ -39,4 +44,4 @@ class NotConnectedCardState {
     if (this.show) this.show = false
   }
 }
-export const notConnectedCardState = new NotConnectedCardState()
+export const notConnectedCard = new NotConnectedCardState()

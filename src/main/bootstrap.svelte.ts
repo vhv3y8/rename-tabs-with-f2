@@ -1,24 +1,38 @@
-if (import.meta.env.MODE === "development") console.log("[onMount]")
-await chromeTabs.focusExtensionPageTabForRefresh()
+import { createReloadingTabsUpdatedHandler } from "@adapters/tabs/input/chrome"
+import { checkTabConnectionAndUpdateStoreFlags } from "@application/usecases/checkTabConnection"
+import { initializeTabInfoStore } from "@application/usecases/initializeTabInfos"
+import { ChromeMainFacadeImpl } from "@infra/ChromeMainFacade"
 
-// initialize application entities
-await initializeTabIdxToInfo()
-await initializeLastFocusTabId()
+await ChromeMainFacadeImpl.focusExtensionPageTabForRefresh()
 
-// initialize view from storage
-view.initializeViewFromSettings()
+// run initializing use cases at bootstrap
+await initializeTabInfoStore()
+await checkTabConnectionAndUpdateStoreFlags()
 
-// update global state
-await checkContentScriptAvailableAndUpdateAllInfo()
+// register adapters
+chrome.tabs.onUpdated.addListener(createReloadingTabsUpdatedHandler())
 
-// initialize view
-focusTabItem({ initial: true })
+// if (import.meta.env.MODE === "development") console.log("[onMount]")
+// await chromeTabs.focusExtensionPageTabForRefresh()
 
-if (import.meta.env.MODE === "development")
-  console.log("[onMount] [tabIdxToInfo]", Object.values(tabIdxToInfo))
+// // initialize application entities
+// await initializeTabIdxToInfo()
+// await initializeLastFocusTabId()
 
-onDestroy(() => {
-  destroySettingsEffect()
-})
+// // initialize view from storage
+// view.initializeViewFromSettings()
 
-<svelte:document onkeydown={keydownHandler} onkeyup={keyupHandler} />
+// // update global state
+// await checkContentScriptAvailableAndUpdateAllInfo()
+
+// // initialize view
+// focusTabItem({ initial: true })
+
+// if (import.meta.env.MODE === "development")
+//   console.log("[onMount] [tabIdxToInfo]", Object.values(tabIdxToInfo))
+
+// onDestroy(() => {
+//   destroySettingsEffect()
+// })
+
+// <svelte:document onkeydown={keydownHandler} onkeyup={keyupHandler} />

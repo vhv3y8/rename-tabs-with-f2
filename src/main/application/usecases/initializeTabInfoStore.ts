@@ -2,10 +2,10 @@ import {
   tabIdxInfoStore,
   type TabInfoState,
 } from "@adapters/tabs/impl/tabInfo.svelte"
-import { tabComponents } from "@adapters/tabs/states/tabComponents.svelte"
+// import { tabItemComponents } from "@adapters/tabs/states/tabItemComponents.svelte"
 import { ChromeMainFacadeImpl } from "@infra/ChromeMainFacade"
 
-export async function initializeTabIdxToInfo() {
+export async function initializeTabInfoStore() {
   // get tabs
   const tabsToInitialize = await ChromeMainFacadeImpl.getTabEntries()
   // reduce to appropriate format

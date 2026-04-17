@@ -4,14 +4,14 @@
 //   setCurrentFocusIdxFromClick,
 // } from "../lib/ui/states/tabs/tabItems.svelte"
 import type { TabInfoState } from "./impl/tabInfo.svelte"
-import { tabComponents } from "./states/tabComponents.svelte"
+import { tabItemComponents } from "./states/tabItemComponents.svelte"
 
 let elem = null
 
 let { tabInfo }: { tabInfo: TabInfoState } = $props()
 let localTitle = $state(tabInfo.title)
 let focusableItemsIdx = $derived(
-  tabComponents.focusableIdxFromTabIdLookup[tabInfo.id],
+  tabItemComponents.focusableIdxFromTabIdLookup[tabInfo.id],
 )
 
 function applyLocalTitle() {
@@ -55,7 +55,7 @@ export function getTabInfo() {
       spellcheck="false"
       onclick={(e) => {
         focusTabInput()
-        tabComponents.updateCurrentFocusIdx(focusableItemsIdx)
+        tabItemComponents.updateCurrentFocusIdx(focusableItemsIdx)
       }}
       onchange={applyLocalTitle}
     />

@@ -1,12 +1,13 @@
-<script>
-import { tabInfoStore } from "./impl/tabInfo.svelte"
-import { tabComponents } from "./states/tabComponents.svelte"
+<script lang="ts">
+import { tabIdxInfoStore } from "./impl/tabInfo.svelte"
+import { tabItemComponents } from "./states/tabItemComponents.svelte"
+import TabItem from "./TabItem.svelte"
 </script>
 
 <!-- HTML -->
 
 <ul>
-  {#each Object.values(tabInfoStore) as tabInfo, idx}
-    <TabItem bind:this={tabComponents.components[idx]} {tabInfo} />
+  {#each Object.values(tabIdxInfoStore) as tabInfo, idx}
+    <TabItem bind:this={tabItemComponents.components[idx]} {tabInfo} />
   {/each}
 </ul>

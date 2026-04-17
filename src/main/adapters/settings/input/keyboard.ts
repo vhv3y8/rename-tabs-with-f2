@@ -18,3 +18,5 @@ export function createListenShortcutKeydownHandler({
     updateShortcutState(shortcut)
   }
 }
+
+// esc to close

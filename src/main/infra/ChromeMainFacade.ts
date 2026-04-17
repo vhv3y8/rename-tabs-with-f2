@@ -5,6 +5,7 @@ import {
   fireChangeTitleToContentScript,
   getAllCurrentWindowTabsWithoutExtensionPage,
   reloadTab,
+  focusExtensionPageTabForRefresh,
 } from "@chrome/tabs"
 
 export interface ChromeMainFacade {
@@ -13,6 +14,7 @@ export interface ChromeMainFacade {
   checkContentScriptConnection: typeof isContentScriptConnected
   getTabEntries: typeof getAllCurrentWindowTabsWithoutExtensionPage
   reloadTab: typeof reloadTab
+  focusExtensionPageTabForRefresh: typeof focusExtensionPageTabForRefresh
   // runtime
   getLastFocusTabId: typeof getLastFocusTabId
   // storage
@@ -26,6 +28,7 @@ export const ChromeMainFacadeImpl: ChromeMainFacade = {
   checkContentScriptConnection: isContentScriptConnected,
   getTabEntries: getAllCurrentWindowTabsWithoutExtensionPage,
   reloadTab,
+  focusExtensionPageTabForRefresh,
   getLastFocusTabId,
   getSettings,
   setSettings,
