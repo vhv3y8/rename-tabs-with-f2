@@ -6,10 +6,8 @@ import Key from "@main/infra/ui/components/Key.svelte"
 import { tabItemComponents } from "./states/tabItemComponents.svelte"
 
 let allCount = $derived(notConnected.allTabs.length)
-let { reloadCount, policyCount } = $derived({
-  reloadCount: notConnected.reloadConnectableTabs.length,
-  policyCount: notConnected.policyBlockedTabs.length,
-})
+let reloadCount = $derived(notConnected.reloadConnectableTabs.length)
+let policyCount = $derived(notConnected.policyBlockedTabs.length)
 </script>
 
 <!-- HTML -->
@@ -36,6 +34,7 @@ let { reloadCount, policyCount } = $derived({
               onclick: () => {
                 // hideUnavailableCardIfItsVisible()
                 // focusTabItem({ current: true })
+                notConnectedCard.hideCardIfVisible()
                 tabItemComponents.focusNextItem()
               },
             }}>Shift + W</Key

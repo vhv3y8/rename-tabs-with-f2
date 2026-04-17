@@ -1,7 +1,5 @@
-import {
-  createShortcut,
-  isValidShortcut,
-} from "../../../../../lib/utils/shortcut"
+import { createShortcut, isValidShortcut } from "../../../../../lib/shortcut"
+import { settingModal } from "../settingModal.svelte"
 
 // shortcut listen keydown
 export function createListenShortcutKeydownHandler({
@@ -22,4 +20,12 @@ export function createListenShortcutKeydownHandler({
   }
 }
 
-// esc to close
+export function keydownSettingHandler(e: KeyboardEvent) {
+  switch (e.key) {
+    // esc to close
+    case "Escape": {
+      e.preventDefault()
+      settingModal.hideIfVisible()
+    }
+  }
+}

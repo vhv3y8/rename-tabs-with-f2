@@ -1,7 +1,7 @@
 <script lang="ts">
 import { settingState } from "@adapters/settings/states/settings.svelte"
-import NotConnectedCard from "@adapters/tabs/NotConnectedCard.svelte"
 import { onDestroy, onMount } from "svelte"
+import NotConnectedCard from "./adapters/ui/tabs/NotConnectedCard.svelte"
 
 // import HeaderBar from "./infra/ui/components/sections/HeaderBar.svelte"
 // import BlurDescriptionCard from "./BlurDescriptionCard.svelte"

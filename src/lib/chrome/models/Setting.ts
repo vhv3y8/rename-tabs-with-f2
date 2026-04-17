@@ -1,4 +1,4 @@
-import { type MigrationMap } from "../../Migration"
+import { type TargetVersionMigrationMap } from "../../Migration"
 
 export type HotKey = {
   ctrlKey: boolean
@@ -11,7 +11,7 @@ export type Setting = {
   extVersion: string
   darkmode: boolean
   largerWidth: boolean
-  hotkey: HotKey
+  hotKey: HotKey
 }
 
 // default values
@@ -26,7 +26,7 @@ export const initialSetting: Setting = {
   extVersion: chrome.runtime.getManifest().version,
   darkmode: false,
   largerWidth: false,
-  hotkey: F2HotKey,
+  hotKey: F2HotKey,
 }
 
 // maybe use chrome.runtime.onInstalled "update" previousVersion
@@ -35,6 +35,6 @@ export const initialSetting: Setting = {
 //   settingData: any,
 // ): "1.0.0" | "1.1.0" | "1.2.0" | "1.2.1" {}
 
-export const settingMigrationMap: MigrationMap = {
+export const settingMigrationMap: TargetVersionMigrationMap = {
   "1.3.0": (editor) => editor.move("shortcut", "hotKey"),
 }

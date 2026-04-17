@@ -16,21 +16,20 @@ export class Toasts {
     })
   }
 
-  appendToast(text: string) {
+  appendToast(text: string): number {
+    const toastId = this.nextId
     this.list.unshift({
-      id: this.nextId,
+      id: toastId,
       text,
       duration: this.DURATION,
     })
     // add timer
-    if (!this.timers.has(this.nextId)) {
-      const timer = setTimeout(
-        () => this.removeToast(this.nextId),
-        this.DURATION,
-      )
-      this.timers.set(this.nextId, timer)
+    if (!this.timers.has(toastId)) {
+      const timer = setTimeout(() => this.removeToast(toastId), this.DURATION)
+      this.timers.set(toastId, timer)
     }
     this.nextId += 1
+    return toastId
   }
   removeToast(id: number) {
     const idx = this.list.findIndex((item) => item.id === id)

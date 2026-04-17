@@ -1,4 +1,4 @@
-import { stringifyShortcut } from "@lib/utils/shortcut"
+import { stringifyShortcut } from "@lib/shortcut"
 import { ChromeMainFacadeImpl } from "@infra/ChromeMainFacade"
 import type { SettingStore } from "@main/application/ports/SettingStore"
 import { app } from "@main/bootstrap.svelte"
@@ -20,8 +20,8 @@ export class SettingModalState {
       })
     })
     this.hotKeyText = $derived.by(() => {
-      if (this.store.setting.hotkey === undefined) return "N/A"
-      return stringifyShortcut(this.store.setting.hotkey)
+      if (this.store.setting.hotKey === undefined) return "N/A"
+      return stringifyShortcut(this.store.setting.hotKey)
     })
   }
 

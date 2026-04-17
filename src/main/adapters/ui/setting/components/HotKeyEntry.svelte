@@ -1,13 +1,13 @@
 <script lang="ts">
 import Key from "@main/infra/ui/components/Key.svelte"
-import { stringifyShortcut } from "@lib/utils/shortcut"
+import { stringifyShortcut } from "@lib/shortcut"
 import { ChromeMainFacadeImpl } from "@main/infra/ChromeMainFacade"
 import ModalEntry from "../ModalEntry.svelte"
 import { settingModal } from "../settingModal.svelte"
 import { toastMessages, toasts } from "../../toast/toasts.svelte"
 import { app } from "@main/bootstrap.svelte"
 
-let localShortcut = $state(app.setting.hotkey)
+let localShortcut = $state(app.setting.hotKey)
 let localShortcutText = $derived(stringifyShortcut(localShortcut))
 
 function pushToast() {
@@ -51,7 +51,7 @@ function pushToast() {
           padding: "0.4em 0.5em",
           onclick: () => {
             localShortcut = ChromeMainFacadeImpl.defaultShortcutF2
-            app.setting.hotkey = localShortcut
+            app.setting.hotKey = localShortcut
             settingModal.endListening()
             pushToast()
           },
@@ -67,7 +67,7 @@ function pushToast() {
           padding: "0.4em 0.5em",
           onclick: () => {
             settingModal.endListening()
-            localShortcut = app.setting.hotkey
+            localShortcut = app.setting.hotKey
           },
         }}>{chrome.i18n.getMessage("settings_shortcut_cancel")}</Key
       >
@@ -78,7 +78,7 @@ function pushToast() {
           padding: "0.4em 0.5em",
           onclick: () => {
             console.log("[localShortcut]", localShortcut)
-            app.setting.hotkey = localShortcut
+            app.setting.hotKey = localShortcut
             settingModal.endListening()
             pushToast()
           },

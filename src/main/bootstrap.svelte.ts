@@ -9,16 +9,16 @@ import type { SettingStore } from "./application/ports/SettingStore"
 
 await ChromeMainFacadeImpl.focusExtensionPageTabForRefresh()
 
-// create port adapter instances
+// create infra / port implementations
 export const tabIdxInfoStore =
   new TabIdxInfoRecordStore() satisfies TabInfoStore
 export const notConnected = tabIdxInfoStore.notConnected
 export const app: SettingStore = await AppSetting.build()
 
 // register adapters
-chrome.tabs.onUpdated.addListener(createReloadingTabsUpdatedHandler())
+// chrome.tabs.onUpdated.addListener(createReloadingTabsUpdatedHandler())
 
-// run initializing use cases at bootstrap
+// run initializing use cases (adapter = bootstrap)
 await initializeTabInfoStore()
 await checkTabConnectionAndUpdateStoreFlags()
 

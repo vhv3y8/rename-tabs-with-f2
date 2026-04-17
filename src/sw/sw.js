@@ -1,6 +1,6 @@
-import * as chromeStorage from "./lib/chrome/storage"
-import * as chromeTabs from "./lib/chrome/tabs"
-import * as chromeWindows from "./lib/chrome/windows"
+import * as chromeStorage from "../lib/chrome/storage"
+import * as chromeTabs from "../lib/chrome/tabs"
+import * as chromeWindows from "../lib/chrome/windows"
 
 let winIdLastFocusTabIdMap = new Map()
 let extensionTabIdSet = new Set()

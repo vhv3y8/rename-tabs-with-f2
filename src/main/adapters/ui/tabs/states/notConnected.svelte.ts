@@ -1,5 +1,5 @@
-import type { TabInfo } from "@domain/entities/TabInfo"
 import type { TabInfoStore } from "@application/ports/TabInfoStore"
+import type { TabInfoState } from "./tabInfoRecord.svelte"
 
 const browserPolicyBlockedURLFilters = [
   /chrome:\/\/.*/i,
@@ -11,7 +11,7 @@ function isBrowserPolicyBlockedURL(url: string) {
   return browserPolicyBlockedURLFilters.some((filter) => filter.test(url))
 }
 
-type NotConnectedTab = Pick<TabInfo, "id" | "title" | "url" | "index">
+type NotConnectedTab = Pick<TabInfoState, "id" | "title" | "url" | "index">
 export class NotConnectedTabLists implements Partial<TabInfoStore> {
   allTabs: NotConnectedTab[]
   policyBlockedTabs: NotConnectedTab[]

@@ -10,7 +10,7 @@ import { app } from "@main/bootstrap.svelte"
 
 let { onclose } = $props()
 
-let localShortcut = $state(app.setting.hotkey)
+let localShortcut = $state(app.setting.hotKey)
 </script>
 
 <!-- Event Handlers -->

@@ -128,7 +128,7 @@ async function updateExtensionVersion() {
 
 // Build
 
-const entries = ["src/main/index.html", "src/content.js", "src/sw.js"]
+const entries = ["src/main/index.html", "src/content.js", "src/sw/sw.js"]
 if (!isProduction) entries.push("src/test-bridge.html", "src/test-bridge.js")
 
 // Run vite build for each entries

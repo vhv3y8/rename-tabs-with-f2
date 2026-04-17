@@ -60,10 +60,11 @@ export class SchemaEditor {
 // }
 
 export type Migration = (editor: SchemaEditor) => void
-export type MigrationMap = Record<string, Migration>
+export type TargetVersionMigrationMap = Record<string, Migration>
 
+// use this to run migrations
 export class MigrationAggregator {
-  constructor(private migrations: MigrationMap) {}
+  constructor(private migrations: TargetVersionMigrationMap) {}
 
   migrate(data: any, targetVersion: number): any {}
 }
