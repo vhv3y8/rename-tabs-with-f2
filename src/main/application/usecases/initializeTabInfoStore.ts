@@ -1,8 +1,5 @@
-import {
-  tabIdxInfoStore,
-  type TabInfoState,
-} from "@adapters/tabs/impl/tabInfo.svelte"
-// import { tabItemComponents } from "@adapters/tabs/states/tabItemComponents.svelte"
+import type { TabInfoState } from "@main/adapters/ui/tabs/states/tabInfoRecord.svelte"
+import { tabIdxInfoStore } from "@main/bootstrap.svelte"
 import { ChromeMainFacadeImpl } from "@infra/ChromeMainFacade"
 
 export async function initializeTabInfoStore() {
@@ -32,10 +29,3 @@ export async function initializeTabInfoStore() {
   // set state
   tabIdxInfoStore.clearAndSetTabInfos(tabIdxInfoRecord)
 }
-
-// export async function initializeLastFocusTabId() {
-//   const lastFocusTabId = await ChromeMainFacadeImpl.getLastFocusTabId()
-//   tabComponents.setLastFocusTabId(lastFocusTabId)
-//   // if (import.meta.env.MODE === "development")
-//   //   console.log("[initializeLastFocusTabId] lastFocusTabId", lastFocusTabId)
-// }

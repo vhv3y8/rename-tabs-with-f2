@@ -1,4 +1,4 @@
-import { tabIdxInfoStore } from "@adapters/tabs/impl/tabInfo.svelte"
+import { tabIdxInfoStore } from "@main/bootstrap.svelte"
 import { ChromeMainFacadeImpl } from "../../infra/ChromeMainFacade"
 
 export async function checkTabConnectionAndUpdateStoreFlags() {

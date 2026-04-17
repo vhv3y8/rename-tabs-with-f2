@@ -1,10 +1,10 @@
-import { tabIdxInfoStore } from "@adapters/tabs/impl/tabInfo.svelte"
+import { tabIdxInfoStore } from "@main/bootstrap.svelte"
 import { ChromeMainFacadeImpl } from "../../infra/ChromeMainFacade"
 
 export async function apply() {
   if (import.meta.env.MODE === "development") console.log("[apply]")
   // trigger change event for focused element to apply input changes
-  document.activeElement!.dispatchEvent(new Event("change", { bubbles: true }))
+  document.activeElement?.dispatchEvent(new Event("change", { bubbles: true }))
 
   await Promise.allSettled(
     tabIdxInfoStore

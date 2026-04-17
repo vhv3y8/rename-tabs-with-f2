@@ -1,45 +1,63 @@
-<script>
-import { onMount } from "svelte"
+<script lang="ts">
+import { onMount, type Snippet } from "svelte"
 
-let elem = null
+type KeyProps = {
+  pressable: boolean
+  isKeyDown: boolean
 
+  shadow: "none" | "small" | "base"
+  padding: string | null
+  fontSize: string | null
+  darkTheme: boolean
+  id?: string
+
+  onclick: (e?: MouseEvent) => void
+  onmousedown: (e?: MouseEvent) => void
+  onmouseup: (e?: MouseEvent) => void
+  repeatClickHandlerWithMouseDown: boolean
+}
+const defaultKeyProps: KeyProps = {
+  pressable: true,
+  isKeyDown: false,
+
+  shadow: "base",
+  padding: "0.5em",
+  fontSize: null,
+  darkTheme: false,
+
+  onclick: () => {},
+  onmousedown: () => {},
+  onmouseup: () => {},
+  repeatClickHandlerWithMouseDown: false,
+}
 let {
-  cssPressable = true,
-  largeShadow = true,
-  themeReversed = false,
-  padding = "0.5em",
-  fontSize = "",
-  noShadow = false,
-  keydown = false,
+  props = defaultKeyProps,
   children,
-  id,
-  mousedownRepeat = false,
-  onclick = () => {},
-  onmousedown = () => {},
-  onmouseup = () => {},
-} = $props()
+}: { props: Partial<KeyProps>; children: Snippet } = $props()
 
-const mousedownThreshold = 100
-let mousedownTimer = null
+const repeatMousedownThreshold = 100
+let repeatMousedownTimer = null
 let movedByMousedownCount = 0
 
+let elem: HTMLElement | null = $state(null)
 const classes = ["key"]
-
 onMount(() => {
-  // css from props
-  elem.style.padding = padding
-  if (fontSize !== "") elem.style.fontSize = fontSize
-  if (noShadow) {
-    elem.style.boxShadow = "none"
-    elem.style.margin = "0"
-    elem.parentElement.style.pointerEvents = "none"
-  }
+  if (elem) {
+    // css from props
+    elem.style.padding = props.padding
+    if (props.fontSize !== "") elem.style.fontSize = props.fontSize
+    if (props.shadow === "none") {
+      elem.style.boxShadow = "none"
+      elem.style.margin = "0"
+      elem.parentElement.style.pointerEvents = "none"
+    }
 
-  // classes
-  if (cssPressable) classes.push("pressable")
-  if (largeShadow) classes.push("large")
-  if (themeReversed) classes.push("reversed")
-  elem.classList.add(...classes)
+    // classes
+    if (props.pressable) classes.push("pressable")
+    if (props.shadow === "base") classes.push("large")
+    if (props.darkTheme) classes.push("reversed")
+    elem.classList.add(...classes)
+  }
 })
 
 // exports
@@ -51,42 +69,49 @@ export function getElem() {
 <!-- HTML -->
 
 <button
+  bind:this={elem}
   type="button"
   class="key"
-  class:keydown
+  class:keydown={props.isKeyDown}
   onclick={() => {
-    if (mousedownRepeat) {
-      if (movedByMousedownCount === 0) onclick()
+    if (props.repeatClickHandlerWithMouseDown) {
+      if (movedByMousedownCount === 0) props.onclick()
     } else {
-      onclick()
+      props.onclick()
     }
   }}
   onmousedown={() => {
-    if (mousedownRepeat) {
-      mousedownTimer = setInterval(() => {
+    if (props.repeatClickHandlerWithMouseDown) {
+      repeatMousedownTimer = setInterval(() => {
         console.log("[running mousedown]")
         movedByMousedownCount += 1
-        onclick()
-      }, mousedownThreshold)
-      onmousedown()
+        props.onclick()
+      }, repeatMousedownThreshold)
+      props.onmousedown()
     } else {
-      onmousedown()
+      props.onmousedown()
     }
   }}
   onmouseup={() => {
-    if (mousedownRepeat) {
-      clearInterval(mousedownTimer)
-      mousedownTimer = null
+    if (props.repeatClickHandlerWithMouseDown) {
+      clearInterval(repeatMousedownTimer)
+      repeatMousedownTimer = null
       movedByMousedownCount = 0
-      onmouseup()
+      props.onmouseup()
     } else {
-      onmouseup()
+      props.onmouseup()
     }
   }}
 >
-  <div bind:this={elem} {id} class="keyInner">
-    {@render children?.()}
-  </div>
+  {#if props.id}
+    <div bind:this={elem} id={props.id} class="keyInner">
+      {@render children?.()}
+    </div>
+  {:else}
+    <div bind:this={elem} class="keyInner">
+      {@render children?.()}
+    </div>
+  {/if}
 </button>
 
 <!-- Style -->

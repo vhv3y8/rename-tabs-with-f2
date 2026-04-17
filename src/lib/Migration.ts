@@ -1,11 +1,12 @@
 export class SchemaEditor {
   constructor(public data: any) {}
-  move(from: string, to: string) {
+  move(from: string, to: string, mapper?: (value: any) => any) {
     const value = this.get(from)
     this.remove(from)
     this.set(to, value)
     return this
   }
+  updateValue(path: string, mapper: (value: any) => any) {}
   remove(path: string) {
     /* ... split('.') logic ... */ return this
   }
@@ -58,8 +59,8 @@ export class SchemaEditor {
 //   }
 // }
 
-export type MigrationFn = (editor: SchemaEditor) => void
-export type MigrationMap = Record<string, MigrationFn>
+export type Migration = (editor: SchemaEditor) => void
+export type MigrationMap = Record<string, Migration>
 
 export class MigrationAggregator {
   constructor(private migrations: MigrationMap) {}
