@@ -1,4 +1,4 @@
-import * as chromeStorage from "../lib/chrome/storage"
+import * as chromeStorage from "../lib/chrome/storage2"
 import * as chromeTabs from "../lib/chrome/tabs"
 import * as chromeWindows from "../lib/chrome/windows"
 

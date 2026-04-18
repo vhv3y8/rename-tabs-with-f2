@@ -1,5 +1,9 @@
 import { getLastFocusTabId } from "@chrome/runtime"
-import { defaultShortcutF2, getSettings, setSettings } from "@chrome/storage"
+import {
+  defaultShortcutF2,
+  getSettings,
+  setSettings,
+} from "@lib/chrome/storage2"
 import {
   isContentScriptConnected,
   fireChangeTitleToContentScript,

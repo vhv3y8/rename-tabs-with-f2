@@ -1,5 +1,5 @@
 import * as chromeRuntime from "./lib/chrome/runtime"
-import * as chromeStorage from "./lib/chrome/storage"
+import * as chromeStorage from "./lib/chrome/storage2"
 
 let shortcut
 
