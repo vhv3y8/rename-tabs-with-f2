@@ -16,7 +16,7 @@ export interface PlatformMainFacade {
   getLastFocusTabId(): Promise<number>
 
   // storage
-  getSettings(): Promise<unknown>
+  getSettings(): Promise<Setting>
   setSettings(setting: Setting): Promise<unknown>
   // defaultShortcutF2
 }

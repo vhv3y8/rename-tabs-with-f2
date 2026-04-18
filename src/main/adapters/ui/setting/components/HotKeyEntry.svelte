@@ -5,11 +5,11 @@ import {
   isValidShortcut,
   stringifyShortcut,
 } from "@lib/shortcut"
-import { ChromeMainFacadeImpl } from "@main/infra/platform/ChromeMainFacade2"
 import ModalEntry from "../ModalEntry.svelte"
-import { toastMessages, toasts } from "../../toast/toasts.svelte"
+import { TOAST_MESSAGES, toasts } from "../../toast/toasts.svelte"
 import { app } from "../states/appSetting.svelte"
 import { settingModal } from "../states/settingModal.svelte"
+import { F2HotKey } from "@lib/chrome/models/Setting"
 
 let localHotKey = $state(app.setting.hotKey)
 let localHotKeyText = $derived(stringifyShortcut(localHotKey))
@@ -23,7 +23,7 @@ function handleListenHotKey(e: KeyboardEvent) {
 }
 
 function publishToast() {
-  toasts.appendToast(toastMessages.SHORTCUT_UPDATED(localHotKeyText))
+  toasts.appendToast(TOAST_MESSAGES.SHORTCUT_UPDATED(localHotKeyText))
 }
 </script>
 
@@ -66,7 +66,7 @@ function publishToast() {
           id: "resetToF2",
           padding: "0.4em 0.5em",
           onclick: () => {
-            localHotKey = ChromeMainFacadeImpl.defaultShortcutF2
+            localHotKey = F2HotKey
             settingModal.endListening()
             app.setting.hotKey = localHotKey
             publishToast()

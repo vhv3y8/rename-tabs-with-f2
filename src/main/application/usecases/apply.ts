@@ -1,5 +1,4 @@
 import { tabIdxInfoStore } from "@main/bootstrap.svelte"
-import { ChromeMainFacadeImpl } from "../../infra/platform/impl/ChromeMainFacade2"
 import type { TabInfoStore } from "../ports/TabInfoStore"
 import type { PlatformMainFacade } from "../ports/PlatformMainFacade"
 
@@ -7,8 +6,8 @@ export interface ApplyLifeCycle {
   beforeStart?(): void
   closePageAfterFinish?(): void
 }
-
 export type ApplyUseCase = ReturnType<typeof createApplyUseCase>
+
 export function createApplyUseCase(
   lifeCycle: ApplyLifeCycle,
   tabInfoStore: TabInfoStore,
@@ -16,6 +15,7 @@ export function createApplyUseCase(
 ) {
   return async function apply() {
     lifeCycle.beforeStart?.()
+
     await Promise.allSettled(
       tabInfoStore
         .getTabInfosToApply()
@@ -23,11 +23,12 @@ export function createApplyUseCase(
         .map(({ id, title }) =>
           extensionFacade.renameTabTitle({
             // why this can be null/undefined??
-            id: id!,
+            tabId: id!,
             title: title!,
           }),
         ),
     )
+
     lifeCycle.closePageAfterFinish?.()
   }
 }

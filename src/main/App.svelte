@@ -6,7 +6,7 @@ import FooterBar from "./adapters/ui/FooterBar.svelte"
 import { cancelAllKeydowns } from "./adapters/ui/reactivity/keys.svelte"
 import { onMount } from "svelte"
 
-function keyupGlobalHandler() {
+function keyupReactivityHandler() {
   cancelAllKeydowns()
 }
 
@@ -18,7 +18,7 @@ onMount(async () => {
 
 <!-- HTML -->
 
-<svelte:document onkeyup={keyupGlobalHandler} />
+<svelte:document onkeyup={keyupReactivityHandler} />
 
 <main class:large={app.setting.largerWidth}>
   <HeaderBar />

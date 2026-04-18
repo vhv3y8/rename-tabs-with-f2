@@ -1,6 +1,6 @@
 import { stringifyShortcut } from "@lib/shortcut"
-import { ChromeMainFacadeImpl } from "@main/infra/platform/impl/ChromeMainFacade2"
 import { app, type AppSetting } from "./appSetting.svelte"
+import { ChromeFacade } from "@main/infra/platform/impl/ChromeMainFacade"
 
 export class SettingModalState {
   show = $state(false)
@@ -23,11 +23,11 @@ export class SettingModalState {
   }
 
   async fetchAndSetSettings() {
-    this.store.setting = await ChromeMainFacadeImpl.getSettings()
+    this.store.setting = await ChromeFacade.getSettings()
     this.destroySettingsEffect = $effect.root(() => {
       // update storage on settings $state change
       $effect(() => {
-        ChromeMainFacadeImpl.setSettings(this.store.setting)
+        ChromeFacade.setSettings(this.store.setting)
       })
     })
   }

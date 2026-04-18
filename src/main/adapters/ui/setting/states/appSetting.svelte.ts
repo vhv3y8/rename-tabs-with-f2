@@ -1,5 +1,5 @@
 import { type Setting } from "@chrome/models/Setting"
-import { ChromeMainFacadeImpl } from "@main/infra/platform/impl/ChromeMainFacade2"
+import { ChromeFacade } from "@main/infra/platform/impl/ChromeMainFacade"
 
 export class AppSetting {
   private constructor(public setting: Setting) {
@@ -7,13 +7,13 @@ export class AppSetting {
     $effect.root(() => {
       $effect(() => {
         // update storage on setting field update
-        ChromeMainFacadeImpl.setSettings(this.setting)
+        ChromeFacade.setSettings(this.setting)
       })
     })
   }
   // use this method to build instance
   static async build() {
-    const setting = await ChromeMainFacadeImpl.getSettings()
+    const setting = await ChromeFacade.getSettings()
     return new AppSetting(setting)
   }
 }

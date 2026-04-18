@@ -26,6 +26,6 @@ export function keydownApplyHandler(e: KeyboardEvent) {
   }
 }
 
-export function keyupGlobalHandler() {
-  cancelAllKeydowns()
-}
+// export function keyupGlobalHandler() {
+//   cancelAllKeydowns()
+// }

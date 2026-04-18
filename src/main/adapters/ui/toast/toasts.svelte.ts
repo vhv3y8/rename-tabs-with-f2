@@ -1,4 +1,4 @@
-export const toastMessages = {
+export const TOAST_MESSAGES = {
   SHORTCUT_UPDATED: (shortcutText: string) =>
     chrome.i18n.getMessage("tips_shortcut_updated", shortcutText),
 }

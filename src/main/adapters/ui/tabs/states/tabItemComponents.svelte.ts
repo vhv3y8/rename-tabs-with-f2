@@ -1,7 +1,7 @@
 import type { TabInfoStore } from "@application/ports/TabInfoStore"
 import type TabItem from "../TabItem.svelte"
-import { ChromeMainFacadeImpl } from "@main/infra/platform/impl/ChromeMainFacade2"
 import { tabIdxInfoStore } from "@main/bootstrap.svelte"
+import { ChromeFacade } from "@main/infra/platform/impl/ChromeMainFacade"
 
 type TabItemComponent = ReturnType<typeof TabItem>
 export class TabItemComponents {
@@ -49,7 +49,7 @@ export class TabItemComponents {
   }
   // use this method to create instance
   static async build(tabIdxInfoStore: TabInfoStore) {
-    const lastFocusTabId = await ChromeMainFacadeImpl.getLastFocusTabId()
+    const lastFocusTabId = await ChromeFacade.getLastFocusTabId()
     return new TabItemComponents(tabIdxInfoStore, lastFocusTabId)
   }
 
