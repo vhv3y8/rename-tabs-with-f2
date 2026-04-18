@@ -7,7 +7,7 @@ import {
 } from "@lib/shortcut"
 import ModalEntry from "../ModalEntry.svelte"
 import { TOAST_MESSAGES, toasts } from "../../toast/toasts.svelte"
-import { app } from "../states/appSetting.svelte"
+import { app } from "../states/inMemorySetting.svelte"
 import { settingModal } from "../states/settingModal.svelte"
 import { F2HotKey } from "@lib/chrome/models/Setting"
 

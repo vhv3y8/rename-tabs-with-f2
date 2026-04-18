@@ -1,6 +1,6 @@
-import type { TabInfoStore } from "@application/ports/TabInfoStore"
-import { TabIdxInfoRecord } from "../states/tabInfoRecord.svelte"
-import { NotConnectedTabLists } from "../states/notConnected.svelte"
+import type { TabInfoStore } from "@main/application/ports/TabInfoStore"
+import { TabIdxInfoRecord } from "../components/tabs/states/tabInfoRecord.svelte"
+import { NotConnectedTabLists } from "../components/tabs/states/notConnected.svelte"
 
 export class TabIdxInfoRecordStore
   extends TabIdxInfoRecord

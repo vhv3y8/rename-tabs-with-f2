@@ -1,10 +1,8 @@
-import { apply } from "@main/application/usecases/apply"
 import {
-  cancelAllKeydowns,
   cancelApplyKeydown,
   keydowns,
-} from "./reactivity/keys.svelte"
-import { settingModal } from "./setting/states/settingModal.svelte"
+} from "../components/reactivity/keys.svelte"
+import { settingModal } from "../components/setting/states/settingModal.svelte"
 
 export function keydownApplyHandler(e: KeyboardEvent) {
   if (settingModal.listen) return
@@ -26,6 +24,6 @@ export function keydownApplyHandler(e: KeyboardEvent) {
   }
 }
 
-// export function keyupGlobalHandler() {
-//   cancelAllKeydowns()
-// }
+export function clickApplyHandler(e: MouseEvent) {
+  apply()
+}

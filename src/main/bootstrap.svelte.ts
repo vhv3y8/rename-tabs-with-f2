@@ -7,6 +7,9 @@
 // import { initializeTabInfoStore } from "./application/usecases/initializeTabInfoStore"
 // import type { SettingStore } from "./application/ports/SettingStore"
 
+import { TabIdxInfoRecordStore } from "./adapters/ui/impl/tabInfoStore.svelte"
+import type { TabInfoStore } from "./application/ports/TabInfoStore"
+
 await ChromeMainFacadeImpl.focusExtensionPageTabForRefresh()
 
 // create infra / port implementations

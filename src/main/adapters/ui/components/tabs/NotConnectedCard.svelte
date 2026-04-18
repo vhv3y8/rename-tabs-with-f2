@@ -6,8 +6,10 @@ import { notConnectedCard } from "./states/notConnected.svelte"
 import { tabItemComponents } from "./states/tabItemComponents.svelte"
 import { settingModal } from "../setting/states/settingModal.svelte"
 // use case handlers
-import { keydownReloadUseCaseHandler } from "./input/keyboard"
-import { clickReloadUseCaseHandler } from "./input/mouse"
+import {
+  clickReloadUseCaseHandler,
+  keydownReloadUseCaseHandler,
+} from "../../input/reload"
 
 let allCount = $derived(notConnected.allTabs.length)
 let reloadCount = $derived(notConnected.reloadConnectableTabs.length)

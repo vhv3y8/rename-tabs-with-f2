@@ -9,9 +9,9 @@ export interface ApplyLifeCycle {
 export type ApplyUseCase = ReturnType<typeof createApplyUseCase>
 
 export function createApplyUseCase(
-  lifeCycle: ApplyLifeCycle,
   tabInfoStore: TabInfoStore,
   extensionFacade: PlatformMainFacade,
+  lifeCycle: ApplyLifeCycle,
 ) {
   return async function apply() {
     lifeCycle.beforeStart?.()

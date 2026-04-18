@@ -14,7 +14,7 @@ let { text, id } = $props()
     toasts.removeToast(id)
   }}
   in:fly={{ y: "5px" }}
-  out:fade={{ duration: 300 }}
+  out:fade={{ duration: 200 }}
 >
   {#each text.split("\n") as line}
     <p>{line}</p>

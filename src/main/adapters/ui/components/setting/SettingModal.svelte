@@ -1,8 +1,8 @@
 <script lang="ts">
 import Popover from "@infra/ui/components/Popover.svelte"
-import DarkModeEntry from "./components/DarkModeEntry.svelte"
-import LargerWidthEntry from "./components/LargerWidthEntry.svelte"
-import HotKeyEntry from "./components/HotKeyEntry.svelte"
+import DarkModeEntry from "./modalEntries/DarkModeEntry.svelte"
+import LargerWidthEntry from "./modalEntries/LargerWidthEntry.svelte"
+import HotKeyEntry from "./modalEntries/HotKeyEntry.svelte"
 
 let { onclose } = $props()
 </script>

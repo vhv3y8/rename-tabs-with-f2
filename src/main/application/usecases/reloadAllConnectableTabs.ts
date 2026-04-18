@@ -13,9 +13,9 @@ export type ReloadAllConnectableTabsUseCase = ReturnType<
 >
 
 export function createReloadAllConnectableTabs(
-  lifeCycle: ReloadLifeCycle,
   tabInfoStore: TabInfoStore,
   extensionFacade: PlatformMainFacade,
+  lifeCycle: ReloadLifeCycle,
   checkAllTabConnectionAndUpdateFlags: CheckAllTabConnectionUseCase,
 ) {
   return async function reloadAllConnectableTabs() {

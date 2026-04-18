@@ -1,10 +1,11 @@
 <script lang="ts">
-import { apply } from "@main/application/usecases/apply"
 import Key from "@main/infra/ui/components/Key.svelte"
 import { keydowns } from "./reactivity/keys.svelte"
 import SettingModal from "./setting/SettingModal.svelte"
 import { settingModal } from "./setting/states/settingModal.svelte"
-import { keydownApplyHandler } from "./keyboard"
+// use case handler
+import { keydownApplyHandler } from "./in/apply/keyboard"
+import { clickApplyHandler } from "./input/mouse"
 
 function keydownCloseSettingHandler(e: KeyboardEvent) {
   switch (e.key) {
@@ -56,7 +57,7 @@ function keydownCloseSettingHandler(e: KeyboardEvent) {
   <Key
     props={{
       id: "ctrlEnterBtn",
-      onclick: apply,
+      onclick: clickApplyHandler,
       isKeyDown: keydowns.ctrlEnter,
       padding: null,
     }}>Ctrl + Enter</Key

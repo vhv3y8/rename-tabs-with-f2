@@ -1,5 +1,5 @@
 import { stringifyShortcut } from "@lib/shortcut"
-import { app, type AppSetting } from "./appSetting.svelte"
+import { app, type AppSetting } from "./inMemorySetting.svelte"
 import { ChromeFacade } from "@main/infra/platform/impl/ChromeMainFacade"
 
 export class SettingModalState {

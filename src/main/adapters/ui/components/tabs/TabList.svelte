@@ -7,7 +7,8 @@ import TabItem from "./TabItem.svelte"
 <!-- HTML -->
 
 <ul>
-  {#each Object.values(tabIdxInfoStore) as tabInfo, idx}
+  <!-- {#each Object.values(tabIdxInfoStore) as tabInfo, idx} -->
+  {#each tabIdxInfoStore.getAllTabInfos() as tabInfo, idx}
     <TabItem bind:this={tabItemComponents.components[idx]} {tabInfo} />
   {/each}
 </ul>
