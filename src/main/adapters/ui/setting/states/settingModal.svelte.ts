@@ -1,18 +1,15 @@
 import { stringifyShortcut } from "@lib/shortcut"
-import { ChromeMainFacadeImpl } from "@infra/ChromeMainFacade"
-import type { SettingStore } from "@main/application/ports/SettingStore"
-import { app } from "@main/bootstrap.svelte"
+import { ChromeMainFacadeImpl } from "@main/infra/platform/impl/ChromeMainFacade2"
+import { app, type AppSetting } from "./appSetting.svelte"
 
 export class SettingModalState {
   show = $state(false)
   // hot key update
   listen = $state(false)
   hotKeyText: string
-
-  // settings: Record<any, any> = $state({})
-  // settingStore: SettingStore
+  // setting update effect
   destroySettingsEffect: any
-  constructor(public store: SettingStore) {
+  constructor(public store: AppSetting) {
     $effect.root(() => {
       $effect(() => {
         // cancel listen mode when setting is closed

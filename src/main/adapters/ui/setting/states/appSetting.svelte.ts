@@ -1,9 +1,9 @@
-import type { SettingStore } from "@application/ports/SettingStore"
 import { type Setting } from "@chrome/models/Setting"
-import { ChromeMainFacadeImpl } from "@main/infra/ChromeMainFacade"
+import { ChromeMainFacadeImpl } from "@main/infra/platform/impl/ChromeMainFacade2"
 
-export class AppSetting implements SettingStore {
+export class AppSetting {
   private constructor(public setting: Setting) {
+    this.setting = $state(setting)
     $effect.root(() => {
       $effect(() => {
         // update storage on setting field update
@@ -17,3 +17,5 @@ export class AppSetting implements SettingStore {
     return new AppSetting(setting)
   }
 }
+// const app = await AppSetting.build()
+// export const setting = app.setting

@@ -3,13 +3,33 @@ import { apply } from "@main/application/usecases/apply"
 import Key from "@main/infra/ui/components/Key.svelte"
 import { keydowns } from "./reactivity/keys.svelte"
 import SettingModal from "./setting/SettingModal.svelte"
-import { settingModal } from "./setting/settingModal.svelte"
+import { settingModal } from "./setting/states/settingModal.svelte"
+import { keydownApplyHandler } from "./keyboard"
+
+function keydownCloseSettingHandler(e: KeyboardEvent) {
+  switch (e.key) {
+    case "Escape": {
+      if (settingModal.show) {
+        e.preventDefault()
+        // settingModal.hideIfVisible()
+        settingModal.hide()
+      }
+    }
+  }
+}
 </script>
 
 <!-- HTML -->
 
+<svelte:document
+  onkeydown={(e: KeyboardEvent) => {
+    keydownApplyHandler(e)
+    keydownCloseSettingHandler(e)
+  }}
+/>
+
 <footer>
-  <!-- Settings -->
+  <!-- setting -->
   <div class="settingsContainer">
     <Key
       props={{
@@ -22,8 +42,7 @@ import { settingModal } from "./setting/settingModal.svelte"
     >
       {chrome.i18n.getMessage("settings")}
     </Key>
-
-    <!-- modal -->
+    <!-- setting modal -->
     {#if settingModal.show}
       <SettingModal
         onclose={() => {
@@ -32,8 +51,7 @@ import { settingModal } from "./setting/settingModal.svelte"
       />
     {/if}
   </div>
-
-  <!-- Save & Close -->
+  <!-- save & close -->
   <span>{chrome.i18n.getMessage("footer_save_and_close")} :</span>
   <Key
     props={{

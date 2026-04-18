@@ -12,6 +12,7 @@ export let keydowns = $state({
   ctrlEnter: false,
 })
 
+// for keyup
 export function cancelAllKeydowns() {
   keydowns.tab = false
   keydowns.shiftTab = false

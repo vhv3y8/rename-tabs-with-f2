@@ -1,19 +1,35 @@
 <script lang="ts">
 import Key from "@main/infra/ui/components/Key.svelte"
-import { stringifyShortcut } from "@lib/shortcut"
-import { ChromeMainFacadeImpl } from "@main/infra/ChromeMainFacade"
+import {
+  createShortcut,
+  isValidShortcut,
+  stringifyShortcut,
+} from "@lib/shortcut"
+import { ChromeMainFacadeImpl } from "@main/infra/platform/ChromeMainFacade2"
 import ModalEntry from "../ModalEntry.svelte"
-import { settingModal } from "../settingModal.svelte"
 import { toastMessages, toasts } from "../../toast/toasts.svelte"
-import { app } from "@main/bootstrap.svelte"
+import { app } from "../states/appSetting.svelte"
+import { settingModal } from "../states/settingModal.svelte"
 
-let localShortcut = $state(app.setting.hotKey)
-let localShortcutText = $derived(stringifyShortcut(localShortcut))
+let localHotKey = $state(app.setting.hotKey)
+let localHotKeyText = $derived(stringifyShortcut(localHotKey))
 
-function pushToast() {
-  toasts.appendToast(toastMessages.SHORTCUT_UPDATED(localShortcutText))
+function handleListenHotKey(e: KeyboardEvent) {
+  if (settingModal.listen) {
+    e.preventDefault()
+    if (!isValidShortcut(e)) return
+    localHotKey = createShortcut(e)
+  }
+}
+
+function publishToast() {
+  toasts.appendToast(toastMessages.SHORTCUT_UPDATED(localHotKeyText))
 }
 </script>
+
+<!-- HTML -->
+
+<svelte:document onkeydown={handleListenHotKey} />
 
 <ModalEntry
   title={{
@@ -39,7 +55,7 @@ function pushToast() {
       </p>
 
       <p id="shortcutText">
-        {localShortcutText}
+        {localHotKeyText}
       </p>
     </div>
 
@@ -50,10 +66,10 @@ function pushToast() {
           id: "resetToF2",
           padding: "0.4em 0.5em",
           onclick: () => {
-            localShortcut = ChromeMainFacadeImpl.defaultShortcutF2
-            app.setting.hotKey = localShortcut
+            localHotKey = ChromeMainFacadeImpl.defaultShortcutF2
             settingModal.endListening()
-            pushToast()
+            app.setting.hotKey = localHotKey
+            publishToast()
           },
         }}>{chrome.i18n.getMessage("settings_shortcut_reset_to_f2")}</Key
       >
@@ -67,7 +83,7 @@ function pushToast() {
           padding: "0.4em 0.5em",
           onclick: () => {
             settingModal.endListening()
-            localShortcut = app.setting.hotKey
+            localHotKey = app.setting.hotKey
           },
         }}>{chrome.i18n.getMessage("settings_shortcut_cancel")}</Key
       >
@@ -77,10 +93,10 @@ function pushToast() {
           id: "okBtn",
           padding: "0.4em 0.5em",
           onclick: () => {
-            console.log("[localShortcut]", localShortcut)
-            app.setting.hotKey = localShortcut
+            console.log("[localHotKey]", localHotKey)
             settingModal.endListening()
-            pushToast()
+            app.setting.hotKey = localHotKey
+            publishToast()
           },
         }}>{chrome.i18n.getMessage("settings_shortcut_ok")}</Key
       >

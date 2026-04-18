@@ -1,7 +1,7 @@
 <script lang="ts">
 import Key from "@main/infra/ui/components/Key.svelte"
 import ModalEntry from "../ModalEntry.svelte"
-import * as view from "../../view"
+import * as view from "../view"
 import { app } from "@main/bootstrap.svelte"
 </script>
 

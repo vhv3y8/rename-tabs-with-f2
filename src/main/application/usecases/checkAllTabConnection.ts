@@ -1,7 +1,7 @@
 import { tabIdxInfoStore } from "@main/bootstrap.svelte"
-import { ChromeMainFacadeImpl } from "../../infra/ChromeMainFacade"
+import { ChromeMainFacadeImpl } from "../../infra/platform/impl/ChromeMainFacade2"
 
-export async function checkTabConnectionAndUpdateStoreFlags() {
+export async function checkAllTabConnectionAndUpdateFlags() {
   let allTabIds = tabIdxInfoStore.getAllTabIds()
 
   // check

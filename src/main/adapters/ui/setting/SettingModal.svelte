@@ -1,32 +1,11 @@
 <script lang="ts">
 import Popover from "@infra/ui/components/Popover.svelte"
-
-import { createListenShortcutKeydownHandler } from "./input/keyboard"
-import { settingModal } from "./settingModal.svelte"
 import DarkModeEntry from "./components/DarkModeEntry.svelte"
 import LargerWidthEntry from "./components/LargerWidthEntry.svelte"
 import HotKeyEntry from "./components/HotKeyEntry.svelte"
-import { app } from "@main/bootstrap.svelte"
 
 let { onclose } = $props()
-
-let localShortcut = $state(app.setting.hotKey)
 </script>
-
-<!-- Event Handlers -->
-
-<svelte:document
-  onkeydown={(e) => {
-    if (settingModal.listen) {
-      // to put keydown logic at outer module
-      createListenShortcutKeydownHandler({
-        updateShortcutState: (shortcutFromEvent) => {
-          localShortcut = shortcutFromEvent
-        },
-      })(e)
-    }
-  }}
-/>
 
 <!-- HTML -->
 

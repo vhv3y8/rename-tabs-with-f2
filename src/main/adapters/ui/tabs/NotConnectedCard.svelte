@@ -1,16 +1,69 @@
 <script lang="ts">
-import { notConnected } from "@main/bootstrap.svelte"
-import { fireReload, reload } from "./states/reload.svelte"
-import { notConnectedCard } from "./states/notConnected.svelte"
 import Key from "@main/infra/ui/components/Key.svelte"
+import { notConnected } from "@main/bootstrap.svelte"
+import { reload } from "./states/reload.svelte"
+import { notConnectedCard } from "./states/notConnected.svelte"
 import { tabItemComponents } from "./states/tabItemComponents.svelte"
+import { settingModal } from "../setting/states/settingModal.svelte"
+// use case handlers
+import { keydownReloadUseCaseHandler } from "./input/keyboard"
+import { clickReloadUseCaseHandler } from "./input/mouse"
 
 let allCount = $derived(notConnected.allTabs.length)
 let reloadCount = $derived(notConnected.reloadConnectableTabs.length)
 let policyCount = $derived(notConnected.policyBlockedTabs.length)
+
+function handleDismiss() {
+  notConnectedCard.hideCardIfVisible()
+  tabItemComponents.focusCurrentItem()
+}
+
+function keydownDismissHandler(e: KeyboardEvent) {
+  if (settingModal.listen) return
+
+  if (e.code === "KeyW" && e.shiftKey && notConnectedCard.show) {
+    e.preventDefault()
+    handleDismiss()
+
+    if (import.meta.env.MODE === "development") console.log("[KeyW, shiftKey]")
+  }
+}
+// async function keydownNotConnectedCardHandler(e: KeyboardEvent) {
+//   if (settingModal.listen) return
+
+//   switch (e.code) {
+//     // shift + r fire reload
+//     case "KeyR": {
+//       if (
+//         e.shiftKey &&
+//         notConnectedCard.show &&
+//         0 < notConnected.reloadConnectableTabs.length
+//       ) {
+//         e.preventDefault()
+//         await fireReload()
+
+//         if (import.meta.env.MODE === "development")
+//           console.log("[KeyR, shiftKey]")
+//       }
+//       break
+//     }
+//     default: {
+//       cancelAllNotConnectedCardKeydowns()
+//     }
+//   }
+// }
 </script>
 
 <!-- HTML -->
+
+<svelte:document
+  onkeydown={(e: KeyboardEvent) => {
+    // use case
+    keydownReloadUseCaseHandler(e)
+    // ui
+    keydownDismissHandler(e)
+  }}
+/>
 
 <div id="notConnectedCardContainer">
   {#if allCount && notConnectedCard.show}
@@ -31,12 +84,7 @@ let policyCount = $derived(notConnected.policyBlockedTabs.length)
               shadow: "base",
               padding: "0.4em",
               fontSize: "15px",
-              onclick: () => {
-                // hideUnavailableCardIfItsVisible()
-                // focusTabItem({ current: true })
-                notConnectedCard.hideCardIfVisible()
-                tabItemComponents.focusNextItem()
-              },
+              onclick: handleDismiss,
             }}>Shift + W</Key
           >
         </div>
@@ -51,14 +99,12 @@ let policyCount = $derived(notConnected.policyBlockedTabs.length)
                 1 < reloadCount ? "s" : "",
               ])} :
             </p>
-
             <p class="titles">
               {notConnected.reloadConnectableTabs
                 .map(({ title }) => title)
                 .join(" , ")}
             </p>
           </li>
-
           <div style:text-align="right">
             <div class="right containsKeyBtn" style:padding-block="4px 3px">
               {#if reload.isWaiting()}
@@ -68,7 +114,7 @@ let policyCount = $derived(notConnected.policyBlockedTabs.length)
                     shadow: "small",
                     padding: "0.4em",
                     fontSize: "15px",
-                    onclick: fireReload,
+                    onclick: clickReloadUseCaseHandler,
                   }}>Shift + R</Key
                 >
               {:else}
@@ -83,6 +129,7 @@ let policyCount = $derived(notConnected.policyBlockedTabs.length)
             </div>
           </div>
         {/if}
+
         <!-- policy blocked tabs -->
         {#if 0 < policyCount}
           <li>

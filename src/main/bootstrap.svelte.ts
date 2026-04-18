@@ -1,9 +1,9 @@
 import { createReloadingTabsUpdatedHandler } from "./adapters/ui/tabs/input/chrome"
-import { checkTabConnectionAndUpdateStoreFlags } from "@application/usecases/checkTabConnection"
-import { ChromeMainFacadeImpl } from "@infra/ChromeMainFacade"
+import { checkTabConnectionAndUpdateStoreFlags } from "@main/application/usecases/checkAllTabConnection"
+import { ChromeMainFacadeImpl } from "@main/infra/platform/impl/ChromeMainFacade2"
 import { TabIdxInfoRecordStore } from "./adapters/ui/tabs/impl/tabInfoStore.svelte"
 import type { TabInfoStore } from "./application/ports/TabInfoStore"
-import { AppSetting } from "./adapters/ui/setting/impl/appSetting.svelte"
+import { AppSetting } from "./adapters/ui/setting/states/appSetting.svelte"
 import { initializeTabInfoStore } from "./application/usecases/initializeTabInfoStore"
 import type { SettingStore } from "./application/ports/SettingStore"
 
@@ -13,7 +13,6 @@ await ChromeMainFacadeImpl.focusExtensionPageTabForRefresh()
 export const tabIdxInfoStore =
   new TabIdxInfoRecordStore() satisfies TabInfoStore
 export const notConnected = tabIdxInfoStore.notConnected
-export const app: SettingStore = await AppSetting.build()
 
 // register adapters
 // chrome.tabs.onUpdated.addListener(createReloadingTabsUpdatedHandler())

@@ -1,6 +1,6 @@
 import type { TabInfoState } from "@main/adapters/ui/tabs/states/tabInfoRecord.svelte"
 import { tabIdxInfoStore } from "@main/bootstrap.svelte"
-import { ChromeMainFacadeImpl } from "@infra/ChromeMainFacade"
+import { ChromeMainFacadeImpl } from "@main/infra/platform/impl/ChromeMainFacade2"
 
 export async function initializeTabInfoStore() {
   // get tabs

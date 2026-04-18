@@ -1,6 +1,6 @@
 import { tabItemComponents } from "./tabItemComponents.svelte"
 import { reloadAllConnectableTabs } from "@application/usecases/reloadAllConnectableTabs"
-import { checkTabConnectionAndUpdateStoreFlags } from "@application/usecases/checkTabConnection"
+import { checkTabConnectionAndUpdateStoreFlags } from "@main/application/usecases/checkAllTabConnection"
 import { notConnected } from "@main/bootstrap.svelte"
 import { waitUntil } from "../../util.svelte"
 
@@ -84,5 +84,6 @@ async function waitForReloadAndUpdateUI({ limit = 2000 }) {
 
   // run use case
   await checkTabConnectionAndUpdateStoreFlags()
+
   tabItemComponents.focusInitialItem()
 }

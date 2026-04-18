@@ -1,16 +1,15 @@
 import { apply } from "@main/application/usecases/apply"
-import { settingModal } from "./setting/settingModal.svelte"
 import {
   cancelAllKeydowns,
   cancelApplyKeydown,
   keydowns,
 } from "./reactivity/keys.svelte"
+import { settingModal } from "./setting/states/settingModal.svelte"
 
-export function keydownGlobalHandler(e: KeyboardEvent) {
+export function keydownApplyHandler(e: KeyboardEvent) {
   if (settingModal.listen) return
 
   switch (e.key) {
-    // apply
     case "Enter": {
       e.preventDefault()
       if (e.ctrlKey) {
