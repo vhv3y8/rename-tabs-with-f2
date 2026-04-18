@@ -1,4 +1,4 @@
-import { type TargetVersionMigrationMap } from "../../Migration"
+import { type TargetVersionMigrationRecord } from "../../migration"
 
 export type HotKey = {
   ctrlKey: boolean
@@ -35,6 +35,6 @@ export const initialSetting: Setting = {
 //   settingData: any,
 // ): "1.0.0" | "1.1.0" | "1.2.0" | "1.2.1" {}
 
-export const settingMigrationMap: TargetVersionMigrationMap = {
+export const settingMigrationMap: TargetVersionMigrationRecord = {
   "1.3.0": (editor) => editor.move("shortcut", "hotKey"),
 }

@@ -7,11 +7,11 @@ import {
 } from "@lib/shortcut"
 import ModalEntry from "../ModalEntry.svelte"
 import { TOAST_MESSAGES, toasts } from "../../toast/toasts.svelte"
-import { app } from "../states/inMemorySetting.svelte"
 import { settingModal } from "../states/settingModal.svelte"
 import { F2HotKey } from "@lib/chrome/models/Setting"
+import { setting } from "../states/inMemorySetting.svelte"
 
-let localHotKey = $state(app.setting.hotKey)
+let localHotKey = $state(setting.hotKey)
 let localHotKeyText = $derived(stringifyShortcut(localHotKey))
 
 function handleListenHotKey(e: KeyboardEvent) {
@@ -68,7 +68,7 @@ function publishToast() {
           onclick: () => {
             localHotKey = F2HotKey
             settingModal.endListening()
-            app.setting.hotKey = localHotKey
+            setting.hotKey = localHotKey
             publishToast()
           },
         }}>{chrome.i18n.getMessage("settings_shortcut_reset_to_f2")}</Key
@@ -83,7 +83,7 @@ function publishToast() {
           padding: "0.4em 0.5em",
           onclick: () => {
             settingModal.endListening()
-            localHotKey = app.setting.hotKey
+            localHotKey = setting.hotKey
           },
         }}>{chrome.i18n.getMessage("settings_shortcut_cancel")}</Key
       >
@@ -95,7 +95,7 @@ function publishToast() {
           onclick: () => {
             console.log("[localHotKey]", localHotKey)
             settingModal.endListening()
-            app.setting.hotKey = localHotKey
+            setting.hotKey = localHotKey
             publishToast()
           },
         }}>{chrome.i18n.getMessage("settings_shortcut_ok")}</Key

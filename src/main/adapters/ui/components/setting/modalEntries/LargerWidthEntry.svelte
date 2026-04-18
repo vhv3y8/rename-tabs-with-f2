@@ -2,7 +2,7 @@
 import Key from "@main/infra/ui/components/Key.svelte"
 import ModalEntry from "../ModalEntry.svelte"
 import * as view from "../view"
-import { app } from "@main/bootstrap.svelte"
+import { setting } from "../states/inMemorySetting.svelte"
 </script>
 
 <ModalEntry
@@ -14,11 +14,11 @@ import { app } from "@main/bootstrap.svelte"
   <Key
     props={{
       onclick: () => {
-        app.setting.largerWidth = !app.setting.largerWidth
+        setting.largerWidth = !setting.largerWidth
         view.applyLargerWidth({
-          largerWidth: app.setting.largerWidth,
+          largerWidth: setting.largerWidth,
         })
       },
-    }}>{app.setting.largerWidth}</Key
+    }}>{setting.largerWidth}</Key
   >
 </ModalEntry>

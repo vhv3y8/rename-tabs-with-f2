@@ -1,11 +1,11 @@
-import { app } from "@main/bootstrap.svelte"
+import { setting } from "./states/inMemorySetting.svelte"
 
 export function initializeViewFromSettings() {
   if (import.meta.env.MODE === "development")
     console.log("[initializeViewFromSettings]")
 
-  applyDarkModeUI({ darkmode: app.setting.darkmode })
-  applyLargerWidth({ largerWidth: app.setting.largerWidth })
+  applyDarkModeUI({ darkmode: setting.darkmode })
+  applyLargerWidth({ largerWidth: setting.largerWidth })
 }
 
 // darkmode

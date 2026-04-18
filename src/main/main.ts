@@ -3,9 +3,13 @@ import App from "./App.svelte"
 import "./style/style.css"
 import "./style/fonts.css"
 import "./style/ds.css"
+import { runBootstrap } from "./bootstrap"
 
+const uiInjections = await runBootstrap()
 const app = mount(App, {
-  target: document.getElementById("app"),
+  target: document.getElementById("app")!,
+  // pass bootstrap return to App.svelte $props
+  props: uiInjections,
 })
 
 /* Log Credits */

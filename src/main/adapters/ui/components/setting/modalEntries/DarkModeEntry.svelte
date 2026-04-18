@@ -2,6 +2,7 @@
 import Key from "@main/infra/ui/components/Key.svelte"
 import ModalEntry from "../ModalEntry.svelte"
 import * as view from "../view"
+import { setting } from "../states/inMemorySetting.svelte"
 </script>
 
 <ModalEntry
@@ -13,9 +14,9 @@ import * as view from "../view"
   <Key
     props={{
       onclick: () => {
-        app.setting.darkmode = !app.setting.darkmode
-        view.applyDarkModeUI({ darkmode: app.setting.darkmode })
+        setting.darkmode = !setting.darkmode
+        view.applyDarkModeUI({ darkmode: setting.darkmode })
       },
-    }}>{app.setting.darkmode}</Key
+    }}>{setting.darkmode}</Key
   >
 </ModalEntry>

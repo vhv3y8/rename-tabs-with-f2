@@ -11,11 +11,11 @@ function isBrowserPolicyBlockedURL(url: string) {
   return browserPolicyBlockedURLFilters.some((filter) => filter.test(url))
 }
 
-type NotConnectedTab = Pick<TabInfoState, "id" | "title" | "url" | "index">
-export class NotConnectedTabLists implements Partial<TabInfoStore> {
-  allTabs: NotConnectedTab[]
-  policyBlockedTabs: NotConnectedTab[]
-  reloadConnectableTabs: NotConnectedTab[]
+type NotConnectedTabInfo = Pick<TabInfoState, "id" | "title" | "url" | "index">
+export class NotConnectedTabInfoLists implements Partial<TabInfoStore> {
+  allTabs: NotConnectedTabInfo[]
+  policyBlockedTabs: NotConnectedTabInfo[]
+  reloadConnectableTabs: NotConnectedTabInfo[]
   constructor(private tabInfoStore: TabInfoStore) {
     this.allTabs = $derived(
       Object.values(this.tabInfoStore.getAllTabInfos())

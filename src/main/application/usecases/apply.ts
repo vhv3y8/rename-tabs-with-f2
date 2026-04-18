@@ -1,4 +1,4 @@
-import { tabIdxInfoStore } from "@main/bootstrap.svelte"
+// import { tabIdxInfoStore } from "@main/bootstrap"
 import type { TabInfoStore } from "../ports/TabInfoStore"
 import type { PlatformMainFacade } from "../ports/PlatformMainFacade"
 

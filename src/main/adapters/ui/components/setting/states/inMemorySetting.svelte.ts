@@ -26,6 +26,6 @@ export class InMemorySetting {
 export const setting = $state({} as Setting)
 // initialize with this before using setting
 export async function initializeSetting(extensionFacade: PlatformMainFacade) {
-  const app = await InMemorySetting.build(extensionFacade)
-  Object.assign(setting, app.setting)
+  const inMemorySetting = await InMemorySetting.build(extensionFacade)
+  Object.assign(setting, inMemorySetting.setting)
 }

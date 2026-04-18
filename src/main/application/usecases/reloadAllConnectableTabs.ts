@@ -5,7 +5,7 @@ import type { CheckAllTabConnectionUseCase } from "./checkAllTabConnection"
 export interface ReloadLifeCycle {
   beforeStart?(): void
   // at other environment, fire and wait can be provided as single operation.
-  waitForReloadingEnd?(options: Partial<{ timeLimit: number }>): Promise<void>
+  waitForReloadingEnd?(options?: { timeLimit?: number }): Promise<void>
   afterFinish?(): void
 }
 export type ReloadAllConnectableTabsUseCase = ReturnType<
@@ -15,8 +15,8 @@ export type ReloadAllConnectableTabsUseCase = ReturnType<
 export function createReloadAllConnectableTabs(
   tabInfoStore: TabInfoStore,
   extensionFacade: PlatformMainFacade,
-  lifeCycle: ReloadLifeCycle,
   checkAllTabConnectionAndUpdateFlags: CheckAllTabConnectionUseCase,
+  lifeCycle: ReloadLifeCycle,
 ) {
   return async function reloadAllConnectableTabs() {
     const tabIdsToReload = tabInfoStore.getTabIdsToReload()
@@ -27,9 +27,9 @@ export function createReloadAllConnectableTabs(
       tabIdsToReload.map((tabId) => extensionFacade.reloadTab({ tabId })),
     )
     await lifeCycle.waitForReloadingEnd?.({})
-
     // check connection and update store flags
     await checkAllTabConnectionAndUpdateFlags()
+
     lifeCycle.afterFinish?.()
   }
 }

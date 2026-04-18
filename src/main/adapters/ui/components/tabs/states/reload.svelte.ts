@@ -1,8 +1,6 @@
 import { tabItemComponents } from "./tabItemComponents.svelte"
-import { reloadAllConnectableTabs } from "@application/usecases/reloadAllConnectableTabs"
-import { checkTabConnectionAndUpdateStoreFlags } from "@main/application/usecases/checkAllTabConnection"
-import { notConnected } from "@main/bootstrap.svelte"
 import { waitUntil } from "../../util.svelte"
+import { getInjections } from "@main/adapters/ui/injections"
 
 type ReloadingTabStatus = {
   id: number
@@ -37,7 +35,8 @@ export const reload = new ReloadState()
 
 export async function fireReload() {
   const reloadEntries = {} as Record<number, ReloadingTabStatus>
-  for (const { index, id } of notConnected.reloadConnectableTabs) {
+  for (const { index, id } of getInjections().notConnected
+    .reloadConnectableTabs) {
     if (!id) continue
     reloadEntries[index] = {
       id,

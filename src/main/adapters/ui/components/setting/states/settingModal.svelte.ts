@@ -1,6 +1,7 @@
 import { stringifyShortcut } from "@lib/shortcut"
-import { app, type AppSetting } from "./inMemorySetting.svelte"
+import { setting, type InMemorySetting } from "./inMemorySetting.svelte"
 import { ChromeFacade } from "@main/infra/platform/impl/ChromeMainFacade"
+import type { Setting } from "@lib/chrome/models/Setting"
 
 export class SettingModalState {
   show = $state(false)
@@ -9,7 +10,7 @@ export class SettingModalState {
   hotKeyText: string
   // setting update effect
   destroySettingsEffect: any
-  constructor(public store: AppSetting) {
+  constructor(public setting: Setting) {
     $effect.root(() => {
       $effect(() => {
         // cancel listen mode when setting is closed
@@ -17,17 +18,17 @@ export class SettingModalState {
       })
     })
     this.hotKeyText = $derived.by(() => {
-      if (this.store.setting.hotKey === undefined) return "N/A"
-      return stringifyShortcut(this.store.setting.hotKey)
+      if (this.setting.hotKey === undefined) return "N/A"
+      return stringifyShortcut(this.setting.hotKey)
     })
   }
 
   async fetchAndSetSettings() {
-    this.store.setting = await ChromeFacade.getSettings()
+    this.setting = await ChromeFacade.getSettings()
     this.destroySettingsEffect = $effect.root(() => {
       // update storage on settings $state change
       $effect(() => {
-        ChromeFacade.setSettings(this.store.setting)
+        ChromeFacade.setSettings(this.setting)
       })
     })
   }
@@ -53,4 +54,4 @@ export class SettingModalState {
     this.listen = false
   }
 }
-export const settingModal = new SettingModalState(app)
+export const settingModal = new SettingModalState(setting)

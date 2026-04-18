@@ -1,16 +1,13 @@
 <script lang="ts">
 import Key from "@main/infra/ui/components/Key.svelte"
-import { notConnected } from "@main/bootstrap.svelte"
 import { reload } from "./states/reload.svelte"
 import { notConnectedCard } from "./states/notConnected.svelte"
 import { tabItemComponents } from "./states/tabItemComponents.svelte"
 import { settingModal } from "../setting/states/settingModal.svelte"
 // use case handlers
-import {
-  clickReloadUseCaseHandler,
-  keydownReloadUseCaseHandler,
-} from "../../input/reload"
+import { getInjections } from "../../injections"
 
+const notConnected = $derived(getInjections().notConnected)
 let allCount = $derived(notConnected.allTabs.length)
 let reloadCount = $derived(notConnected.reloadConnectableTabs.length)
 let policyCount = $derived(notConnected.policyBlockedTabs.length)
@@ -61,7 +58,7 @@ function keydownDismissHandler(e: KeyboardEvent) {
 <svelte:document
   onkeydown={(e: KeyboardEvent) => {
     // use case
-    keydownReloadUseCaseHandler(e)
+    getInjections().keydownReloadUseCaseHandler(e)
     // ui
     keydownDismissHandler(e)
   }}
@@ -116,7 +113,7 @@ function keydownDismissHandler(e: KeyboardEvent) {
                     shadow: "small",
                     padding: "0.4em",
                     fontSize: "15px",
-                    onclick: clickReloadUseCaseHandler,
+                    onclick: getInjections().clickReloadUseCaseHandler,
                   }}>Shift + R</Key
                 >
               {:else}

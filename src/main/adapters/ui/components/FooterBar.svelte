@@ -4,8 +4,7 @@ import { keydowns } from "./reactivity/keys.svelte"
 import SettingModal from "./setting/SettingModal.svelte"
 import { settingModal } from "./setting/states/settingModal.svelte"
 // use case handler
-import { keydownApplyHandler } from "./in/apply/keyboard"
-import { clickApplyHandler } from "./input/mouse"
+import { getInjections } from "../injections"
 
 function keydownCloseSettingHandler(e: KeyboardEvent) {
   switch (e.key) {
@@ -24,7 +23,7 @@ function keydownCloseSettingHandler(e: KeyboardEvent) {
 
 <svelte:document
   onkeydown={(e: KeyboardEvent) => {
-    keydownApplyHandler(e)
+    getInjections().keydownApplyHandler(e)
     keydownCloseSettingHandler(e)
   }}
 />
@@ -57,7 +56,7 @@ function keydownCloseSettingHandler(e: KeyboardEvent) {
   <Key
     props={{
       id: "ctrlEnterBtn",
-      onclick: clickApplyHandler,
+      onclick: getInjections().clickApplyHandler,
       isKeyDown: keydowns.ctrlEnter,
       padding: null,
     }}>Ctrl + Enter</Key

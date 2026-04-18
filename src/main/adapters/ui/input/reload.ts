@@ -1,19 +1,31 @@
-import { notConnected } from "@main/bootstrap.svelte"
-import { notConnectedCard } from "../components/tabs/states/notConnected.svelte"
-import { fireReload } from "../components/tabs/states/reload.svelte"
+import {
+  notConnectedCard,
+  type NotConnectedTabInfoLists,
+} from "../components/tabs/states/notConnected.svelte"
+import type { ReloadAllConnectableTabsUseCase } from "@main/application/usecases/reloadAllConnectableTabs"
 
-export async function keydownReloadUseCaseHandler(e: KeyboardEvent) {
-  if (
-    e.code === "KeyR" &&
-    e.shiftKey &&
-    notConnectedCard.show &&
-    0 < notConnected.reloadConnectableTabs.length
-  ) {
-    e.preventDefault()
-    await fireReload()
+export function createKeydownReloadUseCaseHandler(
+  reloadAllConnectableTabs: ReloadAllConnectableTabsUseCase,
+  // is this ok?
+  notConnected: NotConnectedTabInfoLists,
+) {
+  return async function keydownReloadUseCaseHandler(e: KeyboardEvent) {
+    if (
+      e.code === "KeyR" &&
+      e.shiftKey &&
+      notConnectedCard.show &&
+      0 < notConnected.reloadConnectableTabs.length
+    ) {
+      e.preventDefault()
+      await reloadAllConnectableTabs()
+    }
   }
 }
 
-export async function clickReloadUseCaseHandler(e: MouseEvent) {
-  await fireReload()
+export function createClickReloadUseCaseHandler(
+  reloadAllConnectableTabs: ReloadAllConnectableTabsUseCase,
+) {
+  return async function clickReloadUseCaseHandler(e: MouseEvent) {
+    await reloadAllConnectableTabs()
+  }
 }

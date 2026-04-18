@@ -1,6 +1,6 @@
 import type { TabInfoStore } from "@application/ports/TabInfoStore"
 import type TabItem from "../TabItem.svelte"
-import { tabIdxInfoStore } from "@main/bootstrap.svelte"
+import { tabIdxInfoStore } from "@main/bootstrap"
 import { ChromeFacade } from "@main/infra/platform/impl/ChromeMainFacade"
 
 type TabItemComponent = ReturnType<typeof TabItem>

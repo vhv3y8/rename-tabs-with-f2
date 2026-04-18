@@ -1,18 +1,27 @@
 <script lang="ts">
-import HeaderBar from "./adapters/ui/HeaderBar.svelte"
+import { onMount } from "svelte"
+import HeaderBar from "./adapters/ui/components/HeaderBar.svelte"
 import NotConnectedCard from "./adapters/ui/tabs/NotConnectedCard.svelte"
 import TabList from "./adapters/ui/tabs/TabList.svelte"
-import FooterBar from "./adapters/ui/FooterBar.svelte"
+import FooterBar from "./adapters/ui/components/FooterBar.svelte"
+//
 import { cancelAllKeydowns } from "./adapters/ui/reactivity/keys.svelte"
-import { onMount } from "svelte"
+import { setting } from "./adapters/ui/components/setting/states/inMemorySetting.svelte"
+import { runBootstrap } from "./bootstrap"
+import { setInjectionsContext } from "./adapters/ui/injections"
+
+// inject to svelte components
+const uiInjections: Awaited<ReturnType<typeof runBootstrap>> = $props()
+setInjectionsContext(uiInjections)
 
 function keyupReactivityHandler() {
   cancelAllKeydowns()
 }
 
 onMount(async () => {
-  // run bootstrap
-  await import("./bootstrap.svelte")
+  // await ChromeMainFacadeImpl.focusExtensionPageTabForRefresh()
+  // view.initializeViewFromSettings()
+  // focusTabItem({ initial: true })
 })
 </script>
 
@@ -20,7 +29,7 @@ onMount(async () => {
 
 <svelte:document onkeyup={keyupReactivityHandler} />
 
-<main class:large={app.setting.largerWidth}>
+<main class:large={setting.largerWidth}>
   <HeaderBar />
   <NotConnectedCard />
   <TabList />

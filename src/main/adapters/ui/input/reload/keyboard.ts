@@ -1,4 +1,4 @@
-import { notConnected } from "@main/bootstrap.svelte"
+import { notConnected } from "@main/bootstrap"
 import { notConnectedCard } from "../states/notConnected.svelte"
 import { fireReload } from "../states/reload.svelte"
 

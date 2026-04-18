@@ -13,13 +13,14 @@ export function createCheckAllTabConnectionAndUpdateFlags(
     let allTabIds = tabInfoStore.getAllTabIds()
 
     // check
+    // TODO: fix
     let tabConnectedFlags = await Promise.allSettled(
       allTabIds.map((tabId) => extensionFacade.checkTabConnection({ tabId })),
     ).then((arr) =>
-      // TODO: fix
       arr.map((item) => item.status === "fulfilled" && item.value == true),
     )
     // update info
+    // TODO: fix
     for (const [idx, isConnected] of tabConnectedFlags.entries()) {
       tabInfoStore.setConnectedFlag(idx, isConnected)
     }
