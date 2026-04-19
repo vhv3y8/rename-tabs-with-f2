@@ -33,9 +33,9 @@ class ChromeMainFacade implements PlatformMainFacade {
   setSettings(setting: Setting) {
     return ChromeStorage.setting.setSettings(setting)
   }
-  // additionals
-  addTabsOnUpdatedHandler() {
-    return chrome.tabs.onUpdated.addListener
-  }
+
+  // chrome specific
+  // addTabsOnUpdatedHandlerForReload = chrome.tabs.onUpdated.addListener
+  // removeTabsOnUpdatedHandlerForReload = chrome.tabs.onUpdated.removeListener
 }
 export const ChromeFacade = new ChromeMainFacade()

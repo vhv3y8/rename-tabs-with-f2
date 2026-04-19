@@ -5,6 +5,7 @@ import "./style/fonts.css"
 import "./style/ds.css"
 import { runBootstrap } from "./bootstrap"
 
+// run bootstrap before mount
 const uiInjections = await runBootstrap()
 const app = mount(App, {
   target: document.getElementById("app")!,

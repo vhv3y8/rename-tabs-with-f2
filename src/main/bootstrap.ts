@@ -122,7 +122,7 @@ export async function runBootstrap() {
     reloadAllConnectableTabsUseCase,
   )
 
-  // registering input adapters are delegated to ui components
+  // registering input adapters are delegated to svelte components
 
   // run initializing use cases
   await initializeTabInfoStoreUseCase()
@@ -130,8 +130,6 @@ export async function runBootstrap() {
 
   // detailed instances to DI into ui components
   return {
-    // infra
-    // extensionFacade,
     // output adapters
     tabIdxInfoStore,
     notConnected,
