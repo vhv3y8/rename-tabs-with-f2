@@ -59,6 +59,8 @@ function keydownMoveAroundTabItemsHandler(e: KeyboardEvent) {
         pressable: false,
         isKeyDown: keydowns.esc,
         padding: "0.3em 0.5em",
+        fontSize: "18px",
+        shadow: "base",
         onclick: () => {
           tabItemComponents.focusInitialItem()
         },
@@ -78,6 +80,8 @@ function keydownMoveAroundTabItemsHandler(e: KeyboardEvent) {
         pressable: false,
         isKeyDown: keydowns.tab,
         padding: "0.3em 0.5em",
+        fontSize: "18px",
+        shadow: "base",
         onclick: () => {
           tabItemComponents.focusNextItem()
         },
@@ -96,6 +100,8 @@ function keydownMoveAroundTabItemsHandler(e: KeyboardEvent) {
         pressable: false,
         isKeyDown: keydowns.enter,
         padding: "0.3em 0.5em",
+        fontSize: "18px",
+        shadow: "base",
         onclick: () => {
           tabItemComponents.focusNextItem()
         },
@@ -116,6 +122,8 @@ function keydownMoveAroundTabItemsHandler(e: KeyboardEvent) {
         pressable: false,
         isKeyDown: keydowns.shiftTab,
         padding: "0.3em 0.5em",
+        fontSize: "18px",
+        shadow: "base",
         onclick: () => {
           tabItemComponents.focusPreviousItem()
         },
@@ -134,6 +142,8 @@ function keydownMoveAroundTabItemsHandler(e: KeyboardEvent) {
         pressable: false,
         isKeyDown: keydowns.shiftEnter,
         padding: "0.3em 0.5em",
+        fontSize: "18px",
+        shadow: "base",
         onclick: () => {
           tabItemComponents.focusPreviousItem()
         },
@@ -171,8 +181,8 @@ header {
   row-gap: 0.7em;
 }
 
-:global(header button) {
-  font-size: 18px;
-  padding: 0.3em 0.5em;
+header :global(button) {
+  /* font-size: 18px; */
+  /* padding: 0.3em 0.5em; */
 }
 </style>

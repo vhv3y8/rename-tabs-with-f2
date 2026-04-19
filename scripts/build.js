@@ -4,6 +4,7 @@ import zipPack from "vite-plugin-zip-pack"
 import manifest from "../src/public/manifest.json" with { type: "json" }
 import path from "node:path"
 import fs from "node:fs/promises"
+import tailwindcss from "@tailwindcss/vite"
 
 const isProduction = process.env.MODE === "production"
 const buildDist2ForTest = process.env.DIST2 === "true"
@@ -62,7 +63,11 @@ const createSvelteConfig = (input, last = false) => {
         input,
       },
     },
-    plugins: [svelte(), ...(isProduction && last ? commonPlugins : [])],
+    plugins: [
+      svelte(),
+      tailwindcss(),
+      ...(isProduction && last ? commonPlugins : []),
+    ],
   })
 }
 const createJsConfig = (input, last = false) => {

@@ -13,6 +13,7 @@ import { setting } from "../states/inMemorySetting.svelte"
 >
   <Key
     props={{
+      fontSize: "18px",
       onclick: () => {
         setting.darkmode = !setting.darkmode
         view.applyDarkModeUI({ darkmode: setting.darkmode })

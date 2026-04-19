@@ -4,9 +4,7 @@ import { reload } from "./states/reload.svelte"
 import { notConnectedCard } from "./states/notConnected.svelte"
 import { settingModal } from "../setting/states/settingModal.svelte"
 import { tabItemComponents } from "./states/tabItemComponents.svelte"
-// use case handlers
 import { getInjections } from "../../injections"
-import { onMount } from "svelte"
 
 const notConnected = $derived(getInjections().notConnected)
 let allCount = $derived(notConnected.allTabs.length)
@@ -91,7 +89,7 @@ const { keydownReloadUseCaseHandler, clickReloadUseCaseHandler } =
           {chrome.i18n.getMessage("card_btn_dismiss")} : <Key
             props={{
               darkTheme: true,
-              shadow: "base",
+              shadow: "small",
               padding: "0.4em",
               fontSize: "15px",
               onclick: handleDismiss,
@@ -99,6 +97,7 @@ const { keydownReloadUseCaseHandler, clickReloadUseCaseHandler } =
           >
         </div>
       </div>
+
       <!-- reload connectable tabs -->
       <ul>
         {#if 0 < reloadCount}
@@ -130,9 +129,11 @@ const { keydownReloadUseCaseHandler, clickReloadUseCaseHandler } =
               {:else}
                 <Key
                   props={{
+                    pressable: false,
                     darkTheme: true,
                     shadow: "none",
                     padding: "0.4em",
+                    fontSize: "15px",
                   }}>{chrome.i18n.getMessage("card_reloading")}</Key
                 >
               {/if}
@@ -194,29 +195,17 @@ div#notConnectedCard ul {
 
   /* font-size: 0.9em; */
 }
-div#notConnectedCard p.description {
+
+p.description {
   font-size: 15px;
   margin-bottom: 0.7em;
 }
-div#notConnectedCard p.titles {
+p.titles {
   line-height: 1.5;
   font-size: 0.95em;
 }
 
-/* button.key.reversed {
-  box-shadow: 2px 2px var(--bg);
-  margin-right: 2px;
-  background: var(--primary-8);
-  color: var(--bg);
-  border-color: var(--bg);
-}
-button.key.reversed:active {
-  top: 2px;
-  left: 2px;
-  box-shadow: none;
-} */
-
-div#notConnectedCard div.header {
+div.header {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
@@ -224,18 +213,12 @@ div#notConnectedCard div.header {
   gap: 1em;
 }
 
-div#notConnectedCard button.key {
+/* #notConnectedCardContainer :global(button.key) {
   font-size: 1em;
   padding: 0.4em;
-}
-div#notConnectedCard div.close {
-  /* position: relati;
-  top: 0;
-  right: 0; */
-  /* padding-top: 4px;
-  padding-right: 2px; */
-}
-div#notConnectedCard div.right {
+} */
+
+.right {
   margin-left: auto;
 }
 div.containsKeyBtn {

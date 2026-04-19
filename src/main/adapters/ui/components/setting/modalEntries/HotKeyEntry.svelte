@@ -37,6 +37,7 @@ function publishToast() {
     content: chrome.i18n.getMessage("settings_shortcut"),
     appearance: "block",
   }}
+  liClassName={"hotKeyEntry"}
 >
   {#if settingModal.listen}
     <!-- Listening / shortcutText -->
@@ -56,6 +57,7 @@ function publishToast() {
         props={{
           id: "resetToF2",
           padding: "0.4em 0.5em",
+          fontSize: "17px",
           onclick: () => {
             localHotKey = F2HotKey
             settingModal.endListening()
@@ -72,6 +74,7 @@ function publishToast() {
         props={{
           id: "cancelBtn",
           padding: "0.4em 0.5em",
+          fontSize: "17px",
           onclick: () => {
             settingModal.endListening()
             localHotKey = setting.hotKey
@@ -83,6 +86,7 @@ function publishToast() {
         props={{
           id: "okBtn",
           padding: "0.4em 0.5em",
+          fontSize: "17px",
           onclick: () => {
             console.log("[localHotKey]", localHotKey)
             settingModal.endListening()
@@ -97,6 +101,7 @@ function publishToast() {
       props={{
         id: "hotkeyBtn",
         padding: null,
+        fontSize: "18px",
         onclick: () => {
           settingModal.startListening()
         },
@@ -108,6 +113,12 @@ function publishToast() {
 <!-- Style -->
 
 <style>
+:global(li.hotKeyEntry) {
+  flex-flow: column nowrap;
+  align-items: flex-start;
+  gap: 0.55em;
+}
+
 .listenShortcutText {
   padding: 0.4em 0.5em 0.6em;
   border: 2px solid var(--primary-9);

@@ -3,6 +3,7 @@ import type { Snippet } from "svelte"
 
 let {
   title,
+  liClassName = "",
   flexCol = false,
   children,
 }: {
@@ -10,6 +11,7 @@ let {
     content: string
     appearance: "inline" | "block"
   }
+  liClassName?: string
   flexCol?: boolean
   children: Snippet
 } = $props()
@@ -17,7 +19,7 @@ let {
 
 <!-- HTML -->
 
-<li class:flexCol>
+<li class={`${liClassName ? liClassName : ""}`} class:flexCol>
   {#if title.appearance === "inline"}
     <span>{title.content} :</span>
   {:else if title.appearance === "block"}

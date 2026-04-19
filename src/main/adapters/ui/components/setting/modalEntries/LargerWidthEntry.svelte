@@ -13,6 +13,7 @@ import { setting } from "../states/inMemorySetting.svelte"
 >
   <Key
     props={{
+      fontSize: "18px",
       onclick: () => {
         setting.largerWidth = !setting.largerWidth
         view.applyLargerWidth({

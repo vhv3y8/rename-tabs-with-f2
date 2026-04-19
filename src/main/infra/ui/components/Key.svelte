@@ -1,4 +1,5 @@
 <script lang="ts">
+import { cancelAllKeydowns } from "@main/adapters/ui/components/reactivity/keys.svelte"
 import { onMount, type Snippet } from "svelte"
 
 type KeyProps = {
@@ -22,7 +23,7 @@ const defaultKeyProps: KeyProps = {
 
   shadow: "base",
   padding: "0.5em",
-  fontSize: null,
+  fontSize: "initial",
   darkTheme: false,
 
   onclick: () => {},
@@ -30,55 +31,37 @@ const defaultKeyProps: KeyProps = {
   onmouseup: () => {},
   repeatClickHandlerWithMouseDown: false,
 }
-let {
-  props = defaultKeyProps,
-  children,
-}: { props: Partial<KeyProps>; children: Snippet } = $props()
-console.log("[key] [props]", props)
+let { props, children }: { props: Partial<KeyProps>; children: Snippet } =
+  $props()
+const {
+  pressable,
+  isKeyDown,
+  shadow,
+  padding,
+  fontSize,
+  darkTheme,
+  onclick,
+  onmousedown,
+  onmouseup,
+} = $derived({ ...defaultKeyProps, ...props })
 
 const repeatMousedownThreshold = 100
 let repeatMousedownTimer = null
 let movedByMousedownCount = 0
 
 let elem: HTMLElement | null = $state(null)
-const classes = ["key"]
-onMount(() => {
-  if (elem) {
-    // css from props
-    elem.style.padding = props.padding
-    if (props.fontSize !== "") elem.style.fontSize = props.fontSize
-    if (props.shadow === "none") {
-      elem.style.boxShadow = "none"
-      elem.style.margin = "0"
-      elem.parentElement.style.pointerEvents = "none"
-    }
-
-    // classes
-    if (props.pressable) classes.push("pressable")
-    if (props.shadow === "base") classes.push("large")
-    if (props.darkTheme) classes.push("reversed")
-    elem.classList.add(...classes)
-  }
-})
-
-// exports
-export function getElem() {
-  return elem
-}
 </script>
 
 <!-- HTML -->
 
 <button
-  bind:this={elem}
   type="button"
   class="key p-0 m-0 border-0 shadow-none bg-inherit outline-none"
-  class:keydown={props.isKeyDown}
   onclick={() => {
     if (props.repeatClickHandlerWithMouseDown) {
-      if (movedByMousedownCount === 0) props.onclick?.()
+      if (movedByMousedownCount === 0) onclick()
     } else {
-      props.onclick?.()
+      onclick()
     }
   }}
   onmousedown={() => {
@@ -86,11 +69,11 @@ export function getElem() {
       repeatMousedownTimer = setInterval(() => {
         console.log("[running mousedown]")
         movedByMousedownCount += 1
-        props.onclick?.()
+        onclick()
       }, repeatMousedownThreshold)
-      props.onmousedown?.()
+      onmousedown()
     } else {
-      props.onmousedown?.()
+      onmousedown()
     }
   }}
   onmouseup={() => {
@@ -98,16 +81,25 @@ export function getElem() {
       clearInterval(repeatMousedownTimer)
       repeatMousedownTimer = null
       movedByMousedownCount = 0
-      props.onmouseup?.()
+      cancelAllKeydowns()
+      onmouseup()
     } else {
-      props.onmouseup?.()
+      onmouseup()
     }
   }}
 >
   <div
     bind:this={elem}
     id={props.id || undefined}
-    class="keyInner relative mr-0.5 mb-0.5 outline-none"
+    class={`keyInner relative mr-0.5 mb-0.5 outline-none`}
+    class:pressable
+    class:darkTheme
+    class:keydown={isKeyDown}
+    class:noShadow={shadow === "none"}
+    class:smallShadow={shadow === "small"}
+    class:largeShadow={shadow === "base"}
+    style:padding
+    style:font-size={fontSize}
   >
     {@render children?.()}
   </div>
@@ -116,39 +108,10 @@ export function getElem() {
 <!-- Style -->
 
 <style>
-/* key */
-
-button.key {
-  /* padding: 0;
-  margin: 0;
-  border: 0;
-  box-shadow: none;
-  background-color: inherit;
-  outline: none; */
-}
-
-:global(.keyInner) {
-  /* position: relative;
-  margin-right: 2px;
-  margin-bottom: 2px;
-  outline: none; */
+.keyInner {
   font-family: "Ubuntu Mono";
-
   transition: background-color 0.055s ease-out;
-}
-:global(.keyInner.large) {
-  margin-right: 4px;
-  margin-bottom: 4px;
-}
 
-/* keydown */
-:global(button.keydown) :global(div.keyInner) {
-  background-color: cornflowerblue !important;
-}
-
-/* reversed */
-
-:global(.keyInner) {
   display: flex;
   justify-content: center;
 
@@ -157,28 +120,48 @@ button.key {
   background: var(--bg);
   color: var(--primary-9);
 }
-:global(.keyInner.reversed) {
+.keyInner.darkTheme {
   box-shadow: 2px 2px var(--bg);
   border: 2px solid var(--bg);
   background: var(--primary-8);
   color: var(--bg);
 }
 
-:global(.keyInner.large) {
+/* shadow */
+.keyInner.noShadow {
+  box-shadow: none;
+  margin: 0;
+  pointer-events: none;
+}
+.keyInner.smallShadow {
+  margin-right: 2px;
+  margin-bottom: 2px;
+  box-shadow: 2px 2px var(--primary-8);
+}
+.keyInner.smallShadow.darkTheme {
+  box-shadow: 2px 2px var(--bg);
+}
+.keyInner.largeShadow {
+  margin-right: 4px;
+  margin-bottom: 4px;
   box-shadow: 4px 4px var(--primary-8);
 }
-:global(.keyInner.large.reversed) {
+.keyInner.largeShadow.darkTheme {
   box-shadow: 4px 4px var(--bg);
 }
 
-/* pressable */
+/* keydown */
+.keydown {
+  background-color: cornflowerblue !important;
+}
 
-button:active :global(div.keyInner.pressable) {
+/* pressable */
+button:active .keyInner.pressable {
   top: 2px;
   left: 2px;
   box-shadow: none;
 }
-button:active :global(div.keyInner.pressable.large) {
+button:active .keyInner.pressable.largeShadow {
   top: 4px;
   left: 4px;
 }

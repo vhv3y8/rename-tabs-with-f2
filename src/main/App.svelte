@@ -9,6 +9,7 @@ import { cancelAllKeydowns } from "./adapters/ui/components/reactivity/keys.svel
 import { setting } from "./adapters/ui/components/setting/states/inMemorySetting.svelte"
 import { runBootstrap } from "./bootstrap"
 import { setInjectionsContext } from "./adapters/ui/injections"
+import GlobalToastGrid from "./adapters/ui/components/toast/GlobalToastGrid.svelte"
 
 // inject to svelte components
 const uiInjections: Awaited<ReturnType<typeof runBootstrap>> = $props()
@@ -28,6 +29,8 @@ onMount(async () => {
 <!-- HTML -->
 
 <svelte:document onkeyup={keyupReactivityHandler} />
+
+<GlobalToastGrid />
 
 <main
   class:large={setting.largerWidth}

@@ -45,6 +45,7 @@ const { keydownApplyHandler, clickApplyHandler } = getInjections()
       props={{
         id: "settingsPopoverBtn",
         padding: null,
+        fontSize: "18px",
         onclick: () => {
           settingModal.toggleShow()
         },
@@ -66,9 +67,10 @@ const { keydownApplyHandler, clickApplyHandler } = getInjections()
   <Key
     props={{
       id: "ctrlEnterBtn",
-      onclick: clickApplyHandler,
       isKeyDown: keydowns.ctrlEnter,
       padding: null,
+      fontSize: "18px",
+      onclick: clickApplyHandler,
     }}>Ctrl + Enter</Key
   >
 </footer>
