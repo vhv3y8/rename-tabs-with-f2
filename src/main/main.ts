@@ -1,9 +1,10 @@
 import { mount } from "svelte"
 import App from "./App.svelte"
-import "./style/style.css"
-import "./style/fonts.css"
-import "./style/ds.css"
+import "./infra/ui/style/style.css"
+import "./infra/ui/style/fonts.css"
+import "./infra/ui/style/ds.css"
 import { runBootstrap } from "./bootstrap"
+import { setInjectionsContext } from "./adapters/ui/injections"
 
 // run bootstrap before mount
 const uiInjections = await runBootstrap()

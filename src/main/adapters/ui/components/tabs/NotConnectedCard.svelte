@@ -2,10 +2,11 @@
 import Key from "@main/infra/ui/components/Key.svelte"
 import { reload } from "./states/reload.svelte"
 import { notConnectedCard } from "./states/notConnected.svelte"
-import { tabItemComponents } from "./states/tabItemComponents.svelte"
 import { settingModal } from "../setting/states/settingModal.svelte"
+import { tabItemComponents } from "./states/tabItemComponents.svelte"
 // use case handlers
 import { getInjections } from "../../injections"
+import { onMount } from "svelte"
 
 const notConnected = $derived(getInjections().notConnected)
 let allCount = $derived(notConnected.allTabs.length)
@@ -51,6 +52,16 @@ function keydownDismissHandler(e: KeyboardEvent) {
 //     }
 //   }
 // }
+// onMount(() => {
+//   document.addEventListener("keydown", (e: KeyboardEvent) => {
+//     // use case
+//     getInjections().keydownReloadUseCaseHandler(e)
+//     // ui
+//     keydownDismissHandler(e)
+//   })
+// })
+const { keydownReloadUseCaseHandler, clickReloadUseCaseHandler } =
+  getInjections()
 </script>
 
 <!-- HTML -->
@@ -58,7 +69,7 @@ function keydownDismissHandler(e: KeyboardEvent) {
 <svelte:document
   onkeydown={(e: KeyboardEvent) => {
     // use case
-    getInjections().keydownReloadUseCaseHandler(e)
+    keydownReloadUseCaseHandler(e)
     // ui
     keydownDismissHandler(e)
   }}
@@ -113,7 +124,7 @@ function keydownDismissHandler(e: KeyboardEvent) {
                     shadow: "small",
                     padding: "0.4em",
                     fontSize: "15px",
-                    onclick: getInjections().clickReloadUseCaseHandler,
+                    onclick: clickReloadUseCaseHandler,
                   }}>Shift + R</Key
                 >
               {:else}
@@ -153,10 +164,10 @@ function keydownDismissHandler(e: KeyboardEvent) {
 <!-- Style -->
 
 <style>
-div#blurDescriptionContainer {
+div#notConnectedCardContainer {
   margin-block: 1rem;
 }
-div#blurDescription {
+div#notConnectedCard {
   font-family: "Ubuntu";
 
   font-size: 14px;
@@ -170,7 +181,7 @@ div#blurDescription {
   /* margin-inline: 0.7em; */
   box-shadow: 0 0 2px var(--primary-8);
 }
-div#blurDescription ul {
+div#notConnectedCard ul {
   margin-top: 0.5em;
   list-style-type: disc;
   padding-left: 1.5rem;
@@ -183,11 +194,11 @@ div#blurDescription ul {
 
   /* font-size: 0.9em; */
 }
-div#blurDescription p.description {
+div#notConnectedCard p.description {
   font-size: 15px;
   margin-bottom: 0.7em;
 }
-div#blurDescription p.titles {
+div#notConnectedCard p.titles {
   line-height: 1.5;
   font-size: 0.95em;
 }
@@ -205,7 +216,7 @@ button.key.reversed:active {
   box-shadow: none;
 } */
 
-div#blurDescription div.header {
+div#notConnectedCard div.header {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
@@ -213,18 +224,18 @@ div#blurDescription div.header {
   gap: 1em;
 }
 
-div#blurDescription button.key {
+div#notConnectedCard button.key {
   font-size: 1em;
   padding: 0.4em;
 }
-div#blurDescription div.close {
+div#notConnectedCard div.close {
   /* position: relati;
   top: 0;
   right: 0; */
   /* padding-top: 4px;
   padding-right: 2px; */
 }
-div#blurDescription div.right {
+div#notConnectedCard div.right {
   margin-left: auto;
 }
 div.containsKeyBtn {

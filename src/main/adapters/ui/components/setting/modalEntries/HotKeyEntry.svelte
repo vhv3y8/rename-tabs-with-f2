@@ -23,6 +23,7 @@ function handleListenHotKey(e: KeyboardEvent) {
 }
 
 function publishToast() {
+  console.log("[publishing toast]")
   toasts.appendToast(TOAST_MESSAGES.SHORTCUT_UPDATED(localHotKeyText))
 }
 </script>
@@ -37,30 +38,20 @@ function publishToast() {
     appearance: "block",
   }}
 >
-  {#if !settingModal.listen}
-    <Key
-      props={{
-        id: "shortcutBtn",
-        padding: null,
-        onclick: () => {
-          settingModal.startListening()
-        },
-      }}>{settingModal.hotKeyText}</Key
-    >
-  {:else}
+  {#if settingModal.listen}
     <!-- Listening / shortcutText -->
-    <div class="listenShortcutText">
+    <div class="listenShortcutText w-full box-border text-center">
       <p id="listening">
         {chrome.i18n.getMessage("settings_shortcut_listening")}...
       </p>
 
-      <p id="shortcutText">
+      <p id="hotkeyText">
         {localHotKeyText}
       </p>
     </div>
 
     <!-- Reset to F2 -->
-    <div class="resetToF2Container">
+    <div class="resetToF2Container w-full flex">
       <Key
         props={{
           id: "resetToF2",
@@ -76,7 +67,7 @@ function publishToast() {
     </div>
 
     <!-- Cancel / OK -->
-    <div class="listenCancelOk">
+    <div class="listenCancelOk w-full flex gap-[0.3em]">
       <Key
         props={{
           id: "cancelBtn",
@@ -101,5 +92,79 @@ function publishToast() {
         }}>{chrome.i18n.getMessage("settings_shortcut_ok")}</Key
       >
     </div>
+  {:else}
+    <Key
+      props={{
+        id: "hotkeyBtn",
+        padding: null,
+        onclick: () => {
+          settingModal.startListening()
+        },
+      }}>{settingModal.hotKeyText}</Key
+    >
   {/if}
 </ModalEntry>
+
+<!-- Style -->
+
+<style>
+.listenShortcutText {
+  padding: 0.4em 0.5em 0.6em;
+  border: 2px solid var(--primary-9);
+  color: var(--primary-9);
+  background-color: var(--bg);
+
+  /* width: 100%;
+  box-sizing: border-box;
+  text-align: center; */
+
+  font-size: 0.9em;
+}
+
+/* listening */
+:global(#listening) {
+  margin-bottom: 0.5em;
+  font-size: 0.85em;
+  font-family: "Ubuntu";
+  color: var(--primary-7);
+}
+:global(#hotkeyText) {
+  font-size: 1.2em;
+  font-family: "Ubuntu Mono";
+}
+:global(button.key:has(#resetToF2)) {
+  width: 100%;
+  display: flex;
+}
+:global(#resetToF2) {
+  width: 100%;
+  box-sizing: border-box;
+  /* font-size: 0.85em; */
+  font-size: 0.95em;
+  padding: 0.4em 0.5em;
+}
+
+div.listenCancelOk {
+  /* width: 100%;
+  display: flex;
+  gap: 0.3em; */
+
+  :global(button) {
+    width: 50%;
+    /* font-size: 0.85em; */
+    font-size: 0.95em;
+  }
+}
+:global(#cancelBtn),
+:global(#okBtn) {
+  font-size: 0.95em;
+}
+/* not listening */
+:global(button.key:has(#hotkeyBtn)) {
+  width: 100%;
+}
+:global(#hotkeyBtn) {
+  box-sizing: border-box;
+  padding: 0.7em 0.5em;
+}
+</style>

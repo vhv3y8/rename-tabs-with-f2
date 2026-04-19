@@ -17,6 +17,7 @@ export function createKeydownReloadUseCaseHandler(
       0 < notConnected.reloadConnectableTabs.length
     ) {
       e.preventDefault()
+      console.log("[keydown reload handler]")
       await reloadAllConnectableTabs()
     }
   }
@@ -26,6 +27,7 @@ export function createClickReloadUseCaseHandler(
   reloadAllConnectableTabs: ReloadAllConnectableTabsUseCase,
 ) {
   return async function clickReloadUseCaseHandler(e: MouseEvent) {
+    console.log("[click reload handler]")
     await reloadAllConnectableTabs()
   }
 }

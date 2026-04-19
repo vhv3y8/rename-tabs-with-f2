@@ -1,5 +1,5 @@
 const ChromeWindows = {
-  async getCurrentWindowId({ fromTab = false }) {
+  async getCurrentWindowId(fromTab = false) {
     let focusedWindowId = null
     if (!fromTab) {
       const allFocusedWindows = await chrome.windows

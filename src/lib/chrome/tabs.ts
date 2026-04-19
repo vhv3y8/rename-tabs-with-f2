@@ -31,12 +31,12 @@ const ChromeTabs = {
     },
   },
   create: {
-    async openMainPage(): Promise<void> {
+    async openMainPage(): Promise<chrome.tabs.Tab> {
       // close all existing extension pages on current window
       await ChromeTabs.query
         .getCurrentWindowExtensionPageIds()
         .then((tabIds) => chrome.tabs.remove(tabIds))
-      await chrome.tabs.create({
+      return chrome.tabs.create({
         url: ChromeRuntime.getExtensionPageURL(),
       })
     },
@@ -45,7 +45,7 @@ const ChromeTabs = {
     async reloadTab(tabId: number): Promise<void> {
       return chrome.tabs.reload(tabId)
     },
-    // fix handling refresh
+    // TODO: fix handling refresh
     // async focusTab(tabId: number): Promise<void> {
     //   await chrome.tabs.update(tabId, { active: true })
     // },

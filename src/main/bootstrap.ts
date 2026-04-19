@@ -7,7 +7,9 @@
 // import { initializeTabInfoStore } from "./application/usecases/initializeTabInfoStore"
 // import type { SettingStore } from "./application/ports/SettingStore"
 
+import { TabItemComponents } from "./adapters/ui/components/tabs/states/tabItemComponents.svelte"
 import { DOMApplyLifeCycle } from "./adapters/ui/impl/lifecycles/applyLifeCycle"
+import { createInitializeAppLifeCycle } from "./adapters/ui/impl/lifecycles/initializeAppLifeCycle"
 import { ChromeSvelteReloadLifeCycle } from "./adapters/ui/impl/lifecycles/reloadLifeCycle"
 import { TabIdxInfoRecordStore } from "./adapters/ui/impl/tabInfoStore.svelte"
 import {
@@ -29,6 +31,11 @@ import {
   createCheckAllTabConnectionAndUpdateFlags,
   type CheckAllTabConnectionUseCase,
 } from "./application/usecases/checkAllTabConnection"
+import {
+  createInitializeAppUseCase,
+  type InitializeAppLifeCycle,
+  type InitializeAppUseCase,
+} from "./application/usecases/initializeApp"
 import {
   createInitializeTabInfoStore,
   type InitializeTabInfoStoreUseCase,
@@ -86,10 +93,14 @@ export async function runBootstrap() {
   // create output adapter impl
   const tabIdxInfoStore = new TabIdxInfoRecordStore() satisfies TabInfoStore
   const notConnected = tabIdxInfoStore.notConnected
+  // adapter only impl?
+  // const tabItemComponents = await TabItemComponents.build(tabIdxInfoStore)
 
   // create use case lifecycle impl
   const applyLifeCycle: ApplyLifeCycle = DOMApplyLifeCycle
   const reloadLifeCycle: ReloadLifeCycle = ChromeSvelteReloadLifeCycle
+  const initializeAppLifeCycle: InitializeAppLifeCycle =
+    createInitializeAppLifeCycle(extensionFacade)
 
   // create use cases
   const applyUseCase: ApplyUseCase = createApplyUseCase(
@@ -108,6 +119,11 @@ export async function runBootstrap() {
       checkAllTabConnectionAndUpdateFlagsUseCase,
       reloadLifeCycle,
     )
+  const initializeAppUseCase: InitializeAppUseCase = createInitializeAppUseCase(
+    initializeTabInfoStoreUseCase,
+    checkAllTabConnectionAndUpdateFlagsUseCase,
+    initializeAppLifeCycle,
+  )
 
   // create input adapters
   // apply
@@ -125,14 +141,16 @@ export async function runBootstrap() {
   // registering input adapters are delegated to svelte components
 
   // run initializing use cases
-  await initializeTabInfoStoreUseCase()
-  await checkAllTabConnectionAndUpdateFlagsUseCase()
+  await initializeAppUseCase()
+  // await initializeTabInfoStoreUseCase()
+  // await checkAllTabConnectionAndUpdateFlagsUseCase()
 
   // detailed instances to DI into ui components
   return {
     // output adapters
     tabIdxInfoStore,
     notConnected,
+    // tabItemComponents,
     // input adapters
     keydownApplyHandler,
     clickApplyHandler,

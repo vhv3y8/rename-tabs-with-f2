@@ -1,23 +1,21 @@
-import * as chromeStorage from "../lib/chrome/storage2"
-import * as chromeTabs from "../lib/chrome/tabs"
-import * as chromeWindows from "../lib/chrome/windows"
+import ChromeStorage from "@lib/chrome/storage"
+import ChromeTabs from "@lib/chrome/tabs"
+import ChromeWindows from "@lib/chrome/windows"
 
 let winIdLastFocusTabIdMap = new Map()
 let extensionTabIdSet = new Set()
 
 async function setIdCollectionsAndOpenPage() {
-  const currentWindowId = await chromeWindows.getCurrentWindowId({
-    fromServiceWorker: true,
-  })
+  const currentWindowId = await ChromeWindows.getCurrentWindowId()
   // get last focus tab
-  await chromeTabs.getCurrentWindowActiveTab().then((tabs) => {
+  await ChromeTabs.query.getCurrentWindowActiveTab().then((tabs) => {
     // set window id to last focus tab id map
     const lastFocusTabId = tabs[0].id
     winIdLastFocusTabIdMap.set(currentWindowId, lastFocusTabId)
   })
 
   // open extension main page
-  await chromeTabs.openMainPage().then((tab) => {
+  await ChromeTabs.create.openMainPage().then((tab) => {
     // set extension tab id set
     extensionTabIdSet.add(tab.id)
   })
@@ -44,7 +42,7 @@ chrome.runtime.onMessage.addListener(async (msg, sender, sendRes) => {
     }
     // for ui initial tab
     case "LAST_FOCUS_TAB_ID": {
-      sendRes(winIdLastFocusTabIdMap.get(sender.tab.windowId))
+      sendRes(winIdLastFocusTabIdMap.get(sender.tab?.windowId))
       break
     }
   }
@@ -55,7 +53,8 @@ chrome.tabs.onRemoved.addListener(async (tabId, { windowId }) => {
   if (extensionTabIdSet.has(tabId) && winIdLastFocusTabIdMap.has(windowId)) {
     // focus last focus tab of the window
     const lastFocusTabId = winIdLastFocusTabIdMap.get(windowId)
-    await chromeTabs.focusTab(lastFocusTabId)
+    // TODO: fix handling refresh
+    // await chromeTabs.focusTab(lastFocusTabId)
 
     // remove tab id and window id from collections
     extensionTabIdSet.delete(tabId)
@@ -75,11 +74,11 @@ chrome.tabs.onRemoved.addListener(async (tabId, { windowId }) => {
 chrome.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
     console.log("[installed]")
-    chromeStorage.initializeStorage(chromeStorage.initialStorage).then(() => {
-      chromeTabs.openMainPage()
+    ChromeStorage.initializeStorage(ChromeStorage.INITIAL_STORAGE).then(() => {
+      ChromeTabs.create.openMainPage()
     })
   } else if (reason === "update") {
     console.log("[updated]")
-    chromeStorage.migrateStorage(chromeStorage.initialStorage)
+    // ChromeStorage.migrateStorage(ChromeStorage.INITIAL_STORAGE)
   }
 })

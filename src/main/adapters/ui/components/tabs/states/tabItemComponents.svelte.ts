@@ -1,7 +1,7 @@
 import type { TabInfoStore } from "@application/ports/TabInfoStore"
 import type TabItem from "../TabItem.svelte"
-import { tabIdxInfoStore } from "@main/bootstrap"
 import { ChromeFacade } from "@main/infra/platform/impl/ChromeMainFacade"
+import { getInjections } from "@main/adapters/ui/injections"
 
 type TabItemComponent = ReturnType<typeof TabItem>
 export class TabItemComponents {
@@ -12,10 +12,8 @@ export class TabItemComponents {
 
   private currentFocusInputIdx: number
   private initialFocusInputIdx: number
-  private constructor(
-    private tabIdxInfoStore: TabInfoStore,
-    private lastFocusTabId: number | null = null,
-  ) {
+  constructor() {
+    // private lastFocusTabId: number | null = null, // private tabIdxInfoStore: TabInfoStore,
     // components related
     this.focusableComponents = $derived(
       this.components.filter((elem) => elem.isContentScriptConnected()),
@@ -32,14 +30,15 @@ export class TabItemComponents {
     // indexes
     // TabInfoStore field is needed because initial idx depends on TabInfoStore ?
     // why can't this be just lastFocusTabInfo and resolve initial idx on constructor without store related field?
-    this.initialFocusInputIdx = $derived.by(() => {
-      if (this.lastFocusTabId === null) return 0
-      const lastFocusTabInfo = this.tabIdxInfoStore.getById(this.lastFocusTabId)
-      if (lastFocusTabInfo?.connected) {
-        return this.focusableIdxFromTabIdLookup[this.lastFocusTabId]
-      }
-      return 0
-    })
+    // this.initialFocusInputIdx = $derived.by(() => {
+    //   if (this.lastFocusTabId === null) return 0
+    //   const lastFocusTabInfo = this.tabIdxInfoStore.getById(this.lastFocusTabId)
+    //   if (lastFocusTabInfo?.connected) {
+    //     return this.focusableIdxFromTabIdLookup[this.lastFocusTabId]
+    //   }
+    //   return 0
+    // })
+    this.initialFocusInputIdx = $state(0)
     this.currentFocusInputIdx = $state(this.initialFocusInputIdx)
     $effect.root(() => {
       $effect(() => {
@@ -48,9 +47,12 @@ export class TabItemComponents {
     })
   }
   // use this method to create instance
-  static async build(tabIdxInfoStore: TabInfoStore) {
-    const lastFocusTabId = await ChromeFacade.getLastFocusTabId()
-    return new TabItemComponents(tabIdxInfoStore, lastFocusTabId)
+  // static async build(tabIdxInfoStore: TabInfoStore) {
+  //   const lastFocusTabId = await ChromeFacade.getLastFocusTabId()
+  //   return new TabItemComponents(tabIdxInfoStore, lastFocusTabId)
+  // }
+  setLastFocusTab(tabId: number) {
+    this.initialFocusInputIdx = this.focusableIdxFromTabIdLookup[tabId]
   }
 
   // mouse click
@@ -89,4 +91,4 @@ export class TabItemComponents {
   }
 }
 //
-export const tabItemComponents = await TabItemComponents.build(tabIdxInfoStore)
+export const tabItemComponents = new TabItemComponents()

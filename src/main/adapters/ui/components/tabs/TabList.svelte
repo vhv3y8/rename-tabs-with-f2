@@ -1,16 +1,16 @@
 <script lang="ts">
-import { getInjections } from "../../injections"
-
-// import { tabIdxInfoStore } from "@main/bootstrap.svelte"
 import { tabItemComponents } from "./states/tabItemComponents.svelte"
 import TabItem from "./TabItem.svelte"
+import { getInjections } from "../../injections"
+
+const tabIdxInfoStore = getInjections().tabIdxInfoStore
 </script>
 
 <!-- HTML -->
 
 <ul>
   <!-- {#each Object.values(tabIdxInfoStore) as tabInfo, idx} -->
-  {#each getInjections().tabIdxInfoStore.getAllTabInfos() as tabInfo, idx}
+  {#each tabIdxInfoStore.getAllTabInfos() as tabInfo, idx}
     <TabItem bind:this={tabItemComponents.components[idx]} {tabInfo} />
   {/each}
 </ul>

@@ -1,8 +1,8 @@
 <script lang="ts">
 import Key from "@infra/ui/components/Key.svelte"
 import { cancelAllMoveAroundKeydowns, keydowns } from "./reactivity/keys.svelte"
-import { tabItemComponents } from "./tabs/states/tabItemComponents.svelte"
 import { settingModal } from "./setting/states/settingModal.svelte"
+import { tabItemComponents } from "./tabs/states/tabItemComponents.svelte"
 
 // move around tab components
 function keydownMoveAroundTabItemsHandler(e: KeyboardEvent) {

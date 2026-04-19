@@ -1,6 +1,9 @@
-import type { Setting } from "./models/Setting"
+import { initialSetting, type Setting } from "./models/Setting"
 
 const ChromeStorage = {
+  INITIAL_STORAGE: {
+    settings: initialSetting,
+  },
   initializeStorage(storage: Record<string, any>) {
     return chrome.storage.local.set(storage)
   },

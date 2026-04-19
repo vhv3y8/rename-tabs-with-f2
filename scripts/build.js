@@ -1,7 +1,7 @@
 import { build } from "vite"
 import { svelte } from "@sveltejs/vite-plugin-svelte"
 import zipPack from "vite-plugin-zip-pack"
-import manifest from "../public/manifest.json" with { type: "json" }
+import manifest from "../src/public/manifest.json" with { type: "json" }
 import path from "node:path"
 import fs from "node:fs/promises"
 
@@ -27,7 +27,15 @@ const commonConfig = {
   root: "src",
   resolve: {
     alias: {
-      $$lib: "/lib",
+      // global
+      "@lib": "/lib",
+      "@chrome": "/lib/chrome",
+      // main
+      "@main": "/main",
+      "@domain": "/main/domain",
+      "@application": "/main/application",
+      "@adapters": "/main/adapters",
+      "@infra": "/main/infra",
     },
   },
   define: {
@@ -128,8 +136,8 @@ async function updateExtensionVersion() {
 
 // Build
 
-const entries = ["src/main/index.html", "src/content.js", "src/sw/sw.js"]
-if (!isProduction) entries.push("src/test-bridge.html", "src/test-bridge.js")
+const entries = ["src/main/index.html", "src/content.ts", "src/sw/sw.ts"]
+// if (!isProduction) entries.push("src/test-bridge.html", "src/test-bridge.js")
 
 // Run vite build for each entries
 // bundle and treeshake each entry, without making shared chunk
@@ -141,7 +149,7 @@ async function run() {
   for (let i = 0; i < entries.length; i++) {
     const input = entries[i]
 
-    if (input.endsWith(".js")) {
+    if (input.endsWith(".ts")) {
       await build({
         ...createJsConfig(input, i == lastIdx),
         mode: process.env.MODE || "production",
@@ -155,6 +163,6 @@ async function run() {
   }
 }
 
-await emptyOutDirOnce()
+// await emptyOutDirOnce()
 await run()
 if (buildDist2ForTest) await updateExtensionVersion()

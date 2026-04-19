@@ -34,6 +34,7 @@ let {
   props = defaultKeyProps,
   children,
 }: { props: Partial<KeyProps>; children: Snippet } = $props()
+console.log("[key] [props]", props)
 
 const repeatMousedownThreshold = 100
 let repeatMousedownTimer = null
@@ -71,13 +72,13 @@ export function getElem() {
 <button
   bind:this={elem}
   type="button"
-  class="key"
+  class="key p-0 m-0 border-0 shadow-none bg-inherit outline-none"
   class:keydown={props.isKeyDown}
   onclick={() => {
     if (props.repeatClickHandlerWithMouseDown) {
-      if (movedByMousedownCount === 0) props.onclick()
+      if (movedByMousedownCount === 0) props.onclick?.()
     } else {
-      props.onclick()
+      props.onclick?.()
     }
   }}
   onmousedown={() => {
@@ -85,11 +86,11 @@ export function getElem() {
       repeatMousedownTimer = setInterval(() => {
         console.log("[running mousedown]")
         movedByMousedownCount += 1
-        props.onclick()
+        props.onclick?.()
       }, repeatMousedownThreshold)
-      props.onmousedown()
+      props.onmousedown?.()
     } else {
-      props.onmousedown()
+      props.onmousedown?.()
     }
   }}
   onmouseup={() => {
@@ -97,21 +98,19 @@ export function getElem() {
       clearInterval(repeatMousedownTimer)
       repeatMousedownTimer = null
       movedByMousedownCount = 0
-      props.onmouseup()
+      props.onmouseup?.()
     } else {
-      props.onmouseup()
+      props.onmouseup?.()
     }
   }}
 >
-  {#if props.id}
-    <div bind:this={elem} id={props.id} class="keyInner">
-      {@render children?.()}
-    </div>
-  {:else}
-    <div bind:this={elem} class="keyInner">
-      {@render children?.()}
-    </div>
-  {/if}
+  <div
+    bind:this={elem}
+    id={props.id || undefined}
+    class="keyInner relative mr-0.5 mb-0.5 outline-none"
+  >
+    {@render children?.()}
+  </div>
 </button>
 
 <!-- Style -->
@@ -120,19 +119,19 @@ export function getElem() {
 /* key */
 
 button.key {
-  padding: 0;
+  /* padding: 0;
   margin: 0;
   border: 0;
   box-shadow: none;
   background-color: inherit;
-  outline: none;
+  outline: none; */
 }
 
 :global(.keyInner) {
-  position: relative;
+  /* position: relative;
   margin-right: 2px;
   margin-bottom: 2px;
-  outline: none;
+  outline: none; */
   font-family: "Ubuntu Mono";
 
   transition: background-color 0.055s ease-out;

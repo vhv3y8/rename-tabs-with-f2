@@ -1,11 +1,11 @@
 <script lang="ts">
 import { onMount } from "svelte"
+import TabList from "./adapters/ui/components/tabs/TabList.svelte"
 import HeaderBar from "./adapters/ui/components/HeaderBar.svelte"
-import NotConnectedCard from "./adapters/ui/tabs/NotConnectedCard.svelte"
-import TabList from "./adapters/ui/tabs/TabList.svelte"
+import NotConnectedCard from "./adapters/ui/components/tabs/NotConnectedCard.svelte"
 import FooterBar from "./adapters/ui/components/FooterBar.svelte"
 //
-import { cancelAllKeydowns } from "./adapters/ui/reactivity/keys.svelte"
+import { cancelAllKeydowns } from "./adapters/ui/components/reactivity/keys.svelte"
 import { setting } from "./adapters/ui/components/setting/states/inMemorySetting.svelte"
 import { runBootstrap } from "./bootstrap"
 import { setInjectionsContext } from "./adapters/ui/injections"
@@ -29,7 +29,10 @@ onMount(async () => {
 
 <svelte:document onkeyup={keyupReactivityHandler} />
 
-<main class:large={setting.largerWidth}>
+<main
+  class:large={setting.largerWidth}
+  class="flex flex-col flex-nowrap grow shrink-0 basis-auto"
+>
   <HeaderBar />
   <NotConnectedCard />
   <TabList />
@@ -44,11 +47,6 @@ onMount(async () => {
 }
 
 main {
-  flex: 1 0 auto;
-
-  display: flex;
-  flex-flow: column nowrap;
-
   width: min(100%, var(--width-normal));
 }
 main.large {

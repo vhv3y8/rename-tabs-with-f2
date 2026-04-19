@@ -5,6 +5,7 @@ import SettingModal from "./setting/SettingModal.svelte"
 import { settingModal } from "./setting/states/settingModal.svelte"
 // use case handler
 import { getInjections } from "../injections"
+import { onMount } from "svelte"
 
 function keydownCloseSettingHandler(e: KeyboardEvent) {
   switch (e.key) {
@@ -17,13 +18,22 @@ function keydownCloseSettingHandler(e: KeyboardEvent) {
     }
   }
 }
+
+const { keydownApplyHandler, clickApplyHandler } = getInjections()
+
+// onMount(() => {
+//   document.addEventListener("click", (e: KeyboardEvent) => {
+//     keydownApplyHandler(e)
+//     keydownCloseSettingHandler(e)
+//   })
+// })
 </script>
 
 <!-- HTML -->
 
 <svelte:document
   onkeydown={(e: KeyboardEvent) => {
-    getInjections().keydownApplyHandler(e)
+    keydownApplyHandler(e)
     keydownCloseSettingHandler(e)
   }}
 />
@@ -56,7 +66,7 @@ function keydownCloseSettingHandler(e: KeyboardEvent) {
   <Key
     props={{
       id: "ctrlEnterBtn",
-      onclick: getInjections().clickApplyHandler,
+      onclick: clickApplyHandler,
       isKeyDown: keydowns.ctrlEnter,
       padding: null,
     }}>Ctrl + Enter</Key

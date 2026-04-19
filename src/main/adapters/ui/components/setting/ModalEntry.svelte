@@ -30,6 +30,16 @@ let {
 <!-- CSS -->
 
 <style>
+li {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2em;
+}
+li span {
+  font-size: 0.9em;
+}
 li.flexCol {
   flex-flow: column nowrap;
   align-items: flex-start;

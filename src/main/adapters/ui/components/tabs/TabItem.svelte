@@ -1,4 +1,5 @@
 <script lang="ts">
+import { getInjections } from "../../injections"
 import type { TabInfoState } from "./states/tabInfoRecord.svelte"
 import { tabItemComponents } from "./states/tabItemComponents.svelte"
 
@@ -61,15 +62,13 @@ export function getTabInfo() {
 <!-- Style -->
 
 <style>
-.unselectable {
-  opacity: 0.3;
-  pointer-events: none;
-}
-
 li {
   width: 100%;
 }
-
+li.unselectable {
+  opacity: 0.3;
+  pointer-events: none;
+}
 li label {
   width: 100%;
 
@@ -80,11 +79,9 @@ li label {
 
   margin-bottom: 1em;
 }
-
 li img {
   flex: 0 0 auto;
 }
-
 li input[type="text"] {
   flex: 1 0 auto;
 

@@ -13,6 +13,7 @@ export function createKeydownApplyHandler(apply: ApplyUseCase) {
       case "Enter": {
         e.preventDefault()
         if (e.ctrlKey) {
+          console.log("[keydown reload handler]")
           apply()
         }
       }
@@ -29,6 +30,7 @@ export function createKeydownApplyHandler(apply: ApplyUseCase) {
 
 export function createClickApplyHandler(apply: ApplyUseCase) {
   return function clickApplyHandler(e: MouseEvent) {
+    console.log("[click apply handler]")
     apply()
   }
 }

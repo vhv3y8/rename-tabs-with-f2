@@ -1,10 +1,13 @@
-import * as chromeRuntime from "./lib/chrome/runtime"
-import * as chromeStorage from "./lib/chrome/storage2"
+import ChromeStorage from "@lib/chrome/storage"
+import ChromeRuntime from "./lib/chrome/runtime"
+import type { HotKey } from "@lib/chrome/models/Setting"
 
-let shortcut
+let shortcut: HotKey
 
 window.addEventListener("load", async (e) => {
-  shortcut = await chromeStorage.getSettings().then(({ shortcut }) => shortcut)
+  shortcut = await ChromeStorage.setting
+    .getSettings()
+    .then(({ shortcut }) => shortcut)
 })
 
 // open extension page on hotkey press
@@ -15,7 +18,7 @@ window.addEventListener("keydown", (e) => {
     e.metaKey === shortcut.metaKey &&
     e.key === shortcut.key
   ) {
-    chromeRuntime.fireOpenExtensionPage()
+    ChromeRuntime.fireOpenExtensionPage()
   }
 })
 
