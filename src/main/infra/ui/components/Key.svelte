@@ -10,6 +10,9 @@ type KeyProps = {
   padding: string | null
   fontSize: string | null
   darkTheme: boolean
+  point: "cornflower" | "mutedcoral" | "coralorange"
+  pointBgOpposite: boolean
+  pointOnHover: boolean
   id?: string
 
   onclick: (e?: MouseEvent) => void
@@ -25,6 +28,9 @@ const defaultKeyProps: KeyProps = {
   padding: "0.5em",
   fontSize: "initial",
   darkTheme: false,
+  point: "cornflower",
+  pointBgOpposite: false,
+  pointOnHover: false,
 
   onclick: () => {},
   onmousedown: () => {},
@@ -40,6 +46,9 @@ const {
   padding,
   fontSize,
   darkTheme,
+  point,
+  pointBgOpposite,
+  pointOnHover,
   onclick,
   onmousedown,
   onmouseup,
@@ -95,7 +104,12 @@ let elem: HTMLElement | null = $state(null)
     class={`keyInner relative mr-0.5 mb-0.5 outline-none`}
     class:pressable
     class:darkTheme
+    class:pointBgOpposite
+    class:pointOnHover
     class:keydown={isKeyDown}
+    class:cornflower={point === "cornflower"}
+    class:mutedcoral={point === "mutedcoral"}
+    class:coralorange={point === "coralorange"}
     class:noShadow={shadow === "none"}
     class:smallShadow={shadow === "small"}
     class:largeShadow={shadow === "base"}
@@ -152,12 +166,54 @@ let elem: HTMLElement | null = $state(null)
 }
 
 /* keydown */
-.keydown {
-  background-color: cornflowerblue !important;
+/* .keydown {
+  background-color: var(--point-blue) !important;
+} */
+.keydown.cornflower {
+  background-color: var(--point-cornflower-light) !important;
 }
-.keydown.darkTheme {
-  /* #3C5A9E */
-  background-color: #3c5a9e !important;
+.keydown.cornflower.pointBgOpposite {
+  background-color: var(--point-cornflower-dark) !important;
+}
+.keydown.mutedcoral {
+  background-color: var(--point-mutedcoral-light) !important;
+}
+.keydown.mutedcoral.pointBgOpposite {
+  background-color: var(--point-mutedcoral-dark) !important;
+}
+.keydown.coralorange {
+  background-color: var(--point-coralorange-light) !important;
+}
+.keydown.coralorange.pointBgOpposite {
+  background-color: var(--point-coralorange-dark) !important;
+}
+/* hover */
+.keyInner.pointOnHover {
+  transition: background-color 0.058s ease-in-out;
+}
+.pointOnHover.cornflower:hover,
+.pointOnHover.cornflower:active {
+  background-color: var(--point-cornflower-light) !important;
+}
+.pointOnHover.cornflower.pointBgOpposite:hover,
+.pointOnHover.cornflower.pointBgOpposite:active {
+  background-color: var(--point-cornflower-dark) !important;
+}
+.pointOnHover.mutedcoral:hover,
+.pointOnHover.mutedcoral:active {
+  background-color: var(--point-mutedcoral-light) !important;
+}
+.pointOnHover.mutedcoral.pointBgOpposite:hover,
+.pointOnHover.mutedcoral.pointBgOpposite:active {
+  background-color: var(--point-mutedcoral-dark) !important;
+}
+.pointOnHover.coralorange:hover,
+.pointOnHover.coralorange:active {
+  background-color: var(--point-coralorange-light) !important;
+}
+.pointOnHover.coralorange.pointBgOpposite:hover,
+.pointOnHover.coralorange.pointBgOpposite:active {
+  background-color: var(--point-coralorange-dark) !important;
 }
 /* terracotta? */
 /* #D97757 */

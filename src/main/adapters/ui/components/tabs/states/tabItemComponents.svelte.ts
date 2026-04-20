@@ -11,7 +11,6 @@ export class TabItemComponents {
   private currentFocusInputIdx: number
   private initialFocusInputIdx: number
   constructor() {
-    // private lastFocusTabId: number | null = null, // private tabIdxInfoStore: TabInfoStore,
     // components related
     this.focusableComponents = $derived(
       this.components.filter((elem) => elem.isContentScriptConnected()),
@@ -42,7 +41,6 @@ export class TabItemComponents {
     $effect.root(() => {
       $effect(() => {
         this.currentFocusInputIdx = this.initialFocusInputIdx
-        // this.focusInitialItem()
       })
     })
     $effect.root(() => {
@@ -75,8 +73,9 @@ export class TabItemComponents {
       })
     })
   }
-  setInitialFocusComponent(lastFocusTabId: number) {
+  setLastFocusTabIdForInitialFocus(lastFocusTabId: number) {
     this.lastFocusTabId = lastFocusTabId
+    // index changes are triggered by effect
   }
 
   // mouse click

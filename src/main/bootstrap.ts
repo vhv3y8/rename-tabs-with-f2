@@ -1,7 +1,7 @@
 import { InMemorySetting } from "./adapters/ui/components/setting/states/inMemorySetting.svelte"
 import { DOMApplyLifeCycle } from "./adapters/ui/impl/lifecycles/applyLifeCycle"
 import { createInitializeAppLifeCycle } from "./adapters/ui/impl/lifecycles/initializeAppLifeCycle"
-import { ChromeSvelteReloadLifeCycle } from "./adapters/ui/impl/lifecycles/reloadLifeCycle"
+import { createChromeReloadLifeCycle } from "./adapters/ui/impl/lifecycles/reloadLifeCycle"
 import { TabIdxInfoRecordStore } from "./adapters/ui/impl/tabInfoStore.svelte"
 import {
   createClickApplyHandler,
@@ -48,22 +48,23 @@ export async function runBootstrap() {
   // adapter only impl?
   const inMemorySetting = await InMemorySetting.build(extensionFacade)
 
-  // create use case lifecycle impl
+  // create lifecycle impl and use cases
   const applyLifeCycle: ApplyLifeCycle = DOMApplyLifeCycle
-  const reloadLifeCycle: ReloadLifeCycle = ChromeSvelteReloadLifeCycle
-  const initializeAppLifeCycle: InitializeAppLifeCycle =
-    createInitializeAppLifeCycle(extensionFacade)
-
-  // create use cases
   const applyUseCase: ApplyUseCase = createApplyUseCase(
     tabIdxInfoStore,
     extensionFacade,
     applyLifeCycle,
   )
+
   const checkAllTabConnectionAndUpdateFlagsUseCase: CheckAllTabConnectionUseCase =
     createCheckAllTabConnectionAndUpdateFlags(tabIdxInfoStore, extensionFacade)
   const initializeTabInfoStoreUseCase: InitializeTabInfoStoreUseCase =
     createInitializeTabInfoStore(tabIdxInfoStore, extensionFacade)
+
+  const reloadLifeCycle: ReloadLifeCycle = createChromeReloadLifeCycle(
+    tabIdxInfoStore,
+    checkAllTabConnectionAndUpdateFlagsUseCase,
+  )
   const reloadAllConnectableTabsUseCase: ReloadAllConnectableTabsUseCase =
     createReloadAllConnectableTabs(
       tabIdxInfoStore,
@@ -71,6 +72,9 @@ export async function runBootstrap() {
       checkAllTabConnectionAndUpdateFlagsUseCase,
       reloadLifeCycle,
     )
+
+  const initializeAppLifeCycle: InitializeAppLifeCycle =
+    createInitializeAppLifeCycle(extensionFacade)
   const initializeAppUseCase: InitializeAppUseCase = createInitializeAppUseCase(
     initializeTabInfoStoreUseCase,
     checkAllTabConnectionAndUpdateFlagsUseCase,

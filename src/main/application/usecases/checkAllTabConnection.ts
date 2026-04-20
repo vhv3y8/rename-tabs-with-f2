@@ -15,12 +15,10 @@ export function createCheckAllTabConnectionAndUpdateFlags(
 
     // check
     type TabConnectionReturn = {
-      // TODO id undefined problem
       index: number
-      id: number | undefined
+      id: number
       isConnected: boolean
     }
-    // TODO: fix
     const tabConnectionResults = await Promise.allSettled(
       allTabInfos.map(async ({ id, index }) => {
         // defaults to false
@@ -43,56 +41,5 @@ export function createCheckAllTabConnectionAndUpdateFlags(
     for (const { index: tabIndex, isConnected } of fulfilledConnections) {
       tabInfoStore.setConnectedFlag(tabIndex, isConnected)
     }
-
-    // update info
-    // TODO: fix
-    // for (const [idx, isConnected] of tabConnectedFlags.entries()) {
-    //   tabInfoStore.setConnectedFlag(idx, isConnected)
-    // }
-
-    // if (import.meta.env.MODE === "development")
-    //   console.log(
-    //     "[checkContentScriptAvailableAndUpdateAllInfo] tabIdxToInfo",
-    //     JSON.stringify(
-    //       tabInfoStore.getAllTabInfos().map(({ id, title, connected }) => ({
-    //         id,
-    //         title,
-    //         connected,
-    //       })),
-    //       null,
-    //       2,
-    //     ),
-    //   )
   }
 }
-
-// export async function checkAllTabConnectionAndUpdateFlags() {
-//   let allTabIds = tabIdxInfoStore.getAllTabIds()
-
-//   // check
-//   let tabConnectedFlags = await Promise.allSettled(
-//     allTabIds.map((tabId) => ChromeMainFacade.checkTabConnection({ tabId })),
-//   ).then((arr) =>
-//     // TODO: fix
-//     arr.map((item) => item.status === "fulfilled" && item.value == true),
-//   )
-
-//   // update info
-//   for (const [idx, isConnected] of tabConnectedFlags.entries()) {
-//     tabIdxInfoStore.setConnectedFlag(idx, isConnected)
-//   }
-
-//   if (import.meta.env.MODE === "development")
-//     console.log(
-//       "[checkContentScriptAvailableAndUpdateAllInfo] tabIdxToInfo",
-//       JSON.stringify(
-//         tabIdxInfoStore.getAllTabInfos().map(({ id, title, connected }) => ({
-//           id,
-//           title,
-//           connected,
-//         })),
-//         null,
-//         2,
-//       ),
-//     )
-// }

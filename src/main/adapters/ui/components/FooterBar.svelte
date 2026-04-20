@@ -17,7 +17,7 @@ function keydownCloseSettingHandler(e: KeyboardEvent) {
 }
 
 // use case handlers
-const { keydownApplyHandler, clickApplyHandler } = getInjections()
+const { keydownApplyHandler, clickApplyHandler, setting } = getInjections()
 </script>
 
 <!-- HTML -->
@@ -61,6 +61,7 @@ const { keydownApplyHandler, clickApplyHandler } = getInjections()
       isKeyDown: keydowns.ctrlEnter,
       padding: null,
       fontSize: "18px",
+      pointBgOpposite: setting.darkmode,
       onclick: clickApplyHandler,
     }}>Ctrl + Enter</Key
   >

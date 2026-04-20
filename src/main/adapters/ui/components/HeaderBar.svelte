@@ -3,6 +3,9 @@ import Key from "@infra/ui/components/Key.svelte"
 import { cancelAllMoveAroundKeydowns, keydowns } from "./reactivity/keys.svelte"
 import { settingModal } from "./setting/states/settingModal.svelte"
 import { tabItemComponents } from "./tabs/states/tabItemComponents.svelte"
+import { getInjections } from "../injections"
+
+const { setting } = getInjections()
 
 // move around tab components
 function keydownMoveAroundTabItemsHandler(e: KeyboardEvent) {
@@ -61,6 +64,7 @@ function keydownMoveAroundTabItemsHandler(e: KeyboardEvent) {
         padding: "0.3em 0.5em",
         fontSize: "18px",
         shadow: "base",
+        // darkTheme: setting.darkmode,
         onclick: () => {
           tabItemComponents.focusInitialItem()
         },
@@ -82,6 +86,7 @@ function keydownMoveAroundTabItemsHandler(e: KeyboardEvent) {
         padding: "0.3em 0.5em",
         fontSize: "18px",
         shadow: "base",
+        pointBgOpposite: setting.darkmode,
         onclick: () => {
           tabItemComponents.focusNextItem()
         },
@@ -102,6 +107,7 @@ function keydownMoveAroundTabItemsHandler(e: KeyboardEvent) {
         padding: "0.3em 0.5em",
         fontSize: "18px",
         shadow: "base",
+        pointBgOpposite: setting.darkmode,
         onclick: () => {
           tabItemComponents.focusNextItem()
         },
@@ -124,6 +130,7 @@ function keydownMoveAroundTabItemsHandler(e: KeyboardEvent) {
         padding: "0.3em 0.5em",
         fontSize: "18px",
         shadow: "base",
+        pointBgOpposite: setting.darkmode,
         onclick: () => {
           tabItemComponents.focusPreviousItem()
         },
@@ -144,6 +151,7 @@ function keydownMoveAroundTabItemsHandler(e: KeyboardEvent) {
         padding: "0.3em 0.5em",
         fontSize: "18px",
         shadow: "base",
+        pointBgOpposite: setting.darkmode,
         onclick: () => {
           tabItemComponents.focusPreviousItem()
         },

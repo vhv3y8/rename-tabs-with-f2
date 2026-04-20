@@ -6,7 +6,7 @@ export interface ReloadLifeCycle {
   beforeStart?(tabIdsToReload: number[]): void
   // at other environment, fire and wait can be provided as single operation.
   waitForReloadingEnd?(options?: { timeLimit?: number }): Promise<void>
-  afterFinish?(): void
+  afterFinish?(): Promise<void>
 }
 export type ReloadAllConnectableTabsUseCase = ReturnType<
   typeof createReloadAllConnectableTabs
@@ -29,7 +29,7 @@ export function createReloadAllConnectableTabs(
     )
     console.log("[reload] [triggered]")
     await lifeCycle
-      .waitForReloadingEnd?.({ timeLimit: 4000 })
+      .waitForReloadingEnd?.({ timeLimit: 3000 })
       .catch((reason) => {
         // ended by time limit, not all complete
       })
@@ -38,6 +38,6 @@ export function createReloadAllConnectableTabs(
     await checkAllTabConnectionAndUpdateFlags()
     console.log("[reload] [updated flags]")
 
-    lifeCycle.afterFinish?.()
+    await lifeCycle.afterFinish?.()
   }
 }

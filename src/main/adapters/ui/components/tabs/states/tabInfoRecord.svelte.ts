@@ -53,15 +53,6 @@ export class TabIdxInfoRecord implements Partial<TabInfoStore> {
     )
     console.log("[set tab infos]", tabInfoStateRecord)
     this.record = { ...tabInfoStateRecord }
-
-    // const previous = Object.keys(map)
-    // const dataEntries = Object.entries(map)
-    // // set data
-    // Object.assign(this.record, map)
-    // // ??
-    // for (let i = previous.length; i < previous.length; i++) {
-    //   delete this.record[i]
-    // }
   }
   setConnectedFlag(idx: number, connected: boolean) {
     // const tabInfo = this.record[idx]

@@ -7,10 +7,9 @@ import FooterBar from "./adapters/ui/components/FooterBar.svelte"
 import GlobalToastGrid from "./adapters/ui/components/toast/GlobalToastGrid.svelte"
 //
 import { cancelAllKeydowns } from "./adapters/ui/components/reactivity/keys.svelte"
-// import { setting } from "./adapters/ui/components/setting/states/inMemorySetting.svelte"
-import { runBootstrap } from "./bootstrap"
 import { setInjectionsContext } from "./adapters/ui/injections"
 import { initializeViewFromSettings } from "./adapters/ui/components/setting/view"
+import { runBootstrap } from "./bootstrap"
 
 // inject to svelte components
 const uiInjections: Awaited<ReturnType<typeof runBootstrap>> = $props()
@@ -22,8 +21,6 @@ function keyupReactivityHandler() {
 
 onMount(async () => {
   // await ChromeMainFacadeImpl.focusExtensionPageTabForRefresh()
-  // view.initializeViewFromSettings()
-  // focusTabItem({ initial: true })
   initializeViewFromSettings(uiInjections.setting)
 })
 </script>

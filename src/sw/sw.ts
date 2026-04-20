@@ -21,10 +21,13 @@ async function setIdCollectionsAndOpenPage() {
   })
 
   if (import.meta.env.MODE === "development") {
-    console.log("[extensionTabIdSet.entries()]", extensionTabIdSet.entries())
     console.log(
-      "[winIdLastFocusTabIdMap.entries()]",
-      winIdLastFocusTabIdMap.entries(),
+      "[extension tab id set]",
+      Array.from(extensionTabIdSet.entries()),
+    )
+    console.log(
+      "[window id -> last focus tab id map]",
+      Object.fromEntries(winIdLastFocusTabIdMap.entries()),
     )
   }
 }
@@ -53,18 +56,20 @@ chrome.tabs.onRemoved.addListener(async (tabId, { windowId }) => {
   if (extensionTabIdSet.has(tabId) && winIdLastFocusTabIdMap.has(windowId)) {
     // focus last focus tab of the window
     const lastFocusTabId = winIdLastFocusTabIdMap.get(windowId)
-    // TODO: fix handling refresh
-    // await chromeTabs.focusTab(lastFocusTabId)
+    await ChromeTabs.operate.focusTab(lastFocusTabId)
 
     // remove tab id and window id from collections
     extensionTabIdSet.delete(tabId)
     winIdLastFocusTabIdMap.delete(windowId)
 
     if (import.meta.env.MODE === "development") {
-      console.log("[extensionTabIdSet.entries()]", extensionTabIdSet.entries())
       console.log(
-        "[winIdLastFocusTabIdMap.entries()]",
-        winIdLastFocusTabIdMap.entries(),
+        "[extension tab id set]",
+        Array.from(extensionTabIdSet.entries()),
+      )
+      console.log(
+        "[window id -> last focus tab id map]",
+        Object.fromEntries(winIdLastFocusTabIdMap.entries()),
       )
     }
   }

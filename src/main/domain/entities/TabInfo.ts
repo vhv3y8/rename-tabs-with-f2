@@ -1,13 +1,11 @@
-/// <reference types="chrome" />
+export interface TabInfo {
+  id: number
+  // index from current window tabs
+  index: number
+  url: string
+  title: string
+  favIconUrl: string
+  status: string
 
-// type CompactPick<T, K extends keyof T> = {
-//   [P in K]: NonNullable<T[P]>
-// }
-
-export interface TabInfo
-  extends Pick<
-    chrome.tabs.Tab,
-    "id" | "title" | "favIconUrl" | "url" | "status" | "index"
-  > {
   connected: boolean
 }

@@ -10,11 +10,18 @@ class ReloadState {
   allReloadingTabIds: number[]
   recordIdxFromTabIdLookup: Record<number, string>
   constructor() {
-    this.allComplete = $derived(
-      Object.values(this.reloadingTabIdxStatusRecord).every(
+    this.allComplete = $derived.by(() => {
+      const b = Object.values(this.reloadingTabIdxStatusRecord).every(
         ({ status }) => status === "complete",
-      ),
-    )
+      )
+      console.log(
+        "[reload state] [all complete] [reloading record]",
+        [...Object.values(this.reloadingTabIdxStatusRecord)],
+        "[all complete]",
+        b,
+      )
+      return b
+    })
     this.allReloadingTabIds = $derived(
       Object.values(this.reloadingTabIdxStatusRecord).map(({ id }) => id),
     )

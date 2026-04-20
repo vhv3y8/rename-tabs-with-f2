@@ -46,9 +46,9 @@ const ChromeTabs = {
       return chrome.tabs.reload(tabId)
     },
     // TODO: fix handling refresh
-    // async focusTab(tabId: number): Promise<void> {
-    //   await chrome.tabs.update(tabId, { active: true })
-    // },
+    async focusTab(tabId: number): Promise<void> {
+      await chrome.tabs.update(tabId, { active: true })
+    },
   },
   message: {
     async fireChangeTitleToContentScript({

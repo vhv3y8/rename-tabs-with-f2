@@ -10,7 +10,7 @@ export function createInitializeAppLifeCycle(
       // set initial idx
       const lastFocusTabId = await extensionFacade.getLastFocusTabId()
       console.log("[lastFocusTabId]", lastFocusTabId)
-      tabItemComponents.setInitialFocusComponent(lastFocusTabId)
+      tabItemComponents.setLastFocusTabIdForInitialFocus(lastFocusTabId)
       tabItemComponents.focusInitialItem()
     },
   }

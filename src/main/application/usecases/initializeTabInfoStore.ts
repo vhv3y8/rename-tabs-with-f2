@@ -13,35 +13,14 @@ export function createInitializeTabInfoStore(
 ) {
   return async function initializeTabInfoStore() {
     const tabsToInitialize = await extensionFacade.getInitializeTabEntries()
-    // reduce to appropriate format
-    // const tabIdxInfoRecord = tabsToInitialize.reduce(
-    //   (
-    //     acc: Record<number, TabInfoState>,
-    //     { id, title, favIconUrl, url, index, status },
-    //   ) => {
-    //     // key have to be index. index is tab's position on current window tabs array
-    //     acc[index] = {
-    //       id,
-    //       title,
-    //       favIconUrl,
-    //       url,
-    //       status,
-    //       index,
-    //       connected: true,
-    //       hasChanged: false,
-    //     }
-    //     return acc
-    //   },
-    //   {},
-    // )
     const tabInfos: TabInfo[] = tabsToInitialize.map(
       ({ id, title, favIconUrl, url, index, status }) => ({
-        id,
-        title,
-        favIconUrl,
-        url,
         index,
-        status,
+        id: id!,
+        title: title!,
+        favIconUrl: favIconUrl!,
+        url: url!,
+        status: status!,
         connected: false,
       }),
     )

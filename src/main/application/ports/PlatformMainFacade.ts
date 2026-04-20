@@ -18,5 +18,4 @@ export interface PlatformMainFacade {
   // storage
   getSettings(): Promise<Setting>
   setSettings(setting: Setting): Promise<unknown>
-  // defaultShortcutF2
 }

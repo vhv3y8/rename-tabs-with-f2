@@ -2,7 +2,7 @@ export const TOAST_MESSAGES = {
   SHORTCUT_UPDATED: (shortcutText: string) =>
     chrome.i18n.getMessage("tips_shortcut_updated", shortcutText),
   ERROR: (errorText: string, errorType: string = "") =>
-    `${errorType ? errorType + " " : ""}Error:\n${errorText}`,
+    `${0 < errorType.length ? errorType + " " : ""}Error:\n${errorText}`,
 }
 
 type ToastItem = { id: number; text: any; duration: number }
