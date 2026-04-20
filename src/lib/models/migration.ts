@@ -1,5 +1,63 @@
 import * as semver from "semver"
 
+// simply adding fields can be done with this and initial value
+export function fillMissingDeeply(userData: any, updatedDefault: any) {
+  if (
+    userData === null ||
+    typeof userData !== "object" ||
+    Array.isArray(userData)
+  ) {
+    // set user data if unappropriate
+    userData = {}
+  }
+  if (
+    updatedDefault === null ||
+    typeof updatedDefault !== "object" ||
+    Array.isArray(updatedDefault)
+  ) {
+    return userData
+  }
+  // circular defaults cannot be serialized safely
+  const visiting = new WeakSet<object>()
+  const merge = (target: any, defaults: any) => {
+    if (visiting.has(defaults)) {
+      throw new Error(
+        "fillMissingDeeply: updatedDefault contains circular references",
+      )
+    }
+    visiting.add(defaults)
+    for (const key of Object.keys(defaults)) {
+      const defaultVal = defaults[key]
+      const targetVal = target[key]
+
+      if (targetVal === undefined) {
+        try {
+          // clone with json stringify parse
+          target[key] = JSON.parse(JSON.stringify(defaultVal))
+        } catch {
+          throw new Error(
+            "fillMissingDeeply: default values must be JSON-serializable (no circular references)",
+          )
+        }
+      } else if (
+        typeof targetVal === "object" &&
+        targetVal !== null &&
+        !Array.isArray(targetVal) &&
+        typeof defaultVal === "object" &&
+        defaultVal !== null &&
+        !Array.isArray(defaultVal)
+      ) {
+        // if both have fields, go one step in
+        merge(targetVal, defaultVal)
+      }
+    }
+    visiting.delete(defaults)
+  }
+  // run merge
+  merge(userData, updatedDefault)
+  return userData
+}
+
 // write path string like "first.second.third"
 export class SchemaEditor {
   constructor(public data: any) {}
@@ -61,7 +119,7 @@ export class SchemaEditor {
     return this
   }
   // read
-  get(pathStr: string) {
+  private get(pathStr: string) {
     const pathArr = pathStr.split(".")
     return pathArr.reduce((acc, pathKey) => acc?.[pathKey], this.data)
   }

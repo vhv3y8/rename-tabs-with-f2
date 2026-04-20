@@ -1,10 +1,10 @@
 import { initialSettingPartial, type Setting } from "../models/Setting"
 
 export const chromeInitialSetting: Setting = {
-  // extVersion: chrome.runtime.getManifest().version,
   ...initialSettingPartial,
 }
 const INITIAL_STORAGE = {
+  version: chrome.runtime.getManifest().version,
   settings: chromeInitialSetting,
 }
 
@@ -13,13 +13,13 @@ const ChromeStorage = {
   initializeStorage(storage: Record<string, any>) {
     return chrome.storage.local.set(storage)
   },
-  // migrateStorage(updatedDefaults) {
-  //   const userStorage = await chrome.storage.local.get(null)
-  //   // @ts-ignore
-  //   let migratedStorage = deepMerge(updatedDefaults, userStorage)
+  async migrateStorage(updatedDefaults: any) {
+    const userStorage = await chrome.storage.local.get(null)
+    // @ts-ignore
+    // let migratedStorage = deepMerge(updatedDefaults, userStorage)
 
-  //   return chrome.storage.local.set(migratedStorage)
-  // },
+    return chrome.storage.local.set(migratedStorage)
+  },
   setting: {
     async getSettings() {
       return chrome.storage.local.get(["settings"]).then((db) => db.settings)

@@ -1,10 +1,74 @@
 import { describe, expect, it } from "vitest"
 
 import {
+  fillMissingDeeply,
   MigrationAggregator,
   SchemaEditor,
   type TargetVersionMigrationRecord,
 } from "./migration"
+
+describe("fillMissingDeeply", () => {
+  it("fills only missing fields while preserving existing values", () => {
+    const userData = {
+      enabled: false,
+      nested: {
+        existing: 1,
+      },
+    }
+    const updatedDefault = {
+      enabled: true,
+      label: "new",
+      nested: {
+        existing: 999,
+        missing: 2,
+      },
+    }
+    const result = fillMissingDeeply(userData, updatedDefault)
+    expect(result).toBe(userData)
+    expect(result).toEqual({
+      enabled: false,
+      label: "new",
+      nested: {
+        existing: 1,
+        missing: 2,
+      },
+    })
+  })
+  it("normalizes null userData to an object", () => {
+    const result = fillMissingDeeply(null, {
+      nested: { value: 1 },
+    })
+    expect(result).toEqual({
+      nested: { value: 1 },
+    })
+  })
+  it("keeps existing arrays and fills missing arrays", () => {
+    const result = fillMissingDeeply(
+      {
+        arr: [1],
+      },
+      {
+        arr: [1, 2, 3],
+        missingArr: [4, 5],
+      },
+    )
+    expect(result).toEqual({
+      arr: [1],
+      missingArr: [4, 5],
+    })
+  })
+  it("returns normalized userData unchanged when updatedDefault is not an object", () => {
+    expect(fillMissingDeeply({ a: 1 }, null)).toEqual({ a: 1 })
+    expect(fillMissingDeeply({ a: 1 }, "invalid" as any)).toEqual({ a: 1 })
+  })
+  it("throws for non-serializable default values", () => {
+    const cyclic: any = { a: 1 }
+    cyclic.self = cyclic
+    expect(() => fillMissingDeeply({}, cyclic)).toThrowError(
+      /JSON-serializable/,
+    )
+  })
+})
 
 describe("SchemaEditor.map", () => {
   it("returns the editor instance so calls can be chained", () => {
