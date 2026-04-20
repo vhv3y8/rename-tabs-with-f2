@@ -1,9 +1,10 @@
-import { setting } from "./states/inMemorySetting.svelte"
+import type { Setting } from "@lib/models/Setting"
 
-export function initializeViewFromSettings() {
+export function initializeViewFromSettings(setting: Setting) {
   if (import.meta.env.MODE === "development")
-    console.log("[initializeViewFromSettings]")
+    console.log("[initialize view from settings]")
 
+  // const { setting } = getInjections()
   applyDarkModeUI({ darkmode: setting.darkmode })
   applyLargerWidth({ largerWidth: setting.largerWidth })
 }

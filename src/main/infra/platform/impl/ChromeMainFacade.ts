@@ -1,4 +1,4 @@
-import { type Setting } from "@lib/chrome/models/Setting"
+import { type Setting } from "@lib/models/Setting"
 import ChromeRuntime from "@lib/chrome/runtime"
 import ChromeStorage from "@lib/chrome/storage"
 import ChromeTabs from "@lib/chrome/tabs"

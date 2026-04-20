@@ -48,6 +48,7 @@ const {
 const repeatMousedownThreshold = 100
 let repeatMousedownTimer = null
 let movedByMousedownCount = 0
+// TODO: initial threshold time 1s
 
 let elem: HTMLElement | null = $state(null)
 </script>
@@ -154,6 +155,13 @@ let elem: HTMLElement | null = $state(null)
 .keydown {
   background-color: cornflowerblue !important;
 }
+.keydown.darkTheme {
+  /* #3C5A9E */
+  background-color: #3c5a9e !important;
+}
+/* terracotta? */
+/* #D97757 */
+/* #E8A082 */
 
 /* pressable */
 button:active .keyInner.pressable {

@@ -9,7 +9,10 @@ const ChromeWindows = {
         focusedWindowId = allFocusedWindows[0].id
 
       if (import.meta.env.MODE === "development")
-        console.log("[allFocusedWindows]", allFocusedWindows)
+        console.log(
+          "[get current window id] [all focused windows]",
+          allFocusedWindows,
+        )
     } else {
       focusedWindowId = await chrome.windows
         .getCurrent()

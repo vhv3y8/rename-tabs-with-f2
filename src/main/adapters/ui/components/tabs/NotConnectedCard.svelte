@@ -19,7 +19,7 @@ function handleDismiss() {
 function keydownDismissHandler(e: KeyboardEvent) {
   if (settingModal.listen) return
 
-  if (e.code === "KeyW" && e.shiftKey && notConnectedCard.show) {
+  if (notConnectedCard.show && e.code === "KeyW" && e.shiftKey) {
     e.preventDefault()
     handleDismiss()
 
@@ -117,16 +117,6 @@ const { keydownReloadUseCaseHandler, clickReloadUseCaseHandler } =
           <div style:text-align="right">
             <div class="right containsKeyBtn" style:padding-block="4px 3px">
               {#if reload.isWaiting()}
-                {chrome.i18n.getMessage("card_btn_reload_all")} : <Key
-                  props={{
-                    darkTheme: true,
-                    shadow: "small",
-                    padding: "0.4em",
-                    fontSize: "15px",
-                    onclick: clickReloadUseCaseHandler,
-                  }}>Shift + R</Key
-                >
-              {:else}
                 <Key
                   props={{
                     pressable: false,
@@ -135,6 +125,16 @@ const { keydownReloadUseCaseHandler, clickReloadUseCaseHandler } =
                     padding: "0.4em",
                     fontSize: "15px",
                   }}>{chrome.i18n.getMessage("card_reloading")}</Key
+                >
+              {:else}
+                {chrome.i18n.getMessage("card_btn_reload_all")} : <Key
+                  props={{
+                    darkTheme: true,
+                    shadow: "small",
+                    padding: "0.4em",
+                    fontSize: "15px",
+                    onclick: clickReloadUseCaseHandler,
+                  }}>Shift + R</Key
                 >
               {/if}
             </div>

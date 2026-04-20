@@ -23,7 +23,7 @@ const ChromeTabs = {
         await ChromeTabs.query.getCurrentWindowExtensionPageIds()
 
       if (import.meta.env.MODE === "development")
-        console.log("[allCurrentWindowTabs]", allCurrentWindowTabs)
+        console.log("[all tabs]", allCurrentWindowTabs)
 
       return allCurrentWindowTabs.filter(
         ({ id }) => !currentWindowExtensionTabIds.includes(id!),

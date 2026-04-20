@@ -3,30 +3,21 @@ import Key from "@main/infra/ui/components/Key.svelte"
 import { keydowns } from "./reactivity/keys.svelte"
 import SettingModal from "./setting/SettingModal.svelte"
 import { settingModal } from "./setting/states/settingModal.svelte"
-// use case handler
 import { getInjections } from "../injections"
-import { onMount } from "svelte"
 
 function keydownCloseSettingHandler(e: KeyboardEvent) {
   switch (e.key) {
     case "Escape": {
-      if (settingModal.show) {
+      if (settingModal.show && !settingModal.listen) {
         e.preventDefault()
-        // settingModal.hideIfVisible()
         settingModal.hide()
       }
     }
   }
 }
 
+// use case handlers
 const { keydownApplyHandler, clickApplyHandler } = getInjections()
-
-// onMount(() => {
-//   document.addEventListener("click", (e: KeyboardEvent) => {
-//     keydownApplyHandler(e)
-//     keydownCloseSettingHandler(e)
-//   })
-// })
 </script>
 
 <!-- HTML -->

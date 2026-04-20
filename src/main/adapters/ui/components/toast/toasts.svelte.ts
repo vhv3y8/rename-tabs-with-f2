@@ -1,6 +1,8 @@
 export const TOAST_MESSAGES = {
   SHORTCUT_UPDATED: (shortcutText: string) =>
     chrome.i18n.getMessage("tips_shortcut_updated", shortcutText),
+  ERROR: (errorText: string, errorType: string = "") =>
+    `${errorType ? errorType + " " : ""}Error:\n${errorText}`,
 }
 
 type ToastItem = { id: number; text: any; duration: number }
@@ -9,15 +11,21 @@ export class Toasts {
   private timers: Map<number, ReturnType<typeof setTimeout>> = new Map()
   private nextId = 1
   constructor(private DURATION = 10000) {
-    $effect.root(() => {
-      $effect(() => {
-        console.log("[Toasts.list update]", this.list)
-      })
-    })
+    // $effect.root(() => {
+    //   $effect(() => {
+    //     // console.log("[Toasts.list update]", this.list)
+    //   })
+    // })
   }
 
   appendToast(text: string): number {
     const toastId = this.nextId
+    console.log("[appending toast]", {
+      id: toastId,
+      text,
+      duration: this.DURATION,
+    })
+
     this.list.unshift({
       id: toastId,
       text,

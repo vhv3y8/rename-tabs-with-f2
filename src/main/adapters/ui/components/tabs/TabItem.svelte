@@ -1,5 +1,4 @@
 <script lang="ts">
-import { getInjections } from "../../injections"
 import type { TabInfoState } from "./states/tabInfoRecord.svelte"
 import { tabItemComponents } from "./states/tabItemComponents.svelte"
 
@@ -25,7 +24,7 @@ export function focusTabInput(): void {
 export function isContentScriptConnected(): boolean {
   return tabInfo.connected
 }
-export function tabId(): number {
+export function getTabId(): number {
   return tabInfo.id
 }
 // debug

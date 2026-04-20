@@ -8,10 +8,20 @@ import {
 import ModalEntry from "../ModalEntry.svelte"
 import { TOAST_MESSAGES, toasts } from "../../toast/toasts.svelte"
 import { settingModal } from "../states/settingModal.svelte"
-import { F2HotKey } from "@lib/chrome/models/Setting"
-import { setting } from "../states/inMemorySetting.svelte"
+import { F2HotKey } from "@lib/models/Setting"
+import { getInjections } from "@main/adapters/ui/injections"
 
-let localHotKey = $state(setting.hotKey)
+const { setting } = getInjections()
+const settingHotkeyText = $derived.by(() => {
+  if (!setting.hotkey) {
+    console.error("[Rename Tabs with F2] Storage Error: 'shortcut' not found")
+    toasts.appendToast(TOAST_MESSAGES.ERROR("'shortcut' not found", "Storage"))
+    return "N/A"
+  }
+  return stringifyShortcut(setting.hotkey)
+})
+
+let localHotKey = $state(setting.hotkey)
 let localHotKeyText = $derived(stringifyShortcut(localHotKey))
 
 function handleListenHotKey(e: KeyboardEvent) {
@@ -23,7 +33,7 @@ function handleListenHotKey(e: KeyboardEvent) {
 }
 
 function publishToast() {
-  console.log("[publishing toast]")
+  console.log("[publishing hotkey update toast]", localHotKeyText)
   toasts.appendToast(TOAST_MESSAGES.SHORTCUT_UPDATED(localHotKeyText))
 }
 </script>
@@ -34,13 +44,13 @@ function publishToast() {
 
 <ModalEntry
   title={{
-    content: chrome.i18n.getMessage("settings_shortcut"),
+    content: chrome.i18n.getMessage("settings_hotkey"),
     appearance: "block",
   }}
-  liClassName={"hotKeyEntry"}
+  liClassName={"hotkeyEntry"}
 >
   {#if settingModal.listen}
-    <!-- Listening / shortcutText -->
+    <!-- Listening / current hotkey input -->
     <div class="listenShortcutText w-full box-border text-center">
       <p id="listening">
         {chrome.i18n.getMessage("settings_shortcut_listening")}...
@@ -61,7 +71,7 @@ function publishToast() {
           onclick: () => {
             localHotKey = F2HotKey
             settingModal.endListening()
-            setting.hotKey = localHotKey
+            setting.hotkey = localHotKey
             publishToast()
           },
         }}>{chrome.i18n.getMessage("settings_shortcut_reset_to_f2")}</Key
@@ -77,7 +87,7 @@ function publishToast() {
           fontSize: "17px",
           onclick: () => {
             settingModal.endListening()
-            localHotKey = setting.hotKey
+            localHotKey = setting.hotkey
           },
         }}>{chrome.i18n.getMessage("settings_shortcut_cancel")}</Key
       >
@@ -90,7 +100,7 @@ function publishToast() {
           onclick: () => {
             console.log("[localHotKey]", localHotKey)
             settingModal.endListening()
-            setting.hotKey = localHotKey
+            setting.hotkey = localHotKey
             publishToast()
           },
         }}>{chrome.i18n.getMessage("settings_shortcut_ok")}</Key
@@ -105,7 +115,7 @@ function publishToast() {
         onclick: () => {
           settingModal.startListening()
         },
-      }}>{settingModal.hotKeyText}</Key
+      }}>{settingHotkeyText}</Key
     >
   {/if}
 </ModalEntry>
@@ -113,7 +123,7 @@ function publishToast() {
 <!-- Style -->
 
 <style>
-:global(li.hotKeyEntry) {
+:global(li.hotkeyEntry) {
   flex-flow: column nowrap;
   align-items: flex-start;
   gap: 0.55em;

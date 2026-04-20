@@ -1,4 +1,4 @@
-import { type Setting } from "@chrome/models/Setting"
+import { type Setting } from "@lib/models/Setting"
 import type { PlatformMainFacade } from "@main/application/ports/PlatformMainFacade"
 
 export class InMemorySetting {
@@ -8,9 +8,10 @@ export class InMemorySetting {
     // maybe just set setting function
     public extensionFacade: PlatformMainFacade,
   ) {
-    this.setting = $state(_setting)
+    this.setting = $state(this._setting)
     $effect.root(() => {
       $effect(() => {
+        console.trace("[in memory setting update]", { ...this.setting })
         // update storage on setting field update
         this.extensionFacade.setSettings(this.setting)
       })
@@ -21,14 +22,4 @@ export class InMemorySetting {
     const setting = await extensionFacade.getSettings()
     return new InMemorySetting(setting, extensionFacade)
   }
-}
-
-// use this to get/set setting
-export const setting = $state({} as Setting)
-// initialize with this before using setting
-export async function initializeInMemorySetting(
-  extensionFacade: PlatformMainFacade,
-) {
-  const inMemorySetting = await InMemorySetting.build(extensionFacade)
-  Object.assign(setting, inMemorySetting.setting)
 }

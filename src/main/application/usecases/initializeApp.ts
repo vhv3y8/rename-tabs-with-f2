@@ -12,6 +12,7 @@ export function createInitializeAppUseCase(
   lifeCycle: InitializeAppLifeCycle,
 ) {
   return async function initializeApp() {
+    console.log("[initializing app]")
     await initializeTabInfoStoreUseCase()
     await checkAllTabConnectionAndUpdateFlagsUseCase()
 

@@ -1,13 +1,4 @@
-// import { createReloadingTabsUpdatedHandler } from "./adapters/ui/tabs/input/chrome"
-// import { checkTabConnectionAndUpdateStoreFlags } from "@main/application/usecases/checkAllTabConnection"
-// import { ChromeMainFacadeImpl } from "@main/infra/platform/impl/ChromeMainFacade2"
-// import { TabIdxInfoRecordStore } from "./adapters/ui/tabs/impl/tabInfoStore.svelte"
-// import type { TabInfoStore } from "./application/ports/TabInfoStore"
-// import { AppSetting } from "./adapters/ui/setting/states/appSetting.svelte"
-// import { initializeTabInfoStore } from "./application/usecases/initializeTabInfoStore"
-// import type { SettingStore } from "./application/ports/SettingStore"
-
-import { TabItemComponents } from "./adapters/ui/components/tabs/states/tabItemComponents.svelte"
+import { InMemorySetting } from "./adapters/ui/components/setting/states/inMemorySetting.svelte"
 import { DOMApplyLifeCycle } from "./adapters/ui/impl/lifecycles/applyLifeCycle"
 import { createInitializeAppLifeCycle } from "./adapters/ui/impl/lifecycles/initializeAppLifeCycle"
 import { ChromeSvelteReloadLifeCycle } from "./adapters/ui/impl/lifecycles/reloadLifeCycle"
@@ -47,45 +38,6 @@ import {
 } from "./application/usecases/reloadAllConnectableTabs"
 import { ChromeFacade } from "./infra/platform/impl/ChromeMainFacade"
 
-// await ChromeMainFacadeImpl.focusExtensionPageTabForRefresh()
-
-// // create infra / port implementations
-// export const tabIdxInfoStore =
-//   new TabIdxInfoRecordStore() satisfies TabInfoStore
-// export const notConnected = tabIdxInfoStore.notConnected
-
-// // register adapters
-// // chrome.tabs.onUpdated.addListener(createReloadingTabsUpdatedHandler())
-
-// // run initializing use cases (adapter = bootstrap)
-// await initializeTabInfoStore()
-// await checkTabConnectionAndUpdateStoreFlags()
-
-// if (import.meta.env.MODE === "development") console.log("[onMount]")
-// await chromeTabs.focusExtensionPageTabForRefresh()
-
-// // initialize application entities
-// await initializeTabIdxToInfo()
-// await initializeLastFocusTabId()
-
-// // initialize view from storage
-// view.initializeViewFromSettings()
-
-// // update global state
-// await checkContentScriptAvailableAndUpdateAllInfo()
-
-// // initialize view
-// focusTabItem({ initial: true })
-
-// if (import.meta.env.MODE === "development")
-//   console.log("[onMount] [tabIdxToInfo]", Object.values(tabIdxToInfo))
-
-// onDestroy(() => {
-//   destroySettingsEffect()
-// })
-
-// <svelte:document onkeydown={keydownHandler} onkeyup={keyupHandler} />
-
 export async function runBootstrap() {
   // create infra impl
   const extensionFacade = ChromeFacade satisfies PlatformMainFacade
@@ -94,7 +46,7 @@ export async function runBootstrap() {
   const tabIdxInfoStore = new TabIdxInfoRecordStore() satisfies TabInfoStore
   const notConnected = tabIdxInfoStore.notConnected
   // adapter only impl?
-  // const tabItemComponents = await TabItemComponents.build(tabIdxInfoStore)
+  const inMemorySetting = await InMemorySetting.build(extensionFacade)
 
   // create use case lifecycle impl
   const applyLifeCycle: ApplyLifeCycle = DOMApplyLifeCycle
@@ -142,15 +94,13 @@ export async function runBootstrap() {
 
   // run initializing use cases
   await initializeAppUseCase()
-  // await initializeTabInfoStoreUseCase()
-  // await checkAllTabConnectionAndUpdateFlagsUseCase()
 
   // detailed instances to DI into ui components
   return {
     // output adapters
     tabIdxInfoStore,
     notConnected,
-    // tabItemComponents,
+    setting: inMemorySetting.setting,
     // input adapters
     keydownApplyHandler,
     clickApplyHandler,

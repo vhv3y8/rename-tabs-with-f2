@@ -22,15 +22,21 @@ export function createReloadAllConnectableTabs(
     const tabIdsToReload = tabInfoStore.getTabIdsToReload()
     lifeCycle.beforeStart?.(tabIdsToReload)
 
+    console.log("[reload] [before start]")
     // fire reload and wait
     await Promise.all(
       tabIdsToReload.map((tabId) => extensionFacade.reloadTab({ tabId })),
     )
-    await lifeCycle.waitForReloadingEnd?.({}).catch((reason) => {
-      // ended by time limit, not all complete
-    })
+    console.log("[reload] [triggered]")
+    await lifeCycle
+      .waitForReloadingEnd?.({ timeLimit: 4000 })
+      .catch((reason) => {
+        // ended by time limit, not all complete
+      })
+    console.log("[reload] [waiting ended]")
     // check connection and update store flags
     await checkAllTabConnectionAndUpdateFlags()
+    console.log("[reload] [updated flags]")
 
     lifeCycle.afterFinish?.()
   }

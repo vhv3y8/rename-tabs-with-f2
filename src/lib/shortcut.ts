@@ -1,4 +1,4 @@
-import type { HotKey } from "@chrome/models/Setting"
+import type { HotKey } from "@lib/models/Setting"
 
 export function isValidShortcut(hotKey: HotKey) {
   if (

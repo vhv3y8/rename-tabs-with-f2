@@ -6,6 +6,13 @@ export interface TabInfoState extends TabInfo {
 }
 export class TabIdxInfoRecord implements Partial<TabInfoStore> {
   record: Record<number, TabInfoState> = $state({})
+  constructor() {
+    $effect.root(() => {
+      $effect(() => {
+        console.log("[tab info state record]", this.record)
+      })
+    })
+  }
 
   getAllTabInfos() {
     return Object.values(this.record)
@@ -25,19 +32,44 @@ export class TabIdxInfoRecord implements Partial<TabInfoStore> {
     if (filtered.length === 0) return null
     else return filtered[0]
   }
-  clearAndSetTabInfos(map: Record<number, TabInfo>) {
-    const previous = Object.keys(map)
-    const dataEntries = Object.entries(map)
-    // set data
-    Object.assign(this.record, map)
-    // ??
-    for (let i = previous.length; i < previous.length; i++) {
-      delete this.record[i]
-    }
+  clearAndSetTabInfos(tabInfos: TabInfo[]) {
+    //  Record<number, TabInfo>
+    const tabInfoStateRecord = tabInfos.reduce(
+      (acc, { id, title, favIconUrl, url, index, status, connected }) => {
+        // key have to be index. index is tab's position on current window tabs array
+        acc[index] = {
+          id,
+          title,
+          favIconUrl,
+          url,
+          status,
+          index,
+          connected,
+          hasChanged: false,
+        }
+        return acc
+      },
+      {} as Record<number, TabInfoState>,
+    )
+    console.log("[set tab infos]", tabInfoStateRecord)
+    this.record = { ...tabInfoStateRecord }
+
+    // const previous = Object.keys(map)
+    // const dataEntries = Object.entries(map)
+    // // set data
+    // Object.assign(this.record, map)
+    // // ??
+    // for (let i = previous.length; i < previous.length; i++) {
+    //   delete this.record[i]
+    // }
   }
   setConnectedFlag(idx: number, connected: boolean) {
-    const tabInfo = this.record[idx]
-    if (!tabInfo) return
-    tabInfo["connected"] = connected
+    // const tabInfo = this.record[idx]
+    if (!this.record[idx]) return
+    console.log("[tab info store] [setting flag]", {
+      tabInfo: this.record[idx],
+      connected,
+    })
+    this.record[idx]["connected"] = connected
   }
 }

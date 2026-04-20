@@ -1,7 +1,4 @@
-import type { TabInfoStore } from "@application/ports/TabInfoStore"
 import type TabItem from "../TabItem.svelte"
-import { ChromeFacade } from "@main/infra/platform/impl/ChromeMainFacade"
-import { getInjections } from "@main/adapters/ui/injections"
 
 type TabItemComponent = ReturnType<typeof TabItem>
 export class TabItemComponents {
@@ -10,6 +7,7 @@ export class TabItemComponents {
   private focusableComponents: TabItemComponent[]
   focusableIdxFromTabIdLookup: Record<number, number>
 
+  private lastFocusTabId: number = $state(-1)
   private currentFocusInputIdx: number
   private initialFocusInputIdx: number
   constructor() {
@@ -20,39 +18,65 @@ export class TabItemComponents {
     )
     this.focusableIdxFromTabIdLookup = $derived.by(() => {
       let record = {} as Record<number, number>
-      for (const [focusableIdx, { tabId }] of Object.entries(
+      for (const [focusableIdx, { getTabId }] of Object.entries(
         this.focusableComponents,
       )) {
-        record[tabId()] = Number(focusableIdx)
+        record[getTabId()] = Number(focusableIdx)
       }
       return record
     })
     // indexes
-    // TabInfoStore field is needed because initial idx depends on TabInfoStore ?
-    // why can't this be just lastFocusTabInfo and resolve initial idx on constructor without store related field?
-    // this.initialFocusInputIdx = $derived.by(() => {
-    //   if (this.lastFocusTabId === null) return 0
-    //   const lastFocusTabInfo = this.tabIdxInfoStore.getById(this.lastFocusTabId)
-    //   if (lastFocusTabInfo?.connected) {
-    //     return this.focusableIdxFromTabIdLookup[this.lastFocusTabId]
-    //   }
-    //   return 0
-    // })
-    this.initialFocusInputIdx = $state(0)
+    this.initialFocusInputIdx = $derived.by(() => {
+      const lastFocusTabIdx =
+        this.focusableIdxFromTabIdLookup[this.lastFocusTabId]
+      console.log(
+        "[last focus tab id]",
+        this.lastFocusTabId,
+        "[lastFocusTabIdx]",
+        lastFocusTabIdx,
+      )
+      if (lastFocusTabIdx) return lastFocusTabIdx
+      else return 0
+    })
     this.currentFocusInputIdx = $state(this.initialFocusInputIdx)
     $effect.root(() => {
       $effect(() => {
         this.currentFocusInputIdx = this.initialFocusInputIdx
+        // this.focusInitialItem()
+      })
+    })
+    $effect.root(() => {
+      $effect(() => {
+        console.log(
+          "[focusable components update] [focusableIdxFromTabIdLookup]",
+          this.focusableIdxFromTabIdLookup,
+        )
+      })
+      $effect(() => {
+        console.log(
+          "[focusable components update] [tab infos]",
+          this.focusableComponents.map(({ getTabInfo }) => {
+            const { id, index, title } = getTabInfo()
+            return { id, index, title }
+          }),
+        )
+      })
+      $effect(() => {
+        console.log(
+          "[focusable initial focus input idx update]",
+          this.initialFocusInputIdx,
+        )
+      })
+      $effect(() => {
+        console.log(
+          "[focusable current focus input idx update]",
+          this.currentFocusInputIdx,
+        )
       })
     })
   }
-  // use this method to create instance
-  // static async build(tabIdxInfoStore: TabInfoStore) {
-  //   const lastFocusTabId = await ChromeFacade.getLastFocusTabId()
-  //   return new TabItemComponents(tabIdxInfoStore, lastFocusTabId)
-  // }
-  setLastFocusTab(tabId: number) {
-    this.initialFocusInputIdx = this.focusableIdxFromTabIdLookup[tabId]
+  setInitialFocusComponent(lastFocusTabId: number) {
+    this.lastFocusTabId = lastFocusTabId
   }
 
   // mouse click
@@ -73,18 +97,28 @@ export class TabItemComponents {
     if (0 < this.focusableComponents.length) {
       const focusIdx =
         this.currentFocusInputIdx === 0
-          ? this.focusableComponents.length
+          ? this.focusableComponents.length - 1
           : this.currentFocusInputIdx - 1
       this.focusableComponents[focusIdx].focusTabInput()
       this.currentFocusInputIdx = focusIdx
     }
   }
   focusInitialItem() {
+    console.log("[focus initial item]", {
+      length: this.focusableComponents.length,
+      initialIdx: this.initialFocusInputIdx,
+      component: this.focusableComponents[this.initialFocusInputIdx],
+    })
     if (0 < this.focusableComponents.length) {
       this.focusableComponents[this.initialFocusInputIdx].focusTabInput()
     }
   }
   focusCurrentItem() {
+    console.log("[focus initial item]", {
+      length: this.focusableComponents.length,
+      currentIdx: this.currentFocusInputIdx,
+      component: this.focusableComponents[this.currentFocusInputIdx],
+    })
     if (0 < this.focusableComponents.length) {
       this.focusableComponents[this.currentFocusInputIdx].focusTabInput()
     }

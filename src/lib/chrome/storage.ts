@@ -1,9 +1,15 @@
-import { initialSetting, type Setting } from "./models/Setting"
+import { initialSettingPartial, type Setting } from "../models/Setting"
+
+export const chromeInitialSetting: Setting = {
+  extVersion: chrome.runtime.getManifest().version,
+  ...initialSettingPartial,
+}
+const INITIAL_STORAGE = {
+  settings: chromeInitialSetting,
+}
 
 const ChromeStorage = {
-  INITIAL_STORAGE: {
-    settings: initialSetting,
-  },
+  INITIAL_STORAGE,
   initializeStorage(storage: Record<string, any>) {
     return chrome.storage.local.set(storage)
   },

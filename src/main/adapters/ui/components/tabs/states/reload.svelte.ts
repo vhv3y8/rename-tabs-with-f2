@@ -27,8 +27,20 @@ class ReloadState {
       }
       return lookup
     })
+    $effect.root(() => {
+      $effect(() => {
+        console.log("[reload state] [all complete]", this.allComplete)
+      })
+      $effect(() => {
+        console.log(
+          "[reload state] [reloading tab idx -> status record update]",
+          this.reloadingTabIdxStatusRecord,
+        )
+      })
+    })
   }
   setReloadStatusEntries(reloadEntries: Record<number, ReloadingTabStatus>) {
+    console.log("[setting reload status entries]")
     // Object.assign(this.reloadingTabIdxStatusRecord, {})
     this.waiting = true
     this.reloadingTabIdxStatusRecord = reloadEntries

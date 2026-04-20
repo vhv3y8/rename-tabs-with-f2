@@ -1,4 +1,4 @@
-import type { Setting } from "@lib/chrome/models/Setting"
+import type { Setting } from "@lib/models/Setting"
 
 // depend on chrome for now
 export interface PlatformMainFacade {

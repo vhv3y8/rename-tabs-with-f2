@@ -10,34 +10,59 @@ export function createCheckAllTabConnectionAndUpdateFlags(
   extensionFacade: PlatformMainFacade,
 ) {
   return async function checkAllTabConnectionAndUpdateFlags() {
-    let allTabIds = tabInfoStore.getAllTabIds()
+    console.log("[checking all tab connections]")
+    const allTabInfos = tabInfoStore.getAllTabInfos()
 
     // check
+    type TabConnectionReturn = {
+      // TODO id undefined problem
+      index: number
+      id: number | undefined
+      isConnected: boolean
+    }
     // TODO: fix
-    let tabConnectedFlags = await Promise.allSettled(
-      allTabIds.map((tabId) => extensionFacade.checkTabConnection({ tabId })),
-    ).then((arr) =>
-      arr.map((item) => item.status === "fulfilled" && item.value == true),
+    const tabConnectionResults = await Promise.allSettled(
+      allTabInfos.map(async ({ id, index }) => {
+        // defaults to false
+        let isConnected: boolean = false
+        try {
+          const trueReturnIfAlive = await extensionFacade.checkTabConnection({
+            tabId: id!,
+          })
+          isConnected = trueReturnIfAlive === true
+        } catch {
+          // maybe connection error but do nothing anyway
+        }
+        return { id, index, isConnected }
+      }),
     )
-    // update info
-    // TODO: fix
-    for (const [idx, isConnected] of tabConnectedFlags.entries()) {
-      tabInfoStore.setConnectedFlag(idx, isConnected)
+    const fulfilledConnections: TabConnectionReturn[] = tabConnectionResults
+      .filter((res) => res.status === "fulfilled")
+      .map((res) => res.value)
+
+    for (const { index: tabIndex, isConnected } of fulfilledConnections) {
+      tabInfoStore.setConnectedFlag(tabIndex, isConnected)
     }
 
-    if (import.meta.env.MODE === "development")
-      console.log(
-        "[checkContentScriptAvailableAndUpdateAllInfo] tabIdxToInfo",
-        JSON.stringify(
-          tabInfoStore.getAllTabInfos().map(({ id, title, connected }) => ({
-            id,
-            title,
-            connected,
-          })),
-          null,
-          2,
-        ),
-      )
+    // update info
+    // TODO: fix
+    // for (const [idx, isConnected] of tabConnectedFlags.entries()) {
+    //   tabInfoStore.setConnectedFlag(idx, isConnected)
+    // }
+
+    // if (import.meta.env.MODE === "development")
+    //   console.log(
+    //     "[checkContentScriptAvailableAndUpdateAllInfo] tabIdxToInfo",
+    //     JSON.stringify(
+    //       tabInfoStore.getAllTabInfos().map(({ id, title, connected }) => ({
+    //         id,
+    //         title,
+    //         connected,
+    //       })),
+    //       null,
+    //       2,
+    //     ),
+    //   )
   }
 }
 
