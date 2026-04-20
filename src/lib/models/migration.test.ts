@@ -15,12 +15,10 @@ describe("SchemaEditor.map", () => {
         },
       },
     })
-
     const chainedEditor = editor
       .create("settings.profile.display.theme.name", "midnight")
       .updateValue("settings.shortcuts.primary", (value) => `${value}-updated`)
       .map("settings.shortcuts.primary", "settings.hotkey.primary")
-
     expect(chainedEditor).toBe(editor)
     expect(editor.data).toEqual({
       settings: {
@@ -38,15 +36,11 @@ describe("SchemaEditor.map", () => {
       },
     })
   })
-
   it("skips when the source path does not exist", () => {
     const editor = new SchemaEditor({})
-
     editor.map("shortcut", "hotkey")
-
     expect(editor.data).toEqual({})
   })
-
   it("moves nested values and keeps the mapped shape intact", () => {
     const editor = new SchemaEditor({
       settings: {
@@ -56,9 +50,7 @@ describe("SchemaEditor.map", () => {
         },
       },
     })
-
     editor.map("settings.shortcuts.primary", "settings.hotkey.primary")
-
     expect(editor.data).toEqual({
       settings: {
         shortcuts: {
@@ -70,7 +62,6 @@ describe("SchemaEditor.map", () => {
       },
     })
   })
-
   it("creates deep paths and ignores missing updates", () => {
     const editor = new SchemaEditor({
       settings: {
@@ -79,7 +70,6 @@ describe("SchemaEditor.map", () => {
         },
       },
     })
-
     editor.create("settings.profile.display.theme.name", "midnight")
     editor.updateValue(
       "settings.shortcuts.primary",
@@ -89,7 +79,6 @@ describe("SchemaEditor.map", () => {
       "settings.shortcuts.missing.value",
       (value) => `${value}-ignored`,
     )
-
     expect(editor.data).toEqual({
       settings: {
         shortcuts: {
@@ -127,12 +116,10 @@ describe("MigrationAggregator.migrate", () => {
         editor.map("settings.shortcuts.primary", "settings.hotkey.primary")
       },
     }
-
     const result = new MigrationAggregator(migrations).migrate(
       { settings: {} },
       "1.0.0",
     )
-
     expect(runOrder).toEqual(["1.1.0", "1.2.0", "2.0.0"])
     expect(result).toEqual({
       settings: {
@@ -143,7 +130,6 @@ describe("MigrationAggregator.migrate", () => {
       },
     })
   })
-
   it("starts from the middle version and only runs later migrations", () => {
     const runOrder: string[] = []
     const migrations: TargetVersionMigrationRecord = {
@@ -163,7 +149,6 @@ describe("MigrationAggregator.migrate", () => {
         editor.map("settings.shortcuts.primary", "settings.hotkey.primary")
       },
     }
-
     const result = new MigrationAggregator(migrations).migrate(
       {
         settings: {
@@ -174,7 +159,6 @@ describe("MigrationAggregator.migrate", () => {
       },
       "1.1.0",
     )
-
     expect(runOrder).toEqual(["1.2.0", "2.0.0"])
     expect(result).toEqual({
       settings: {
@@ -185,7 +169,6 @@ describe("MigrationAggregator.migrate", () => {
       },
     })
   })
-
   it("runs a deep migration chain in semver order and includes the target version", () => {
     const runOrder: string[] = []
     const migrations: TargetVersionMigrationRecord = {
@@ -220,7 +203,6 @@ describe("MigrationAggregator.migrate", () => {
         editor.create("profile.details.touchedByMigration", true)
       },
     }
-
     const result = new MigrationAggregator(migrations).migrate(
       {
         settings: {
@@ -242,7 +224,6 @@ describe("MigrationAggregator.migrate", () => {
       "1.0.0",
       "2.0.0",
     )
-
     expect(runOrder).toEqual(["1.1.0", "1.2.0", "2.0.0"])
     expect(result).toEqual({
       settings: {
@@ -285,7 +266,6 @@ describe("MigrationAggregator.migrate", () => {
         "1.1.0": (editor) => editor.map("shortcut", "hotkey"),
         invalid: (editor) => editor.map("shortcut", "hotkey"),
       }
-
       expect(() =>
         new MigrationAggregator(migrations).migrate(
           { shortcut: "ctrl-k" },
@@ -293,19 +273,16 @@ describe("MigrationAggregator.migrate", () => {
         ),
       ).toThrowError(/Invalid migration version\(s\): invalid/)
     })
-
     it("fails fast when the input versions are not semver", () => {
       const migrations: TargetVersionMigrationRecord = {
         "1.1.0": (editor) => editor.map("shortcut", "hotkey"),
       }
-
       expect(() =>
         new MigrationAggregator(migrations).migrate(
           { shortcut: "ctrl-k" },
           "not-a-version",
         ),
       ).toThrowError(/Invalid starting version: not-a-version/)
-
       expect(() =>
         new MigrationAggregator(migrations).migrate(
           { shortcut: "ctrl-k" },
