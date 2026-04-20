@@ -8,7 +8,6 @@ export type HotKey = {
   key: string
 }
 export type Setting = {
-  extVersion: string
   darkmode: boolean
   largerWidth: boolean
   hotkey: HotKey
@@ -35,5 +34,5 @@ export const initialSettingPartial = {
 // ): "1.0.0" | "1.1.0" | "1.2.0" | "1.2.1" {}
 
 export const settingMigrationMap: TargetVersionMigrationRecord = {
-  "1.3.0": (editor) => editor.move("shortcut", "hotkey"),
+  "1.3.0": (editor) => editor.map("shortcut", "hotkey"),
 }

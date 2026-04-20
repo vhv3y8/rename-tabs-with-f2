@@ -28,11 +28,9 @@ export function createReloadAllConnectableTabs(
       tabIdsToReload.map((tabId) => extensionFacade.reloadTab({ tabId })),
     )
     console.log("[reload] [triggered]")
-    await lifeCycle
-      .waitForReloadingEnd?.({ timeLimit: 3000 })
-      .catch((reason) => {
-        // ended by time limit, not all complete
-      })
+    await lifeCycle.waitForReloadingEnd?.({ timeLimit: 50 }).catch((reason) => {
+      // ended by time limit, not all complete
+    })
     console.log("[reload] [waiting ended]")
     // check connection and update store flags
     await checkAllTabConnectionAndUpdateFlags()

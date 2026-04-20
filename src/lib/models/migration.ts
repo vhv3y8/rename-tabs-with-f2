@@ -1,63 +1,71 @@
+import * as semver from "semver"
+
+// write path string like "first.second.third"
 export class SchemaEditor {
   constructor(public data: any) {}
-  move(from: string, to: string, mapper?: (value: any) => any) {
-    const value = this.get(from)
-    this.remove(from)
-    this.set(to, value)
+  // update
+  map(fromStr: string, toStr: string, mapper?: (value: any) => any) {
+    const value = this.get(fromStr)
+    if (value === undefined) {
+      return this
+    }
+    this.delete(fromStr)
+    if (mapper) {
+      this.create(toStr, mapper(value))
+    } else {
+      this.create(toStr, value)
+    }
     return this
   }
-  updateValue(path: string, mapper: (value: any) => any) {}
-  remove(path: string) {
-    /* ... split('.') logic ... */ return this
+  updateValue(pathStr: string, mapper: (value: any) => any) {
+    const pathArr = pathStr.split(".")
+    pathArr.reduce((acc, pathKey, index) => {
+      if (acc === undefined || acc === null) return undefined
+      if (index === pathArr.length - 1) {
+        // update value and return
+        acc[pathKey] = mapper(acc[pathKey])
+        return
+      }
+      return acc[pathKey]
+    }, this.data)
+    return this
   }
-
-  set(path: string, value: any) {
-    /* ... */ return this
+  // create
+  create(pathStr: string, value: any) {
+    const pathArr = pathStr.split(".")
+    pathArr.reduce((acc, pathKey, index) => {
+      if (index === pathArr.length - 1) {
+        // set value and return
+        acc[pathKey] = value
+        return acc[pathKey]
+      }
+      // create empty object if not exists
+      if (acc[pathKey] === undefined || acc[pathKey] === null) {
+        acc[pathKey] = {}
+      }
+      return acc[pathKey]
+    }, this.data)
+    return this
   }
-  get(path: string) {
-    /* ... */
+  // delete
+  delete(pathStr: string) {
+    const pathArr = pathStr.split(".")
+    pathArr.reduce((acc, pathKey, index) => {
+      if (acc === undefined || acc === null) return undefined
+      if (index === pathArr.length - 1) {
+        delete acc[pathKey]
+        return
+      }
+      return acc[pathKey]
+    }, this.data)
+    return this
   }
-  // commit(nextVersion: string, versionText: string = "extVersion") {
-  //   this.result.version = nextVersion
-  //   return this.result
-  // }
+  // read
+  get(pathStr: string) {
+    const pathArr = pathStr.split(".")
+    return pathArr.reduce((acc, pathKey) => acc?.[pathKey], this.data)
+  }
 }
-
-// class SchemaEditor {
-//   constructor(data) {
-//     this.result = { ...data };
-//   }
-
-//   rename(oldKey, newKey) {
-//     if (oldKey in this.result) {
-//       this.result[newKey] = this.result[oldKey];
-//       delete this.result[oldKey];
-//     }
-//     return this;
-//   }
-
-//   remove(key) {
-//     delete this.result[key];
-//     return this;
-//   }
-
-//   add(key, defaultValue) {
-//     this.result[key] = defaultValue;
-//     return this;
-//   }
-
-//   map(key, fn) {
-//     if (key in this.result) {
-//       this.result[key] = fn(this.result[key]);
-//     }
-//     return this;
-//   }
-
-//   commit(nextVersion) {
-//     this.result.version = nextVersion;
-//     return this.result;
-//   }
-// }
 
 export type Migration = (editor: SchemaEditor) => void
 export type TargetVersionMigrationRecord = Record<string, Migration>
@@ -65,6 +73,40 @@ export type TargetVersionMigrationRecord = Record<string, Migration>
 // use this to run migrations
 export class MigrationAggregator {
   constructor(private migrations: TargetVersionMigrationRecord) {}
+  migrate(
+    startingData: any,
+    startingVersion: string,
+    targetVersion?: string,
+  ): any {
+    const migarationVersions = Object.keys(this.migrations)
+    const invalidMigrationVersions = migarationVersions.filter(
+      (version) => semver.valid(version) === null,
+    )
+    if (invalidMigrationVersions.length > 0) {
+      throw new Error(
+        `Invalid migration version(s): ${invalidMigrationVersions.join(", ")}`,
+      )
+    }
+    if (semver.valid(startingVersion) === null) {
+      throw new Error(`Invalid starting version: ${startingVersion}`)
+    }
+    if (targetVersion !== undefined && semver.valid(targetVersion) === null) {
+      throw new Error(`Invalid target version: ${targetVersion}`)
+    }
 
-  migrate(data: any, targetVersion: number): any {}
+    const pendingVersions = migarationVersions
+      .filter((v) => semver.gt(v, startingVersion))
+      .filter(targetVersion ? (v) => semver.lte(v, targetVersion) : () => true)
+      .sort(semver.compare)
+    console.log("[pendingVersions]", pendingVersions)
+
+    const editor = new SchemaEditor(startingData)
+    for (const version of pendingVersions) {
+      const runMigration = this.migrations[version]
+      runMigration(editor)
+      console.log("[migration result]", version, editor.data)
+    }
+    console.log("[all migration done]", editor.data)
+    return editor.data
+  }
 }

@@ -1,7 +1,7 @@
 import { initialSettingPartial, type Setting } from "../models/Setting"
 
 export const chromeInitialSetting: Setting = {
-  extVersion: chrome.runtime.getManifest().version,
+  // extVersion: chrome.runtime.getManifest().version,
   ...initialSettingPartial,
 }
 const INITIAL_STORAGE = {
