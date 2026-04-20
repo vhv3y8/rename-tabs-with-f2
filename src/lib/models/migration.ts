@@ -1,6 +1,6 @@
 import * as semver from "semver"
 
-// simply adding fields can be done with this and initial value
+// simply adding fields can be done with this and initial value after migrations
 export function fillMissingDeeply(userData: any, updatedDefault: any) {
   if (
     userData === null ||

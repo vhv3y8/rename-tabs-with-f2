@@ -4,7 +4,6 @@ export const chromeInitialSetting: Setting = {
   ...initialSettingPartial,
 }
 const INITIAL_STORAGE = {
-  version: chrome.runtime.getManifest().version,
   settings: chromeInitialSetting,
 }
 
@@ -17,6 +16,8 @@ const ChromeStorage = {
     const userStorage = await chrome.storage.local.get(null)
     // @ts-ignore
     // let migratedStorage = deepMerge(updatedDefaults, userStorage)
+
+    const version = chrome.runtime.getManifest().version
 
     return chrome.storage.local.set(migratedStorage)
   },

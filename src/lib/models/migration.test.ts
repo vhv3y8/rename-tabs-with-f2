@@ -68,6 +68,71 @@ describe("fillMissingDeeply", () => {
       /JSON-serializable/,
     )
   })
+  it("fills deeply nested mixed values without touching existing data", () => {
+    const userData = {
+      settings: {
+        appearance: {
+          theme: "light",
+          palette: ["blue"],
+        },
+        flags: {
+          enabled: false,
+        },
+      },
+      profile: {
+        name: "before",
+        metadata: null,
+      },
+    }
+    const updatedDefault = {
+      settings: {
+        appearance: {
+          theme: "dark",
+          palette: ["blue", "green"],
+          density: 2,
+        },
+        flags: {
+          enabled: true,
+          beta: true,
+        },
+        shortcuts: {
+          primary: "ctrl-k",
+          secondary: "ctrl-shift-k",
+        },
+      },
+      profile: {
+        name: "after",
+        metadata: {
+          locale: "ko-KR",
+          count: 1,
+        },
+      },
+      version: 3,
+    }
+    const result = fillMissingDeeply(userData, updatedDefault)
+    expect(result).toEqual({
+      settings: {
+        appearance: {
+          theme: "light",
+          palette: ["blue"],
+          density: 2,
+        },
+        flags: {
+          enabled: false,
+          beta: true,
+        },
+        shortcuts: {
+          primary: "ctrl-k",
+          secondary: "ctrl-shift-k",
+        },
+      },
+      profile: {
+        name: "before",
+        metadata: null,
+      },
+      version: 3,
+    })
+  })
 })
 
 describe("SchemaEditor.map", () => {

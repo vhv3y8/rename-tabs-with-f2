@@ -83,7 +83,11 @@ chrome.runtime.onInstalled.addListener(({ reason, previousVersion }) => {
       ChromeTabs.create.openMainPage()
     })
   } else if (reason === "update") {
-    console.log("[updated] [previous version]", previousVersion)
+    console.log(
+      "[updated] [previous version]",
+      previousVersion,
+      typeof previousVersion,
+    )
     // ChromeStorage.migrateStorage(ChromeStorage.INITIAL_STORAGE)
   }
 })
