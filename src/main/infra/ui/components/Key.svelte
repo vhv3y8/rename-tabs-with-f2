@@ -192,7 +192,9 @@ let elem: HTMLElement | null = $state(null)
   transition: background-color 0.058s ease-in-out;
 }
 .pointOnHover.cornflower:hover,
-.pointOnHover.cornflower:active {
+.pointOnHover.cornflower:active,
+.pointOnHover.cornflower.darkTheme.pointBgOpposite:hover,
+.pointOnHover.cornflower.darkTheme.pointBgOpposite:active {
   background-color: var(--point-cornflower-light) !important;
 }
 .pointOnHover.cornflower.pointBgOpposite:hover,
@@ -200,7 +202,9 @@ let elem: HTMLElement | null = $state(null)
   background-color: var(--point-cornflower-dark) !important;
 }
 .pointOnHover.mutedcoral:hover,
-.pointOnHover.mutedcoral:active {
+.pointOnHover.mutedcoral:active,
+.pointOnHover.mutedcoral.darkTheme.pointBgOpposite:hover,
+.pointOnHover.mutedcoral.darkTheme.pointBgOpposite:active {
   background-color: var(--point-mutedcoral-light) !important;
 }
 .pointOnHover.mutedcoral.pointBgOpposite:hover,
@@ -211,8 +215,10 @@ let elem: HTMLElement | null = $state(null)
 .pointOnHover.coralorange:active {
   background-color: var(--point-coralorange-light) !important;
 }
-.pointOnHover.coralorange.pointBgOpposite:hover,
-.pointOnHover.coralorange.pointBgOpposite:active {
+.pointOnHover.coralorange:hover,
+.pointOnHover.coralorange:active,
+.pointOnHover.coralorange.darkTheme.pointBgOpposite:hover,
+.pointOnHover.coralorange.darkTheme.pointBgOpposite:active {
   background-color: var(--point-coralorange-dark) !important;
 }
 /* terracotta? */

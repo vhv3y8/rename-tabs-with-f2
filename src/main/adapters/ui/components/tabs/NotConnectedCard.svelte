@@ -58,8 +58,10 @@ const { keydownReloadUseCaseHandler, clickReloadUseCaseHandler, setting } =
           {chrome.i18n.getMessage("card_btn_dismiss")} : <Key
             props={{
               darkTheme: true,
-              point: "coralorange",
-              pointBgOpposite: setting.darkmode,
+              // point: "coralorange",
+              // pointBgOpposite: setting.darkmode,
+              point: "cornflower",
+              pointBgOpposite: true,
               pointOnHover: true,
               shadow: "small",
               padding: "0.4em",
@@ -105,8 +107,10 @@ const { keydownReloadUseCaseHandler, clickReloadUseCaseHandler, setting } =
                 {chrome.i18n.getMessage("card_btn_reload_all")} : <Key
                   props={{
                     darkTheme: true,
-                    point: "coralorange",
-                    pointBgOpposite: setting.darkmode,
+                    // point: "coralorange",
+                    // pointBgOpposite: setting.darkmode,
+                    point: "cornflower",
+                    pointBgOpposite: true,
                     pointOnHover: true,
                     shadow: "small",
                     padding: "0.4em",

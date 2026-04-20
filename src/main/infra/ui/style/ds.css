@@ -15,14 +15,14 @@
 
   --point-cornflower-light: cornflowerblue;
   --point-cornflower-dark: #3c5a9e;
-  --point-coralorange-light: #ff8a65;
+  /* --point-coralorange-light: #ff8a65; */
+  --point-coralorange-light: #ff7043;
   --point-coralorange-dark: #e58e73;
   /* --point-coralorange-dark: cornflowerblue;
   --point-coralorange-light: #3c5a9e;
   --point-cornflower-dark: #ff8a65;
   --point-cornflower-light: #e58e73; */
 
-  /* --point-coralorange-light: #ff7043; */
   --point-mutedcoral-light: #e57373;
   --point-mutedcoral-dark: #d66d6d;
 }
