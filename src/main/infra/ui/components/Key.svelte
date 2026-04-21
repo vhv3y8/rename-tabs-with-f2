@@ -55,9 +55,10 @@ const {
 } = $derived({ ...defaultKeyProps, ...props })
 
 const repeatMousedownThreshold = 100
-let repeatMousedownTimer = null
+const repeatMousedownInitialDelay = 300
+let repeatMousedownDelayTimer: ReturnType<typeof setTimeout> | null = null
+let repeatMousedownTimer: ReturnType<typeof setInterval> | null = null
 let movedByMousedownCount = 0
-// TODO: initial threshold time 1s
 
 let elem: HTMLElement | null = $state(null)
 </script>
@@ -76,11 +77,13 @@ let elem: HTMLElement | null = $state(null)
   }}
   onmousedown={() => {
     if (props.repeatClickHandlerWithMouseDown) {
-      repeatMousedownTimer = setInterval(() => {
-        console.log("[running mousedown]")
-        movedByMousedownCount += 1
-        onclick()
-      }, repeatMousedownThreshold)
+      repeatMousedownDelayTimer = setTimeout(() => {
+        repeatMousedownTimer = setInterval(() => {
+          console.log("[running mousedown]")
+          movedByMousedownCount += 1
+          onclick()
+        }, repeatMousedownThreshold)
+      }, repeatMousedownInitialDelay)
       onmousedown()
     } else {
       onmousedown()
@@ -88,6 +91,8 @@ let elem: HTMLElement | null = $state(null)
   }}
   onmouseup={() => {
     if (props.repeatClickHandlerWithMouseDown) {
+      clearTimeout(repeatMousedownDelayTimer)
+      repeatMousedownDelayTimer = null
       clearInterval(repeatMousedownTimer)
       repeatMousedownTimer = null
       movedByMousedownCount = 0

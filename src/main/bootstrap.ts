@@ -1,7 +1,7 @@
 import { InMemorySetting } from "./adapters/ui/components/setting/states/inMemorySetting.svelte"
 import { DOMApplyLifeCycle } from "./adapters/ui/impl/lifecycles/applyLifeCycle"
 import { createInitializeAppLifeCycle } from "./adapters/ui/impl/lifecycles/initializeAppLifeCycle"
-import { createChromeReloadLifeCycle } from "./adapters/ui/impl/lifecycles/reloadLifeCycle"
+import { createChromeSvelteReloadLifeCycle } from "./adapters/ui/impl/lifecycles/reloadLifeCycle"
 import { TabIdxInfoRecordStore } from "./adapters/ui/impl/tabInfoStore.svelte"
 import {
   createClickApplyHandler,
@@ -61,7 +61,7 @@ export async function runBootstrap() {
   const initializeTabInfoStoreUseCase: InitializeTabInfoStoreUseCase =
     createInitializeTabInfoStore(tabIdxInfoStore, extensionFacade)
 
-  const reloadLifeCycle: ReloadLifeCycle = createChromeReloadLifeCycle(
+  const reloadLifeCycle: ReloadLifeCycle = createChromeSvelteReloadLifeCycle(
     tabIdxInfoStore,
     checkAllTabConnectionAndUpdateFlagsUseCase,
   )
