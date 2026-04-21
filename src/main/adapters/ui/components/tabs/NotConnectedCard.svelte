@@ -6,7 +6,14 @@ import { settingModal } from "../setting/states/settingModal.svelte"
 import { tabItemComponents } from "./states/tabItemComponents.svelte"
 import { getInjections } from "../../injections"
 
-const notConnected = $derived(getInjections().notConnected)
+const {
+  keydownReloadUseCaseHandler,
+  clickReloadUseCaseHandler,
+  setting,
+  notConnected,
+} = getInjections()
+
+// const notConnected = $derived(notConnected)
 let allCount = $derived(notConnected.allTabs.length)
 let reloadCount = $derived(notConnected.reloadConnectableTabs.length)
 let policyCount = $derived(notConnected.policyBlockedTabs.length)
@@ -26,9 +33,6 @@ function keydownDismissHandler(e: KeyboardEvent) {
     if (import.meta.env.MODE === "development") console.log("[KeyW, shiftKey]")
   }
 }
-
-const { keydownReloadUseCaseHandler, clickReloadUseCaseHandler, setting } =
-  getInjections()
 </script>
 
 <!-- HTML -->
@@ -57,11 +61,11 @@ const { keydownReloadUseCaseHandler, clickReloadUseCaseHandler, setting } =
         <div class="close containsKeyBtn">
           {chrome.i18n.getMessage("card_btn_dismiss")} : <Key
             props={{
-              darkTheme: true,
+              // darkTheme: true,
               // point: "coralorange",
-              // pointBgOpposite: setting.darkmode,
+              // onOpposite: setting.darkmode,
               point: "cornflower",
-              pointBgOpposite: true,
+              onOpposite: true,
               pointOnHover: true,
               shadow: "small",
               padding: "0.4em",
@@ -90,14 +94,24 @@ const { keydownReloadUseCaseHandler, clickReloadUseCaseHandler, setting } =
           </li>
           <div style:text-align="right">
             <div class="right containsKeyBtn" style:padding-block="4px 3px">
+              <!-- <Key
+                props={{
+                  // id: "reloadingBtn",
+                  pressable: false,
+                  special: true,
+                  shadow: "none",
+                  padding: "0.4em",
+                  fontSize: "15px",
+                }}>{chrome.i18n.getMessage("card_reloading")}</Key
+              > -->
+            </div>
+            <div class="right containsKeyBtn" style:padding-block="4px 3px">
               {#if reload.isWaiting()}
                 <Key
                   props={{
                     id: "reloadingBtn",
                     pressable: false,
-                    // isKeyDown: true,
-                    // point: "coralorange",
-                    darkTheme: true,
+                    special: true,
                     shadow: "none",
                     padding: "0.4em",
                     fontSize: "15px",
@@ -106,11 +120,8 @@ const { keydownReloadUseCaseHandler, clickReloadUseCaseHandler, setting } =
               {:else}
                 {chrome.i18n.getMessage("card_btn_reload_all")} : <Key
                   props={{
-                    darkTheme: true,
-                    // point: "coralorange",
-                    // pointBgOpposite: setting.darkmode,
                     point: "cornflower",
-                    pointBgOpposite: true,
+                    onOpposite: true,
                     pointOnHover: true,
                     shadow: "small",
                     padding: "0.4em",
@@ -196,14 +207,14 @@ div.header {
 }
 
 :global(#reloadingBtn) {
-  color: var(--point-cornflower-dark);
+  /* color: var(--point-cornflower-dark);
   border-color: var(--point-cornflower-dark);
-  border-width: 5px;
+  border-width: 5px; */
   /* font-weight: bold; */
 }
-:global(#reloadingBtn.pointBgOpposite) {
-  color: var(--point-cornflower-light);
-  border-color: var(--point-cornflower-light);
+:global(#reloadingBtn.onOpposite) {
+  /* color: var(--point-cornflower-light);
+  border-color: var(--point-cornflower-light); */
 }
 
 /* #notConnectedCardContainer :global(button.key) {

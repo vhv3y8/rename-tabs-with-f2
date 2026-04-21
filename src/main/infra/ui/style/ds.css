@@ -13,18 +13,21 @@
   --width-normal: 650px;
   --width-large: 800px;
 
-  --point-cornflower-light: cornflowerblue;
-  --point-cornflower-dark: #3c5a9e;
+  --point-cornflower-default: cornflowerblue;
+  --point-cornflower-opposite: #3c5a9e;
   /* --point-coralorange-light: #ff8a65; */
-  --point-coralorange-light: #ff7043;
-  --point-coralorange-dark: #e58e73;
+  --point-coralorange-default: #ff7043;
+  --point-coralorange-opposite: #e58e73;
   /* --point-coralorange-dark: cornflowerblue;
   --point-coralorange-light: #3c5a9e;
   --point-cornflower-dark: #ff8a65;
   --point-cornflower-light: #e58e73; */
 
-  --point-mutedcoral-light: #e57373;
-  --point-mutedcoral-dark: #d66d6d;
+  --point-mutedcoral-default: #e57373;
+  --point-mutedcoral-opposite: #d66d6d;
+  /* terracotta? */
+  /* #D97757 */
+  /* #E8A082 */
 }
 
 :root.dark {
@@ -35,4 +38,11 @@
   --primary-7: #999;
   --primary-8: #bbb;
   --primary-9: #ddd;
+
+  --point-cornflower-default: #3c5a9e;
+  --point-cornflower-opposite: cornflowerblue;
+  --point-coralorange-default: #ff7043;
+  --point-coralorange-opposite: #e58e73;
+  --point-mutedcoral-default: #e57373;
+  --point-mutedcoral-opposite: #d66d6d;
 }

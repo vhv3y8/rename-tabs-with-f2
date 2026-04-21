@@ -86,7 +86,6 @@ function keydownMoveAroundTabItemsHandler(e: KeyboardEvent) {
         padding: "0.3em 0.5em",
         fontSize: "18px",
         shadow: "base",
-        pointBgOpposite: setting.darkmode,
         onclick: () => {
           tabItemComponents.focusNextItem()
         },
@@ -107,7 +106,6 @@ function keydownMoveAroundTabItemsHandler(e: KeyboardEvent) {
         padding: "0.3em 0.5em",
         fontSize: "18px",
         shadow: "base",
-        pointBgOpposite: setting.darkmode,
         onclick: () => {
           tabItemComponents.focusNextItem()
         },
@@ -130,7 +128,6 @@ function keydownMoveAroundTabItemsHandler(e: KeyboardEvent) {
         padding: "0.3em 0.5em",
         fontSize: "18px",
         shadow: "base",
-        pointBgOpposite: setting.darkmode,
         onclick: () => {
           tabItemComponents.focusPreviousItem()
         },
@@ -151,7 +148,6 @@ function keydownMoveAroundTabItemsHandler(e: KeyboardEvent) {
         padding: "0.3em 0.5em",
         fontSize: "18px",
         shadow: "base",
-        pointBgOpposite: setting.darkmode,
         onclick: () => {
           tabItemComponents.focusPreviousItem()
         },

@@ -5,6 +5,7 @@ import manifest from "../src/public/manifest.json" with { type: "json" }
 import path from "node:path"
 import fs from "node:fs/promises"
 import tailwindcss from "@tailwindcss/vite"
+import postcssNesting from "postcss-nesting"
 
 const isProduction = process.env.MODE === "production"
 const buildDist2ForTest = process.env.DIST2 === "true"
@@ -68,6 +69,11 @@ const createSvelteConfig = (input, last = false) => {
       tailwindcss(),
       ...(isProduction && last ? commonPlugins : []),
     ],
+    css: {
+      postcss: {
+        plugins: [postcssNesting()],
+      },
+    },
   })
 }
 const createJsConfig = (input, last = false) => {

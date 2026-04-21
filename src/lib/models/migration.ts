@@ -71,32 +71,28 @@ export type Migration = (editor: SchemaEditor) => void
 export type TargetVersionMigrationRecord = Record<string, Migration>
 
 // use this to combine migration maps into root migration map
-export function buildRootMigrationRecord(
-  configs: Record<string, TargetVersionMigrationRecord>,
-): TargetVersionMigrationRecord {
-  const rootRecord: TargetVersionMigrationRecord = {}
+// export function buildRootMigrationRecord(
+//   configs: Record<string, TargetVersionMigrationRecord>,
+// ): TargetVersionMigrationRecord {
+//   const rootRecord: TargetVersionMigrationRecord = {}
 
-  const allVersions = new Set<string>()
-  Object.values(configs).forEach((map) =>
-    Object.keys(map).forEach((v) => allVersions.add(v)),
-  )
+//   const allVersions = new Set<string>()
+//   Object.values(configs).forEach((map) =>
+//     Object.keys(map).forEach((v) => allVersions.add(v)),
+//   )
 
-  allVersions.forEach((version) => {
-    rootRecord[version] = (rootEditor: SchemaEditor) => {
-      for (const [domain, migrationMap] of Object.entries(configs)) {
-        if (migrationMap[version]) {
-          // root.settings 같이 특정 도메인으로 스코프를 좁혀서 에디터 전달
-          // SchemaEditor에 하위 경로를 타게팅하는 기능이 있다고 가정하거나
-          // 여기서 간단히 wrap 해서 전달
-          const domainData = (rootEditor.data[domain] ??= {})
-          migrationMap[version](new SchemaEditor(domainData))
-        }
-      }
-    }
-  })
-
-  return rootRecord
-}
+//   allVersions.forEach((version) => {
+//     rootRecord[version] = (rootEditor: SchemaEditor) => {
+//       for (const [domain, migrationMap] of Object.entries(configs)) {
+//         if (migrationMap[version]) {
+//           const domainData = (rootEditor.data[domain] ??= {})
+//           migrationMap[version](new SchemaEditor(domainData))
+//         }
+//       }
+//     }
+//   })
+//   return rootRecord
+// }
 
 // use this to run migrations
 export class MigrationAggregator {

@@ -1,6 +1,6 @@
 <script lang="ts">
 import { cancelAllKeydowns } from "@main/adapters/ui/components/reactivity/keys.svelte"
-import { onMount, type Snippet } from "svelte"
+import { type Snippet } from "svelte"
 
 type KeyProps = {
   pressable: boolean
@@ -9,9 +9,9 @@ type KeyProps = {
   shadow: "none" | "small" | "base"
   padding: string | null
   fontSize: string | null
-  darkTheme: boolean
+  special: boolean
   point: "cornflower" | "mutedcoral" | "coralorange"
-  pointBgOpposite: boolean
+  onOpposite: boolean
   pointOnHover: boolean
   id?: string
 
@@ -27,9 +27,9 @@ const defaultKeyProps: KeyProps = {
   shadow: "base",
   padding: "0.5em",
   fontSize: "initial",
-  darkTheme: false,
+  special: false,
   point: "cornflower",
-  pointBgOpposite: false,
+  onOpposite: false,
   pointOnHover: false,
 
   onclick: () => {},
@@ -45,9 +45,9 @@ const {
   shadow,
   padding,
   fontSize,
-  darkTheme,
+  special,
   point,
-  pointBgOpposite,
+  onOpposite,
   pointOnHover,
   onclick,
   onmousedown,
@@ -103,8 +103,8 @@ let elem: HTMLElement | null = $state(null)
     id={props.id || undefined}
     class={`keyInner relative mr-0.5 mb-0.5 outline-none`}
     class:pressable
-    class:darkTheme
-    class:pointBgOpposite
+    class:special
+    class:onOpposite
     class:pointOnHover
     class:keydown={isKeyDown}
     class:cornflower={point === "cornflower"}
@@ -130,100 +130,90 @@ let elem: HTMLElement | null = $state(null)
   display: flex;
   justify-content: center;
 
-  box-shadow: 2px 2px var(--primary-8);
-  border: 2px solid var(--primary-8);
-  background: var(--bg);
-  color: var(--primary-9);
-}
-.keyInner.darkTheme {
-  box-shadow: 2px 2px var(--bg);
-  border: 2px solid var(--bg);
-  background: var(--primary-8);
-  color: var(--bg);
-}
+  box-shadow: var(--box-shadow);
+  border: 2px solid;
+  border-color: var(--shadow-border-color);
+  background-color: var(--background-color);
+  color: var(--color);
 
-/* shadow */
-.keyInner.noShadow {
-  box-shadow: none;
-  margin: 0;
-  pointer-events: none;
-}
-.keyInner.smallShadow {
-  margin-right: 2px;
-  margin-bottom: 2px;
-  box-shadow: 2px 2px var(--primary-8);
-}
-.keyInner.smallShadow.darkTheme {
-  box-shadow: 2px 2px var(--bg);
-}
-.keyInner.largeShadow {
-  margin-right: 4px;
-  margin-bottom: 4px;
-  box-shadow: 4px 4px var(--primary-8);
-}
-.keyInner.largeShadow.darkTheme {
-  box-shadow: 4px 4px var(--bg);
-}
+  --box-shadow: var(--box-shadow-lengths) var(--shadow-border-color);
+  --box-shadow-lengths: 2px 2px;
 
-/* keydown */
-/* .keydown {
-  background-color: var(--point-blue) !important;
-} */
-.keydown.cornflower {
-  background-color: var(--point-cornflower-light) !important;
+  /* background button */
+  --shadow-border-color: var(--primary-8);
+  --background-color: var(--bg);
+  --color: var(--primary-9);
+
+  /* card button */
+  &.onOpposite {
+    --shadow-border-color: var(--bg);
+    --background-color: var(--primary-8);
+    --color: var(--bg);
+  }
+
+  /* shadow */
+  &.noShadow {
+    box-shadow: none;
+    margin: 0;
+    pointer-events: none;
+  }
+  &.smallShadow {
+    margin-right: 2px;
+    margin-bottom: 2px;
+  }
+  &.largeShadow {
+    margin-right: 4px;
+    margin-bottom: 4px;
+    --box-shadow-lengths: 4px 4px;
+  }
+
+  /* hover */
+  &.pointOnHover {
+    transition: background-color 0.058s ease-in-out;
+  }
+
+  /* colors */
+  /* cornflower */
+  &.cornflower.keydown,
+  &.cornflower.pointOnHover:hover,
+  &.cornflower.pointOnHover:active {
+    --background-color: var(--point-cornflower-default);
+  }
+  &.cornflower.special.keydown,
+  &.cornflower.onOpposite.pointOnHover:hover,
+  &.cornflower.onOpposite.pointOnHover:active {
+    --background-color: var(--point-cornflower-opposite);
+  }
+  /* mutedcoral */
+  &.mutedcoral.keydown,
+  &.mutedcoral.pointOnHover:hover,
+  &.mutedcoral.pointOnHover:active {
+    --background-color: var(--point-mutedcoral-default);
+  }
+  &.mutedcoral.special.keydown,
+  &.mutedcoral.onOpposite.pointOnHover:hover,
+  &.mutedcoral.onOpposite.pointOnHover:active {
+    --background-color: var(--point-mutedcoral-opposite);
+  }
+  /* coralorange */
+  &.coralorange.keydown,
+  &.coralorange.pointOnHover:hover,
+  &.coralorange.pointOnHover:active {
+    --background-color: var(--point-coralorange-default);
+  }
+  &.coralorange.special.keydown,
+  &.coralorange.onOpposite.pointOnHover:hover,
+  &.coralorange.onOpposite.pointOnHover:active {
+    --background-color: var(--point-coralorange-opposite);
+  }
+
+  /* special */
+  &.special {
+    --background-color: var(--point-cornflower-opposite);
+    --color: var(--bg);
+    --shadow-border-color: var(--bg);
+  }
 }
-.keydown.cornflower.pointBgOpposite {
-  background-color: var(--point-cornflower-dark) !important;
-}
-.keydown.mutedcoral {
-  background-color: var(--point-mutedcoral-light) !important;
-}
-.keydown.mutedcoral.pointBgOpposite {
-  background-color: var(--point-mutedcoral-dark) !important;
-}
-.keydown.coralorange {
-  background-color: var(--point-coralorange-light) !important;
-}
-.keydown.coralorange.pointBgOpposite {
-  background-color: var(--point-coralorange-dark) !important;
-}
-/* hover */
-.keyInner.pointOnHover {
-  transition: background-color 0.058s ease-in-out;
-}
-.pointOnHover.cornflower:hover,
-.pointOnHover.cornflower:active,
-.pointOnHover.cornflower.darkTheme.pointBgOpposite:hover,
-.pointOnHover.cornflower.darkTheme.pointBgOpposite:active {
-  background-color: var(--point-cornflower-light) !important;
-}
-.pointOnHover.cornflower.pointBgOpposite:hover,
-.pointOnHover.cornflower.pointBgOpposite:active {
-  background-color: var(--point-cornflower-dark) !important;
-}
-.pointOnHover.mutedcoral:hover,
-.pointOnHover.mutedcoral:active,
-.pointOnHover.mutedcoral.darkTheme.pointBgOpposite:hover,
-.pointOnHover.mutedcoral.darkTheme.pointBgOpposite:active {
-  background-color: var(--point-mutedcoral-light) !important;
-}
-.pointOnHover.mutedcoral.pointBgOpposite:hover,
-.pointOnHover.mutedcoral.pointBgOpposite:active {
-  background-color: var(--point-mutedcoral-dark) !important;
-}
-.pointOnHover.coralorange:hover,
-.pointOnHover.coralorange:active {
-  background-color: var(--point-coralorange-light) !important;
-}
-.pointOnHover.coralorange:hover,
-.pointOnHover.coralorange:active,
-.pointOnHover.coralorange.darkTheme.pointBgOpposite:hover,
-.pointOnHover.coralorange.darkTheme.pointBgOpposite:active {
-  background-color: var(--point-coralorange-dark) !important;
-}
-/* terracotta? */
-/* #D97757 */
-/* #E8A082 */
 
 /* pressable */
 button:active .keyInner.pressable {
