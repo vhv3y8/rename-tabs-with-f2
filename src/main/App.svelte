@@ -1,124 +1,56 @@
-<script>
-import { onDestroy, onMount } from "svelte"
+<script lang="ts">
+import { onMount } from "svelte"
+import TabList from "./adapters/ui/components/tabs/TabList.svelte"
+import HeaderBar from "./adapters/ui/components/HeaderBar.svelte"
+import NotConnectedCard from "./adapters/ui/components/tabs/NotConnectedCard.svelte"
+import FooterBar from "./adapters/ui/components/FooterBar.svelte"
+import GlobalToastGrid from "./adapters/ui/components/toast/GlobalToastGrid.svelte"
+//
+import { cancelAllKeydowns } from "./adapters/ui/components/reactivity/keys.svelte"
+import { setInjectionsContext } from "./adapters/ui/injections"
+import { initializeViewFromSettings } from "./adapters/ui/components/setting/view"
+import { runBootstrap } from "./bootstrap"
 
-import HeaderBar from "./app/HeaderBar.svelte"
-import BlurDescriptionCard from "./app/BlurDescriptionCard.svelte"
-import TabItem from "./components/TabItem.svelte"
-import FooterBar from "./app/FooterBar.svelte"
-import GlobalToastGrid from "./components/GlobalToastGrid.svelte"
-import Debug from "./app/Debug.svelte"
+// inject to svelte components
+const uiInjections: Awaited<ReturnType<typeof runBootstrap>> = $props()
+setInjectionsContext(uiInjections)
 
-import * as chromeTabs from "../lib/chrome/tabs"
+function keyupReactivityHandler() {
+  cancelAllKeydowns()
+}
 
-import { checkContentScriptAvailableAndUpdateAllInfo } from "./lib/application/usecases/checkContentScriptAvailable"
-import {
-  initializeLastFocusTabId,
-  initializeTabIdxToInfo,
-} from "./lib/application/usecases/initializeTabInfos"
-import { allTabItems, focusTabItem } from "./lib/ui/states/tabs/tabItems.svelte"
-
-import * as view from "./lib/ui/view"
-import {
-  destroySettingsEffect,
-  settings,
-} from "./lib/ui/states/settings.svelte"
-import { tabIdxToInfo } from "./lib/application/tabInfo.svelte"
-import { keydownHandler, keyupHandler } from "./lib/ui/keyboard"
-
-// lifecycle
 onMount(async () => {
-  if (import.meta.env.MODE === "development") console.log("[onMount]")
-  await chromeTabs.focusExtensionPageTabForRefresh()
-
-  // initialize application entities
-  await initializeTabIdxToInfo()
-  await initializeLastFocusTabId()
-
-  // initialize view from storage
-  view.initializeViewFromSettings()
-
-  // update global state
-  await checkContentScriptAvailableAndUpdateAllInfo()
-
-  // initialize view
-  focusTabItem({ initial: true })
-
-  if (import.meta.env.MODE === "development")
-    console.log("[onMount] [tabIdxToInfo]", Object.values(tabIdxToInfo))
-})
-
-onDestroy(() => {
-  destroySettingsEffect()
+  // await ChromeMainFacadeImpl.focusExtensionPageTabForRefresh()
+  initializeViewFromSettings(uiInjections.setting)
 })
 </script>
 
-<!-- Event Handlers -->
-
-<svelte:document onkeydown={keydownHandler} onkeyup={keyupHandler} />
-
 <!-- HTML -->
 
-<main class:large={settings.largerWidth}>
+<svelte:document onkeyup={keyupReactivityHandler} />
+
+<GlobalToastGrid />
+
+<main
+  class:large={uiInjections.setting.largerWidth}
+  class="flex flex-col flex-nowrap grow shrink-0 basis-auto"
+>
   <HeaderBar />
-
-  <!-- <Debug /> -->
-
-  <BlurDescriptionCard />
-
-  <!-- TabItem List -->
-  <ul>
-    {#each Object.values(tabIdxToInfo) as tabInfo, idx}
-      <TabItem bind:this={allTabItems[idx]} {tabInfo} />
-    {/each}
-  </ul>
-
+  <NotConnectedCard />
+  <TabList />
   <FooterBar />
-
-  <!-- Fixed -->
-
-  <GlobalToastGrid />
 </main>
 
 <!-- Style -->
 
 <style>
-/* Common */
-
 :global(body) {
   background-color: var(--bg);
 }
-
-/* Main */
-
 main {
-  flex: 1 0 auto;
-
-  display: flex;
-  flex-flow: column nowrap;
-
   width: min(100%, var(--width-normal));
 }
 main.large {
   width: min(100%, var(--width-large));
-}
-
-/* Tab List */
-ul {
-  flex: 1 1 0px;
-  overflow-y: auto;
-
-  padding: 0;
-  width: 100%;
-
-  padding-right: 1em;
-  box-sizing: border-box;
-}
-
-ul::-webkit-scrollbar {
-  width: 0.6rem;
-}
-ul::-webkit-scrollbar-thumb {
-  background-color: var(--shadow-9);
-  border: 3px solid var(--shadow-9);
 }
 </style>

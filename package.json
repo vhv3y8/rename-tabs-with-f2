@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "MODE=development node vite-build.js",
-    "build:zip": "MODE=production node vite-build.js",
+    "build": "MODE=development node scripts/build.js",
+    "build:zip": "MODE=production node scripts/build.js",
     "test:unit": "vitest",
     "storybook": "storybook dev -p 6006",
     "test:e2e": "playwright test",
@@ -20,9 +20,11 @@
     "@storybook/addon-svelte-csf": "^5.0.10",
     "@storybook/svelte-vite": "^10.0.7",
     "@sveltejs/vite-plugin-svelte": "^4.0.4",
+    "@tailwindcss/vite": "^4.2.2",
     "@testing-library/svelte": "^5.2.9",
     "@types/chrome": "^0.0.279",
     "@types/node": "^24.10.1",
+    "@types/semver": "^7.7.1",
     "culori": "^4.0.2",
     "jsdom": "^27.1.0",
     "postcss": "^8.5.6",
@@ -30,9 +32,13 @@
     "prettier-plugin-svelte": "^3.2.7",
     "storybook": "^10.0.7",
     "svelte": "^5.43.6",
+    "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3",
     "vite": "^5.4.21",
     "vite-plugin-zip-pack": "^1.2.4",
     "vitest": "^4.0.9"
+  },
+  "dependencies": {
+    "semver": "^7.7.4"
   }
 }

@@ -1,0 +1,34 @@
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+* {
+  margin: 0;
+}
+
+html,
+body {
+  width: 100vw;
+  height: 100vh;
+}
+
+body {
+  box-sizing: border-box;
+  padding: 2rem 2rem 1.25rem;
+
+  display: flex;
+  flex-direction: column;
+
+  user-select: none;
+
+  color: var(--primary-9);
+}
+
+#app {
+  flex: 1 0 auto;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

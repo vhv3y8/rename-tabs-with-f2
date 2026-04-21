@@ -1,0 +1,95 @@
+{
+  "header_focus_initial": {
+    "message": "처음으로"
+  },
+  "header_next": {
+    "message": "다음"
+  },
+  "header_previous": {
+    "message": "이전"
+  },
+
+  "footer_save_and_close": {
+    "message": "저장 & 닫기"
+  },
+
+  "settings": {
+    "message": "설정"
+  },
+  "settings_darkmode": {
+    "message": "다크모드"
+  },
+  "settings_larger_width": {
+    "message": "너비 크게"
+  },
+  "settings_hotkey": {
+    "message": "단축키"
+  },
+  "settings_shortcut_listening": {
+    "message": "듣는 중"
+  },
+  "settings_shortcut_reset_to_f2": {
+    "message": "F2로 초기화"
+  },
+  "settings_shortcut_cancel": {
+    "message": "취소"
+  },
+  "settings_shortcut_ok": {
+    "message": "확인"
+  },
+
+  "tips_cannot_connect_to_tab": {
+    "message": "탭에 연결할 수 없습니다.\n브라우저 정책 때문일 수도 있으며, 또는 탭과 이 페이지를 새로고침해서 연결을 재시도하세요."
+  },
+  "tips_shortcut_updated": {
+    "message": "단축키가 '$SHORTCUT$'로 업데이트 되었습니다.\n이미 열려있는 탭에서 사용하고 싶다면, 그 탭을 새로고침하세요!",
+    "placeholders": {
+      "shortcut": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "card_msg": {
+    "message": "$TAB$개의 탭이 연결되지 않았습니다.",
+    "placeholders": {
+      "tab": {
+        "content": "$1"
+      },
+      "plural": {
+        "content": "$2"
+      }
+    }
+  },
+  "card_btn_dismiss": {
+    "message": "숨기기"
+  },
+  "card_btn_reload_all": {
+    "message": "연결 가능한 탭들 모두 새로고침"
+  },
+  "card_reloading": {
+    "message": "새로고침 하는 중..."
+  },
+  "card_connectable": {
+    "message": "탭 새로고침으로 연결 가능 (탭 $TAB$개)",
+    "placeholders": {
+      "tab": {
+        "content": "$1"
+      },
+      "plural": {
+        "content": "$2"
+      }
+    }
+  },
+  "card_blocked": {
+    "message": "브라우저 정책으로 막힘 (탭 $TAB$개)",
+    "placeholders": {
+      "tab": {
+        "content": "$1"
+      },
+      "plural": {
+        "content": "$2"
+      }
+    }
+  }
+}
