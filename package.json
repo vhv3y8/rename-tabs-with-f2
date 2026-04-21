@@ -19,7 +19,7 @@
     "@playwright/test": "^1.56.1",
     "@storybook/addon-svelte-csf": "^5.0.10",
     "@storybook/svelte-vite": "^10.0.7",
-    "@sveltejs/vite-plugin-svelte": "^4.0.4",
+    "@sveltejs/vite-plugin-svelte": "^7.0.0",
     "@tailwindcss/vite": "^4.2.2",
     "@testing-library/svelte": "^5.2.9",
     "@types/chrome": "^0.0.279",
@@ -35,7 +35,7 @@
     "svelte": "^5.43.6",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3",
-    "vite": "^5.4.21",
+    "vite": "^8.0.9",
     "vite-plugin-zip-pack": "^1.2.4",
     "vitest": "^4.0.9"
   },

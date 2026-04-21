@@ -2,11 +2,14 @@ import type { TabInfoStore } from "@application/ports/TabInfoStore"
 import type { TabInfo } from "@domain/entities/TabInfo"
 
 export interface TabInfoState extends TabInfo {
+  initialTitle: string
   hasChanged: boolean
 }
 export class TabIdxInfoRecord implements Partial<TabInfoStore> {
   record: Record<number, TabInfoState> = $state({})
+  allTabInfos: TabInfoState[]
   constructor() {
+    this.allTabInfos = $derived(Object.values(this.record))
     $effect.root(() => {
       $effect(() => {
         console.log("[tab info state record]", this.record)
@@ -15,20 +18,15 @@ export class TabIdxInfoRecord implements Partial<TabInfoStore> {
   }
 
   getAllTabInfos() {
-    return Object.values(this.record)
+    return this.allTabInfos
   }
   getTabInfosToApply() {
-    return this.getAllTabInfos().filter(
+    return this.allTabInfos.filter(
       (tabInfo) => tabInfo.hasChanged && tabInfo.connected,
     )
   }
-  getAllTabIds() {
-    return Object.keys(this.record).map((key) => parseInt(key))
-  }
   getById(tabId: number) {
-    let filtered = this.getAllTabInfos().filter(
-      ({ id }) => id === Number(tabId),
-    )
+    let filtered = this.allTabInfos.filter(({ id }) => id === Number(tabId))
     if (filtered.length === 0) return null
     else return filtered[0]
   }
@@ -40,6 +38,7 @@ export class TabIdxInfoRecord implements Partial<TabInfoStore> {
         acc[index] = {
           id,
           title,
+          initialTitle: title,
           favIconUrl,
           url,
           status,
@@ -55,7 +54,6 @@ export class TabIdxInfoRecord implements Partial<TabInfoStore> {
     this.record = { ...tabInfoStateRecord }
   }
   setConnectedFlag(idx: number, connected: boolean) {
-    // const tabInfo = this.record[idx]
     if (!this.record[idx]) return
     console.log("[tab info store] [setting flag]", {
       tabInfo: this.record[idx],

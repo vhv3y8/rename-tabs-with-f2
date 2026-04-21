@@ -1,5 +1,5 @@
 import type { TabInfoStore } from "../ports/TabInfoStore"
-import type { PlatformMainFacade } from "../ports/PlatformMainFacade"
+import type { PlatformMainFacade } from "../ports/infra/PlatformMainFacade"
 import type { TabInfoState } from "@main/adapters/ui/components/tabs/states/tabInfoRecord.svelte"
 import type { TabInfo } from "@main/domain/entities/TabInfo"
 

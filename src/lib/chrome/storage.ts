@@ -9,11 +9,9 @@ import {
 } from "../models/Setting"
 import * as semver from "semver"
 
-export const chromeInitialSetting: Setting = {
-  ...initialSettingPartial,
-}
 const INITIAL_STORAGE = {
-  settings: chromeInitialSetting,
+  settings: initialSettingPartial,
+  titles: {},
 }
 
 const ChromeStorage = {

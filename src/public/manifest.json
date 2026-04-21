@@ -2,12 +2,12 @@
   "manifest_version": 3,
   "name": "Rename Tabs with F2",
   "version": "1.3.0",
-  "description": "Rename opened tabs using the F2 keyboard shortcut.",
+  "description": "Rename tab titles at extension page that can be opened with F2 keyboard shortcut.",
   "icons": {
     "128": "icon128.png"
   },
   "default_locale": "en",
-  "permissions": ["tabs", "storage"],
+  "permissions": ["tabs", "storage", "unlimitedStorage"],
   "background": {
     "service_worker": "sw.js",
     "type": "module"

@@ -47,6 +47,7 @@ const commonConfig = {
     outDir: buildDist2ForTest ? "../dist2" : "../dist",
     rollupOptions: {
       output: {
+        assetFileNames: "[name][extname]",
         entryFileNames: "[name].js", // applied to js files
       },
     },

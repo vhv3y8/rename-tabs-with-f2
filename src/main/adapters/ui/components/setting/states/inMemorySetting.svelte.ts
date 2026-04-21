@@ -1,5 +1,5 @@
 import { type Setting } from "@lib/models/Setting"
-import type { PlatformMainFacade } from "@main/application/ports/PlatformMainFacade"
+import type { PlatformMainFacade } from "@main/application/ports/infra/PlatformMainFacade"
 
 export class InMemorySetting {
   setting: Setting

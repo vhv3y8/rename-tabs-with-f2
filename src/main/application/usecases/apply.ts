@@ -1,6 +1,6 @@
 // import { tabIdxInfoStore } from "@main/bootstrap"
 import type { TabInfoStore } from "../ports/TabInfoStore"
-import type { PlatformMainFacade } from "../ports/PlatformMainFacade"
+import type { PlatformMainFacade } from "../ports/infra/PlatformMainFacade"
 
 export interface ApplyLifeCycle {
   beforeStart?(): void

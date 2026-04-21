@@ -2,7 +2,7 @@ import { type Setting } from "@lib/models/Setting"
 import ChromeRuntime from "@lib/chrome/runtime"
 import ChromeStorage from "@lib/chrome/storage"
 import ChromeTabs from "@lib/chrome/tabs"
-import type { PlatformMainFacade } from "@main/application/ports/PlatformMainFacade"
+import type { PlatformMainFacade } from "@main/application/ports/infra/PlatformMainFacade"
 
 class ChromeMainFacade implements PlatformMainFacade {
   // tabs

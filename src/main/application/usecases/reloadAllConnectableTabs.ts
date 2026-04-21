@@ -1,4 +1,4 @@
-import type { PlatformMainFacade } from "../ports/PlatformMainFacade"
+import type { PlatformMainFacade } from "../ports/infra/PlatformMainFacade"
 import type { TabInfoStore } from "../ports/TabInfoStore"
 import type { CheckAllTabConnectionUseCase } from "./checkAllTabConnection"
 

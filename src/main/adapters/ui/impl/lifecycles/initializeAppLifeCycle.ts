@@ -1,4 +1,4 @@
-import type { PlatformMainFacade } from "@main/application/ports/PlatformMainFacade"
+import type { PlatformMainFacade } from "@main/application/ports/infra/PlatformMainFacade"
 import type { InitializeAppLifeCycle } from "@main/application/usecases/initializeApp"
 import { tabItemComponents } from "../../components/tabs/states/tabItemComponents.svelte"
 

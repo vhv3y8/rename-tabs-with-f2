@@ -11,7 +11,7 @@ import {
   createClickReloadUseCaseHandler,
   createKeydownReloadUseCaseHandler,
 } from "./adapters/ui/input/reload"
-import type { PlatformMainFacade } from "./application/ports/PlatformMainFacade"
+import type { PlatformMainFacade } from "./application/ports/infra/PlatformMainFacade"
 import type { TabInfoStore } from "./application/ports/TabInfoStore"
 import {
   createApplyUseCase,
