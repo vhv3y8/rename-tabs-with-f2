@@ -22,6 +22,9 @@
   "settings_larger_width": {
     "message": "Larger Width"
   },
+  "settings_pointcolor": {
+    "message": "Point Color"
+  },
   "settings_hotkey": {
     "message": "Shortcut"
   },

@@ -61,7 +61,7 @@ const { keydownApplyHandler, clickApplyHandler, setting } = getInjections()
       isKeyDown: keydowns.ctrlEnter,
       padding: null,
       fontSize: "18px",
-      pointBgOpposite: setting.darkmode,
+      point: setting.pointColor,
       onclick: clickApplyHandler,
     }}>Ctrl + Enter</Key
   >

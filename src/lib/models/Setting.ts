@@ -10,6 +10,7 @@ export type HotKey = {
 export type Setting = {
   darkmode: boolean
   largerWidth: boolean
+  pointColor: "cornflower" | "mutedcoral" | "coralorange"
   hotkey: HotKey
 }
 
@@ -24,8 +25,9 @@ export const F2HotKey: HotKey = {
 export const initialSettingPartial = {
   darkmode: false,
   largerWidth: false,
+  pointColor: "cornflower",
   hotkey: F2HotKey,
-} satisfies Partial<Setting>
+} satisfies Setting
 
 export const settingMigrationMap: TargetVersionMigrationRecord = {
   "1.3.0": (editor) => editor.map("shortcut", "hotkey"),

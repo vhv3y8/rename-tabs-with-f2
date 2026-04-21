@@ -180,6 +180,7 @@ let elem: HTMLElement | null = $state(null)
     --background-color: var(--point-cornflower-default);
   }
   &.cornflower.special.keydown,
+  &.cornflower.onOpposite.keydown,
   &.cornflower.onOpposite.pointOnHover:hover,
   &.cornflower.onOpposite.pointOnHover:active {
     --background-color: var(--point-cornflower-opposite);
@@ -191,6 +192,7 @@ let elem: HTMLElement | null = $state(null)
     --background-color: var(--point-mutedcoral-default);
   }
   &.mutedcoral.special.keydown,
+  &.mutedcoral.onOpposite.keydown,
   &.mutedcoral.onOpposite.pointOnHover:hover,
   &.mutedcoral.onOpposite.pointOnHover:active {
     --background-color: var(--point-mutedcoral-opposite);
@@ -202,6 +204,7 @@ let elem: HTMLElement | null = $state(null)
     --background-color: var(--point-coralorange-default);
   }
   &.coralorange.special.keydown,
+  &.coralorange.onOpposite.keydown,
   &.coralorange.onOpposite.pointOnHover:hover,
   &.coralorange.onOpposite.pointOnHover:active {
     --background-color: var(--point-coralorange-opposite);
@@ -209,9 +212,18 @@ let elem: HTMLElement | null = $state(null)
 
   /* special */
   &.special {
-    --background-color: var(--point-cornflower-opposite);
     --color: var(--bg);
     --shadow-border-color: var(--bg);
+
+    &.cornflower {
+      --background-color: var(--point-cornflower-opposite);
+    }
+    &.coralorange {
+      --background-color: var(--point-coralorange-opposite);
+    }
+    &.mutedcoral {
+      --background-color: var(--point-mutedcoral-opposite);
+    }
   }
 }
 

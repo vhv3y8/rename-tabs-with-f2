@@ -61,10 +61,7 @@ function keydownDismissHandler(e: KeyboardEvent) {
         <div class="close containsKeyBtn">
           {chrome.i18n.getMessage("card_btn_dismiss")} : <Key
             props={{
-              // darkTheme: true,
-              // point: "coralorange",
-              // onOpposite: setting.darkmode,
-              point: "cornflower",
+              point: setting.pointColor,
               onOpposite: true,
               pointOnHover: true,
               shadow: "small",
@@ -115,12 +112,13 @@ function keydownDismissHandler(e: KeyboardEvent) {
                     shadow: "none",
                     padding: "0.4em",
                     fontSize: "15px",
+                    point: setting.pointColor,
                   }}>{chrome.i18n.getMessage("card_reloading")}</Key
                 >
               {:else}
                 {chrome.i18n.getMessage("card_btn_reload_all")} : <Key
                   props={{
-                    point: "cornflower",
+                    point: setting.pointColor,
                     onOpposite: true,
                     pointOnHover: true,
                     shadow: "small",

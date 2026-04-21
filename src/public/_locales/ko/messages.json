@@ -22,6 +22,9 @@
   "settings_larger_width": {
     "message": "너비 크게"
   },
+  "settings_pointcolor": {
+    "message": "포인트 색상"
+  },
   "settings_hotkey": {
     "message": "단축키"
   },

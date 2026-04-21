@@ -3,6 +3,7 @@ import Popover from "@infra/ui/components/Popover.svelte"
 import DarkModeEntry from "./modalEntries/DarkModeEntry.svelte"
 import LargerWidthEntry from "./modalEntries/LargerWidthEntry.svelte"
 import HotKeyEntry from "./modalEntries/HotKeyEntry.svelte"
+import PointColorEntry from "./modalEntries/PointColorEntry.svelte"
 
 let { onclose } = $props()
 </script>
@@ -11,6 +12,7 @@ let { onclose } = $props()
 
 <Popover {onclose} directionDown={false}>
   <ul id="settingsPopoverContent">
+    <PointColorEntry />
     <DarkModeEntry />
     <LargerWidthEntry />
     <HotKeyEntry />
