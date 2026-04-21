@@ -173,7 +173,14 @@ export function createChromeReloadLifeCycle(
         console.log(
           "[reload lifecycle] [after finish] [not all complete] [waiting...]",
         )
-        await waitUntil(() => reload.allComplete, true)
+        // await waitUntil(() => reload.allComplete, true)
+        await waitUntil(
+          () =>
+            Object.values(reload.reloadingTabIdxStatusRecord)
+              .map(({ status }) => status)
+              .every((status) => status === "complete"),
+          true,
+        )
         console.log("[reload lifecycle] [after finish] [all complete!]")
         await checkAllTabConnectionAndUpdateFlags()
         console.log(

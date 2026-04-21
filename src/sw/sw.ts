@@ -79,7 +79,7 @@ chrome.tabs.onRemoved.addListener(async (tabId, { windowId }) => {
 chrome.runtime.onInstalled.addListener(({ reason, previousVersion }) => {
   if (reason === "install") {
     console.log("[installed]")
-    ChromeStorage.initializeStorage(ChromeStorage.INITIAL_STORAGE).then(() => {
+    ChromeStorage.initializeStorage().then(() => {
       ChromeTabs.create.openMainPage()
     })
   } else if (reason === "update") {
@@ -88,6 +88,9 @@ chrome.runtime.onInstalled.addListener(({ reason, previousVersion }) => {
       previousVersion,
       typeof previousVersion,
     )
-    // ChromeStorage.migrateStorage(ChromeStorage.INITIAL_STORAGE)
+    ChromeStorage.migrateStorage(
+      // maybe | "1.0.0" ?
+      previousVersion!,
+    )
   }
 })

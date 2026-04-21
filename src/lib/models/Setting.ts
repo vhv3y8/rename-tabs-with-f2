@@ -27,12 +27,6 @@ export const initialSettingPartial = {
   hotkey: F2HotKey,
 } satisfies Partial<Setting>
 
-// maybe use chrome.runtime.onInstalled "update" previousVersion
-// for versions before 1.3
-// export function resolveSettingExtVersionForLegacy(
-//   settingData: any,
-// ): "1.0.0" | "1.1.0" | "1.2.0" | "1.2.1" {}
-
 export const settingMigrationMap: TargetVersionMigrationRecord = {
   "1.3.0": (editor) => editor.map("shortcut", "hotkey"),
 }

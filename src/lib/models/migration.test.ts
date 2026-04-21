@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest"
 
 import {
-  fillMissingDeeply,
+  fillMissingDeeplyAfterMigration,
   MigrationAggregator,
   SchemaEditor,
   type TargetVersionMigrationRecord,
 } from "./migration"
 
-describe("fillMissingDeeply", () => {
+describe("fillMissingDeeplyAfterMigration", () => {
   it("fills only missing fields while preserving existing values", () => {
     const userData = {
       enabled: false,
@@ -23,7 +23,7 @@ describe("fillMissingDeeply", () => {
         missing: 2,
       },
     }
-    const result = fillMissingDeeply(userData, updatedDefault)
+    const result = fillMissingDeeplyAfterMigration(userData, updatedDefault)
     expect(result).toBe(userData)
     expect(result).toEqual({
       enabled: false,
@@ -35,7 +35,7 @@ describe("fillMissingDeeply", () => {
     })
   })
   it("normalizes null userData to an object", () => {
-    const result = fillMissingDeeply(null, {
+    const result = fillMissingDeeplyAfterMigration(null, {
       nested: { value: 1 },
     })
     expect(result).toEqual({
@@ -43,7 +43,7 @@ describe("fillMissingDeeply", () => {
     })
   })
   it("keeps existing arrays and fills missing arrays", () => {
-    const result = fillMissingDeeply(
+    const result = fillMissingDeeplyAfterMigration(
       {
         arr: [1],
       },
@@ -58,13 +58,15 @@ describe("fillMissingDeeply", () => {
     })
   })
   it("returns normalized userData unchanged when updatedDefault is not an object", () => {
-    expect(fillMissingDeeply({ a: 1 }, null)).toEqual({ a: 1 })
-    expect(fillMissingDeeply({ a: 1 }, "invalid" as any)).toEqual({ a: 1 })
+    expect(fillMissingDeeplyAfterMigration({ a: 1 }, null)).toEqual({ a: 1 })
+    expect(fillMissingDeeplyAfterMigration({ a: 1 }, "invalid" as any)).toEqual(
+      { a: 1 },
+    )
   })
   it("throws for non-serializable default values", () => {
     const cyclic: any = { a: 1 }
     cyclic.self = cyclic
-    expect(() => fillMissingDeeply({}, cyclic)).toThrowError(
+    expect(() => fillMissingDeeplyAfterMigration({}, cyclic)).toThrowError(
       /JSON-serializable/,
     )
   })
@@ -109,7 +111,7 @@ describe("fillMissingDeeply", () => {
       },
       version: 3,
     }
-    const result = fillMissingDeeply(userData, updatedDefault)
+    const result = fillMissingDeeplyAfterMigration(userData, updatedDefault)
     expect(result).toEqual({
       settings: {
         appearance: {
