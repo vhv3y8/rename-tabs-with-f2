@@ -13,12 +13,12 @@ export function createCheckAllTabConnectionAndUpdateFlags(
     console.log("[checking all tab connections]")
     const allTabInfos = tabInfoStore.getAllTabInfos()
 
-    // check
     type TabConnectionReturn = {
       index: number
       id: number
       isConnected: boolean
     }
+    // check
     const tabConnectionResults = await Promise.allSettled(
       allTabInfos.map(async ({ id, index }) => {
         // defaults to false

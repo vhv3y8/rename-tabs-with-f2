@@ -18,4 +18,8 @@ export interface PlatformMainFacade {
   // storage
   getSettings(): Promise<Setting>
   setSettings(setting: Setting): Promise<unknown>
+
+  // TODO
+  // getTitles(): Promise<Setting>
+  // setTitles(setting: Setting): Promise<unknown>
 }

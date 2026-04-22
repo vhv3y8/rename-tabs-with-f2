@@ -57,6 +57,15 @@ const ChromeStorage = {
       return chrome.storage.local.set({ settings })
     },
   },
+  titles: {
+    async getTitles() {
+      return chrome.storage.local.get(["titles"]).then((db) => db.titles)
+    },
+    // TODO
+    async setTitles(titles: unknown) {
+      return chrome.storage.local.set({ titles })
+    },
+  },
 }
 
 export default ChromeStorage

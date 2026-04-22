@@ -25,29 +25,32 @@
   "settings_pointcolor": {
     "message": "포인트 색상"
   },
+  "settings_persist_apply": {
+    "message": "탭 이름 저장 & 적용"
+  },
   "settings_hotkey": {
     "message": "단축키"
   },
-  "settings_shortcut_listening": {
+  "settings_hotkey_listening": {
     "message": "듣는 중"
   },
-  "settings_shortcut_reset_to_f2": {
+  "settings_hotkey_reset_to_f2": {
     "message": "F2로 초기화"
   },
-  "settings_shortcut_cancel": {
+  "settings_hotkey_cancel": {
     "message": "취소"
   },
-  "settings_shortcut_ok": {
+  "settings_hotkey_ok": {
     "message": "확인"
   },
 
   "tips_cannot_connect_to_tab": {
     "message": "탭에 연결할 수 없습니다.\n브라우저 정책 때문일 수도 있으며, 또는 탭과 이 페이지를 새로고침해서 연결을 재시도하세요."
   },
-  "tips_shortcut_updated": {
+  "tips_hotkey_updated": {
     "message": "단축키가 '$SHORTCUT$'로 업데이트 되었습니다.\n이미 열려있는 탭에서 사용하고 싶다면, 그 탭을 새로고침하세요!",
     "placeholders": {
-      "shortcut": {
+      "hotkey": {
         "content": "$1"
       }
     }

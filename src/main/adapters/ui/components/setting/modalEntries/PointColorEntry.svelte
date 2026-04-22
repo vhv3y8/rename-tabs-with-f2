@@ -24,7 +24,7 @@ let currentIdx = $state(initialIdx)
 >
   <Key
     props={{
-      fontSize: "17px",
+      fontSize: "18px",
       isKeyDown: true,
       point: pointColorList[currentIdx],
       onclick: () => {

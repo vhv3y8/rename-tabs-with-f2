@@ -1,8 +1,8 @@
-import type { CheckAllTabConnectionUseCase } from "./checkAllTabConnection"
+import type { CheckAllTabConnectionUseCase } from "../checkAllTabConnection"
 import type { InitializeTabInfoStoreUseCase } from "./initializeTabInfoStore"
 
 export interface InitializeAppLifeCycle {
-  afterStoreInitialized?(): Promise<void>
+  afterStoresInitialized?(): Promise<void>
 }
 export type InitializeAppUseCase = ReturnType<typeof createInitializeAppUseCase>
 
@@ -16,6 +16,6 @@ export function createInitializeAppUseCase(
     await initializeTabInfoStoreUseCase()
     await checkAllTabConnectionAndUpdateFlagsUseCase()
 
-    lifeCycle.afterStoreInitialized?.()
+    lifeCycle.afterStoresInitialized?.()
   }
 }

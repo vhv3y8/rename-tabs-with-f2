@@ -25,29 +25,32 @@
   "settings_pointcolor": {
     "message": "Point Color"
   },
+  "settings_persist_apply": {
+    "message": "Persist & Apply Tab Titles"
+  },
   "settings_hotkey": {
     "message": "Shortcut"
   },
-  "settings_shortcut_listening": {
+  "settings_hotkey_listening": {
     "message": "Listening"
   },
-  "settings_shortcut_reset_to_f2": {
+  "settings_hotkey_reset_to_f2": {
     "message": "Reset to F2"
   },
-  "settings_shortcut_cancel": {
+  "settings_hotkey_cancel": {
     "message": "Cancel"
   },
-  "settings_shortcut_ok": {
+  "settings_hotkey_ok": {
     "message": "OK"
   },
 
   "tips_cannot_connect_to_tab": {
     "message": "Cannot connect to the tab.\nIt might be because of the browser policy, or try refreshing the tab and this page to reconnect."
   },
-  "tips_shortcut_updated": {
+  "tips_hotkey_updated": {
     "message": "Shortcut is updated to '$SHORTCUT$'.\nIf you want to use it at existing tabs, you have to refresh that tab!",
     "placeholders": {
-      "shortcut": {
+      "hotkey": {
         "content": "$1"
       }
     }

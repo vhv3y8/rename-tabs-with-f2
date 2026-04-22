@@ -26,11 +26,11 @@ import {
   createInitializeAppUseCase,
   type InitializeAppLifeCycle,
   type InitializeAppUseCase,
-} from "./application/usecases/initializeApp"
+} from "./application/usecases/initialize/initializeApp"
 import {
   createInitializeTabInfoStore,
   type InitializeTabInfoStoreUseCase,
-} from "./application/usecases/initializeTabInfoStore"
+} from "./application/usecases/initialize/initializeTabInfoStore"
 import {
   createReloadAllConnectableTabs,
   type ReloadAllConnectableTabsUseCase,
