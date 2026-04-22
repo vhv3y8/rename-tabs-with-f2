@@ -1,7 +1,8 @@
 <script>
 import { fade, fly, scale } from "svelte/transition"
-import { toasts } from "./toasts.svelte"
+import { getInjections } from "../../injections"
 
+const { toasts } = getInjections()
 let { text, id } = $props()
 </script>
 

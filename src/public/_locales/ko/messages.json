@@ -16,6 +16,16 @@
   "settings": {
     "message": "설정"
   },
+  "settings_cancel": {
+    "message": "취소"
+  },
+  "settings_ok": {
+    "message": "확인"
+  },
+  "settings_done": {
+    "message": "완료"
+  },
+
   "settings_darkmode": {
     "message": "다크모드"
   },
@@ -28,6 +38,27 @@
   "settings_persist_apply": {
     "message": "탭 이름 저장 & 적용"
   },
+
+  "tooltip_persist_apply_off_data_remains": {
+    "message": "이 옵션을 꺼도 기존의 탭 이름 데이터들은 유지됩니다."
+  },
+
+  "settings_upload_titles_file": {
+    "message": "파일 로드"
+  },
+  "settings_save_titles_file": {
+    "message": "파일 저장"
+  },
+  "settings_resolve_conflicts": {
+    "message": "충돌 해결"
+  },
+  "settings_resolve_conflicts_all_existing": {
+    "message": "모두 기존"
+  },
+  "settings_resolve_conflicts_all_uploaded": {
+    "message": "모두 새로"
+  },
+
   "settings_hotkey": {
     "message": "단축키"
   },
@@ -37,17 +68,8 @@
   "settings_hotkey_reset_to_f2": {
     "message": "F2로 초기화"
   },
-  "settings_hotkey_cancel": {
-    "message": "취소"
-  },
-  "settings_hotkey_ok": {
-    "message": "확인"
-  },
 
-  "tips_cannot_connect_to_tab": {
-    "message": "탭에 연결할 수 없습니다.\n브라우저 정책 때문일 수도 있으며, 또는 탭과 이 페이지를 새로고침해서 연결을 재시도하세요."
-  },
-  "tips_hotkey_updated": {
+  "toast_hotkey_updated": {
     "message": "단축키가 '$SHORTCUT$'로 업데이트 되었습니다.\n이미 열려있는 탭에서 사용하고 싶다면, 그 탭을 새로고침하세요!",
     "placeholders": {
       "hotkey": {
@@ -55,8 +77,26 @@
       }
     }
   },
+  "toast_upload_titles_file_cancel": {
+    "message": "파일 업로드 취소:\n선택된 파일이 적용되지 않았습니다."
+  },
+  "toast_upload_titles_file_success": {
+    "message": "파일 업로드 성공:\n탭 이름 데이터가 성공적으로 기존 데이터들에 추가되었습니다."
+  },
+  "toast_upload_titles_file_inappropriate_format": {
+    "message": "부적절한 파일 포맷:\n선택된 파일이 유효하지 않습니다."
+  },
+  "toast_persist_apply_off_data_remains": {
+    "message": "탭 이름 저장 & 적용 옵션을 껐음:\n기존의 탭 이름 데이터들은 남아있지만, 추가 저장 및 적용은 이루어지지 않습니다."
+  },
 
-  "card_msg": {
+  "not_connected_description_not_plural": {
+    "message": " is"
+  },
+  "not_connected_description_plural": {
+    "message": "s are"
+  },
+  "not_connected_description": {
     "message": "$TAB$개의 탭이 연결되지 않았습니다.",
     "placeholders": {
       "tab": {
@@ -67,16 +107,20 @@
       }
     }
   },
-  "card_btn_dismiss": {
+  "not_connected_dismiss": {
     "message": "숨기기"
   },
-  "card_btn_reload_all": {
+  "not_connected_reload_all": {
     "message": "연결 가능한 탭들 모두 새로고침"
   },
-  "card_reloading": {
-    "message": "새로고침 하는 중..."
+  "not_connected_reloading": {
+    "message": "새로고침 하는 중"
   },
-  "card_connectable": {
+
+  "not_connected_count_plural": {
+    "message": ""
+  },
+  "not_connected_connectable": {
     "message": "탭 새로고침으로 연결 가능 (탭 $TAB$개)",
     "placeholders": {
       "tab": {
@@ -87,7 +131,7 @@
       }
     }
   },
-  "card_blocked": {
+  "not_connected_policy_blocked": {
     "message": "브라우저 정책으로 막힘 (탭 $TAB$개)",
     "placeholders": {
       "tab": {

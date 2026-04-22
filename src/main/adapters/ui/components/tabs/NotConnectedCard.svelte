@@ -52,14 +52,16 @@ function keydownDismissHandler(e: KeyboardEvent) {
       <div class="header">
         <span style:font-size="1rem">
           <!-- TODO: fix -->
-          {chrome.i18n.getMessage("card_msg", [
+          {chrome.i18n.getMessage("not_connected_description", [
             allCount.toString(),
-            1 < allCount ? "s are" : " is",
+            1 < allCount
+              ? chrome.i18n.getMessage("note_connected_description_plural")
+              : chrome.i18n.getMessage("note_connected_description_not_plural"),
           ])}
         </span>
 
         <div class="close containsKeyBtn">
-          {chrome.i18n.getMessage("card_btn_dismiss")} : <Key
+          {chrome.i18n.getMessage("not_connected_dismiss")} : <Key
             props={{
               point: setting.pointColor,
               onOpposite: true,
@@ -80,7 +82,9 @@ function keydownDismissHandler(e: KeyboardEvent) {
             <p class="description">
               {chrome.i18n.getMessage("card_connectable", [
                 reloadCount.toString(),
-                1 < reloadCount ? "s" : "",
+                1 < reloadCount
+                  ? chrome.i18n.getMessage("not_connected_count_plural")
+                  : "",
               ])} :
             </p>
             <p class="titles">
@@ -113,10 +117,10 @@ function keydownDismissHandler(e: KeyboardEvent) {
                     padding: "0.4em",
                     fontSize: "15px",
                     point: setting.pointColor,
-                  }}>{chrome.i18n.getMessage("card_reloading")}</Key
+                  }}>{chrome.i18n.getMessage("not_connected_reloading")}</Key
                 >
               {:else}
-                {chrome.i18n.getMessage("card_btn_reload_all")} : <Key
+                {chrome.i18n.getMessage("not_connected_reload_all")} : <Key
                   props={{
                     point: setting.pointColor,
                     onOpposite: true,
@@ -136,9 +140,11 @@ function keydownDismissHandler(e: KeyboardEvent) {
         {#if 0 < policyCount}
           <li>
             <p class="description">
-              {chrome.i18n.getMessage("card_blocked", [
+              {chrome.i18n.getMessage("not_connected_policy_blocked", [
                 policyCount.toString(),
-                1 < policyCount ? "s" : "",
+                1 < policyCount
+                  ? chrome.i18n.getMessage("not_connected_count_plural")
+                  : "",
               ])} :
             </p>
             <p class="titles">

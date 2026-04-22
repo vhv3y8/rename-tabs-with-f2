@@ -3,6 +3,7 @@ import { DOMApplyLifeCycle } from "./adapters/ui/impl/lifecycles/applyLifeCycle"
 import { createInitializeAppLifeCycle } from "./adapters/ui/impl/lifecycles/initializeAppLifeCycle"
 import { createChromeSvelteReloadLifeCycle } from "./adapters/ui/impl/lifecycles/reloadLifeCycle"
 import { TabIdxInfoRecordStore } from "./adapters/ui/impl/tabInfoStore.svelte"
+import { Toasts } from "./adapters/ui/impl/toastPublisher.svelte"
 import {
   createClickApplyHandler,
   createKeydownApplyHandler,
@@ -12,6 +13,7 @@ import {
   createKeydownReloadUseCaseHandler,
 } from "./adapters/ui/input/reload"
 import type { PlatformMainFacade } from "./application/ports/infra/PlatformMainFacade"
+import type { ToastPublisher } from "./application/ports/infra/ToastPublisher"
 import type { TabInfoStore } from "./application/ports/TabInfoStore"
 import {
   createApplyUseCase,
@@ -41,6 +43,7 @@ import { ChromeFacade } from "./infra/platform/impl/ChromeMainFacade"
 export async function runBootstrap() {
   // create infra impl
   const extensionFacade = ChromeFacade satisfies PlatformMainFacade
+  const toastPublisher: ToastPublisher = new Toasts()
 
   // create output adapter impl
   const tabIdxInfoStore = new TabIdxInfoRecordStore() satisfies TabInfoStore
@@ -101,6 +104,7 @@ export async function runBootstrap() {
 
   // detailed instances to DI into ui components
   return {
+    toasts: toastPublisher,
     // output adapters
     tabIdxInfoStore,
     notConnected,

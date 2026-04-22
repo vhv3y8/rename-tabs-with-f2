@@ -1,12 +1,19 @@
+import type {
+  ToastItem,
+  ToastPublisher,
+} from "@main/application/ports/infra/ToastPublisher"
+
 export const TOAST_MESSAGES = {
   SHORTCUT_UPDATED: (shortcutText: string) =>
     chrome.i18n.getMessage("tips_shortcut_updated", shortcutText),
   ERROR: (errorText: string, errorType: string = "") =>
     `${0 < errorType.length ? errorType + " " : ""}Error:\n${errorText}`,
+  // load file
+  CANCEL_LOAD_FILE: chrome.i18n.getMessage("tips_cancel_load_file"),
 }
 
-type ToastItem = { id: number; text: any; duration: number }
-export class Toasts {
+// type ToastItem = { id: number; text: any; duration: number }
+export class Toasts implements ToastPublisher {
   list: ToastItem[] = $state([])
   private timers: Map<number, ReturnType<typeof setTimeout>> = new Map()
   private nextId = 1
@@ -18,7 +25,7 @@ export class Toasts {
     // })
   }
 
-  appendToast(text: string): number {
+  publishToast(text: string): number {
     const toastId = this.nextId
     console.log("[appending toast]", {
       id: toastId,
@@ -51,5 +58,8 @@ export class Toasts {
       }
     }
   }
+  getAll() {
+    return this.list
+  }
 }
-export const toasts = new Toasts()
+// export const toasts = new Toasts()

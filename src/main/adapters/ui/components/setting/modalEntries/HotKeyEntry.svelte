@@ -6,16 +6,16 @@ import {
   stringifyShortcut,
 } from "@lib/shortcut"
 import ModalEntry from "../ModalEntry.svelte"
-import { TOAST_MESSAGES, toasts } from "../../toast/toasts.svelte"
+import { TOAST_MESSAGES } from "../../../impl/toastPublisher.svelte"
 import { settingModal } from "../states/settingModal.svelte"
 import { F2HotKey } from "@lib/models/Setting"
 import { getInjections } from "@main/adapters/ui/injections"
 
-const { setting } = getInjections()
+const { setting, toasts } = getInjections()
 const settingHotkeyText = $derived.by(() => {
   if (!setting.hotkey) {
     console.error("[Rename Tabs with F2] Storage Error: 'shortcut' not found")
-    toasts.appendToast(TOAST_MESSAGES.ERROR("'shortcut' not found", "Storage"))
+    toasts.publishToast(TOAST_MESSAGES.ERROR("'shortcut' not found", "Storage"))
     return "N/A"
   }
   return stringifyShortcut(setting.hotkey)
@@ -34,7 +34,7 @@ function handleListenHotKey(e: KeyboardEvent) {
 
 function publishToast() {
   console.log("[publishing hotkey update toast]", localHotKeyText)
-  toasts.appendToast(TOAST_MESSAGES.SHORTCUT_UPDATED(localHotKeyText))
+  toasts.publishToast(TOAST_MESSAGES.SHORTCUT_UPDATED(localHotKeyText))
 }
 </script>
 
@@ -53,7 +53,7 @@ function publishToast() {
     <!-- Listening / current hotkey input -->
     <div class="listenShortcutText w-full box-border text-center">
       <p id="listening">
-        {chrome.i18n.getMessage("settings_shortcut_listening")}...
+        {chrome.i18n.getMessage("settings_hotkey_listening")}...
       </p>
 
       <p id="hotkeyText">
@@ -74,7 +74,7 @@ function publishToast() {
             setting.hotkey = localHotKey
             publishToast()
           },
-        }}>{chrome.i18n.getMessage("settings_shortcut_reset_to_f2")}</Key
+        }}>{chrome.i18n.getMessage("settings_hotkey_reset_to_f2")}</Key
       >
     </div>
 
@@ -89,7 +89,7 @@ function publishToast() {
             settingModal.endListening()
             localHotKey = setting.hotkey
           },
-        }}>{chrome.i18n.getMessage("settings_shortcut_cancel")}</Key
+        }}>{chrome.i18n.getMessage("settings_cancel")}</Key
       >
 
       <Key
@@ -103,7 +103,7 @@ function publishToast() {
             setting.hotkey = localHotKey
             publishToast()
           },
-        }}>{chrome.i18n.getMessage("settings_shortcut_ok")}</Key
+        }}>{chrome.i18n.getMessage("settings_ok")}</Key
       >
     </div>
   {:else}

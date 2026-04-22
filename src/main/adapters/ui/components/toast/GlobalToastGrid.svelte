@@ -1,12 +1,14 @@
 <script lang="ts">
+import { getInjections } from "../../injections"
 import ToastItem from "./ToastItem.svelte"
-import { toasts } from "./toasts.svelte"
+
+const { toasts } = getInjections()
 </script>
 
 <!-- HTML -->
 
 <ul id="globalToastGrid">
-  {#each toasts.list as toastItem (toastItem.id)}
+  {#each toasts.getAll() as toastItem (toastItem.id)}
     <ToastItem text={toastItem.text} id={toastItem.id} />
   {/each}
 </ul>

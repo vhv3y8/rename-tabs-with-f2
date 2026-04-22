@@ -16,6 +16,16 @@
   "settings": {
     "message": "Settings"
   },
+  "settings_cancel": {
+    "message": "Cancel"
+  },
+  "settings_ok": {
+    "message": "OK"
+  },
+  "settings_done": {
+    "message": "Done"
+  },
+
   "settings_darkmode": {
     "message": "Darkmode"
   },
@@ -26,8 +36,28 @@
     "message": "Point Color"
   },
   "settings_persist_apply": {
-    "message": "Persist & Apply Tab Titles"
+    "message": "Persist & Apply Titles"
   },
+  "tooltip_persist_apply_off_data_remains": {
+    "message": "Existing tab title datas remains even if you turn this off."
+  },
+
+  "settings_upload_titles_file": {
+    "message": "load file"
+  },
+  "settings_save_titles_file": {
+    "message": "save file"
+  },
+  "settings_resolve_conflicts": {
+    "message": "Resolve Conflicts"
+  },
+  "settings_resolve_conflicts_all_existing": {
+    "message": "all existing"
+  },
+  "settings_resolve_conflicts_all_uploaded": {
+    "message": "all uploaded"
+  },
+
   "settings_hotkey": {
     "message": "Shortcut"
   },
@@ -37,17 +67,8 @@
   "settings_hotkey_reset_to_f2": {
     "message": "Reset to F2"
   },
-  "settings_hotkey_cancel": {
-    "message": "Cancel"
-  },
-  "settings_hotkey_ok": {
-    "message": "OK"
-  },
 
-  "tips_cannot_connect_to_tab": {
-    "message": "Cannot connect to the tab.\nIt might be because of the browser policy, or try refreshing the tab and this page to reconnect."
-  },
-  "tips_hotkey_updated": {
+  "toast_hotkey_updated": {
     "message": "Shortcut is updated to '$SHORTCUT$'.\nIf you want to use it at existing tabs, you have to refresh that tab!",
     "placeholders": {
       "hotkey": {
@@ -55,8 +76,26 @@
       }
     }
   },
+  "toast_upload_titles_file_cancel": {
+    "message": "Canceled File Upload:\nSelected file is not applied."
+  },
+  "toast_upload_titles_file_success": {
+    "message": "File Upload Success:\nTab title datas are successfully appended to existing datas."
+  },
+  "toast_upload_titles_file_inappropriate_format": {
+    "message": "Inappropriate file format:\nSelected file is invalid."
+  },
+  "toast_persist_apply_off_data_remains": {
+    "message": "Turned Persist & Apply Titles Option Off:\nExisting tab title datas remain, but "
+  },
 
-  "card_msg": {
+  "not_connected_description_not_plural": {
+    "message": " is"
+  },
+  "not_connected_description_plural": {
+    "message": "s are"
+  },
+  "not_connected_description": {
     "message": "$TAB$ tab$PLURAL$ not connected.",
     "placeholders": {
       "tab": {
@@ -67,16 +106,20 @@
       }
     }
   },
-  "card_btn_dismiss": {
+  "not_connected_dismiss": {
     "message": "Dismiss"
   },
-  "card_btn_reload_all": {
+  "not_connected_reload_all": {
     "message": "Reload all connectable tabs"
   },
-  "card_reloading": {
-    "message": "Reloading..."
+  "not_connected_reloading": {
+    "message": "Reloading"
   },
-  "card_connectable": {
+
+  "not_connected_count_plural": {
+    "message": "s"
+  },
+  "not_connected_connectable": {
     "message": "Connectable by reloading tab ($TAB$ tab$PLURAL$)",
     "placeholders": {
       "tab": {
@@ -87,7 +130,7 @@
       }
     }
   },
-  "card_blocked": {
+  "not_connected_policy_blocked": {
     "message": "Blocked by browser policy ($TAB$ tab$PLURAL$)",
     "placeholders": {
       "tab": {
