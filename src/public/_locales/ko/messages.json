@@ -70,7 +70,7 @@
   },
 
   "toast_hotkey_updated": {
-    "message": "단축키가 '$SHORTCUT$'로 업데이트 되었습니다.\n이미 열려있는 탭에서 사용하고 싶다면, 그 탭을 새로고침하세요!",
+    "message": "단축키가 '$HOTKEY$'로 업데이트 되었습니다.\n이미 열려있는 탭에서 사용하고 싶다면, 그 탭을 새로고침하세요!",
     "placeholders": {
       "hotkey": {
         "content": "$1"

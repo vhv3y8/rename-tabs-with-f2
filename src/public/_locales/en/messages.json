@@ -69,7 +69,7 @@
   },
 
   "toast_hotkey_updated": {
-    "message": "Shortcut is updated to '$SHORTCUT$'.\nIf you want to use it at existing tabs, you have to refresh that tab!",
+    "message": "Shortcut is updated to '$HOTKEY$'.\nIf you want to use it at existing tabs, you have to refresh that tab!",
     "placeholders": {
       "hotkey": {
         "content": "$1"

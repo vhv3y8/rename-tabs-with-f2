@@ -1,3 +1,7 @@
-export interface Serializer {}
+export interface Serializer {
+  serialize(data: any): any
+}
 
-export interface Deserializer {}
+export interface Deserializer {
+  deserialize(data: any): any
+}

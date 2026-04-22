@@ -5,11 +5,20 @@ import type {
 
 export const TOAST_MESSAGES = {
   SHORTCUT_UPDATED: (shortcutText: string) =>
-    chrome.i18n.getMessage("tips_shortcut_updated", shortcutText),
+    chrome.i18n.getMessage("toast_hotkey_updated", shortcutText),
   ERROR: (errorText: string, errorType: string = "") =>
     `${0 < errorType.length ? errorType + " " : ""}Error:\n${errorText}`,
   // load file
-  CANCEL_LOAD_FILE: chrome.i18n.getMessage("tips_cancel_load_file"),
+  UPLOAD_FILE_CANCEL: chrome.i18n.getMessage("toast_upload_titles_file_cancel"),
+  UPLOAD_FILE_SUCCESS: chrome.i18n.getMessage(
+    "toast_upload_titles_file_success",
+  ),
+  UPLOAD_INAPPROPRIATE_FORMAT: chrome.i18n.getMessage(
+    "toast_upload_titles_file_inappropriate_format",
+  ),
+  PERSIST_APPLY_OFF: chrome.i18n.getMessage(
+    "toast_persist_apply_off_data_remains",
+  ),
 }
 
 // type ToastItem = { id: number; text: any; duration: number }

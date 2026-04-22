@@ -9,8 +9,10 @@ export function createExportURLTitleCollectionFile(
   urlTitleCollectionStore: URLTitleCollectionStore,
   fileStorage: FileStorage,
 ) {
-  return function exportURLTitleCollectionFile() {
+  return async function exportURLTitleCollectionFile() {
     // get collection
+    const collection = urlTitleCollectionStore.getCollection()
     // download file
+    await fileStorage.save(collection.toRecord())
   }
 }

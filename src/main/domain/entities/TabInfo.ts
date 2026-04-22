@@ -4,6 +4,7 @@ export interface TabInfo {
   index: number
   url: string
   title: string
+  persistedTitle: string
   favIconUrl: string
   status: string
 

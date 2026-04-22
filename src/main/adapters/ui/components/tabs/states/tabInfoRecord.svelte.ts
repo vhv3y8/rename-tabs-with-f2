@@ -2,7 +2,7 @@ import type { TabInfoStore } from "@application/ports/TabInfoStore"
 import type { TabInfo } from "@domain/entities/TabInfo"
 
 export interface TabInfoState extends TabInfo {
-  initialTitle: string
+  titleState: string
   hasChanged: boolean
 }
 export class TabIdxInfoRecord implements Partial<TabInfoStore> {
@@ -33,12 +33,25 @@ export class TabIdxInfoRecord implements Partial<TabInfoStore> {
   clearAndSetTabInfos(tabInfos: TabInfo[]) {
     //  Record<number, TabInfo>
     const tabInfoStateRecord = tabInfos.reduce(
-      (acc, { id, title, favIconUrl, url, index, status, connected }) => {
+      (
+        acc,
+        {
+          id,
+          title,
+          persistedTitle,
+          favIconUrl,
+          url,
+          index,
+          status,
+          connected,
+        },
+      ) => {
         // key have to be index. index is tab's position on current window tabs array
         acc[index] = {
           id,
           title,
-          initialTitle: title,
+          titleState: title,
+          persistedTitle,
           favIconUrl,
           url,
           status,

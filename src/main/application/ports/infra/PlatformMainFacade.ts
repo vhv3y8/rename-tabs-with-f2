@@ -1,4 +1,8 @@
 import type { Setting } from "@lib/models/Setting"
+import type {
+  TabTitle,
+  URLMatch,
+} from "@main/domain/entities/URLTitleCollection"
 
 // depend on chrome for now
 export interface PlatformMainFacade {
@@ -17,9 +21,9 @@ export interface PlatformMainFacade {
 
   // storage
   getSettings(): Promise<Setting>
-  setSettings(setting: Setting): Promise<unknown>
+  setSettings(setting: Setting): Promise<void>
 
   // TODO
-  // getTitles(): Promise<Setting>
-  // setTitles(setting: Setting): Promise<unknown>
+  getTitleRecord(): Promise<Record<URLMatch, TabTitle>>
+  setTitles(record: Record<URLMatch, TabTitle>): Promise<void>
 }

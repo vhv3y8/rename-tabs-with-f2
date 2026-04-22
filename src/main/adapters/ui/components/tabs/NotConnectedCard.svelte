@@ -80,7 +80,7 @@ function keydownDismissHandler(e: KeyboardEvent) {
         {#if 0 < reloadCount}
           <li>
             <p class="description">
-              {chrome.i18n.getMessage("card_connectable", [
+              {chrome.i18n.getMessage("not_connected_connectable", [
                 reloadCount.toString(),
                 1 < reloadCount
                   ? chrome.i18n.getMessage("not_connected_count_plural")
@@ -117,7 +117,7 @@ function keydownDismissHandler(e: KeyboardEvent) {
                     padding: "0.4em",
                     fontSize: "15px",
                     point: setting.pointColor,
-                  }}>{chrome.i18n.getMessage("not_connected_reloading")}</Key
+                  }}>{chrome.i18n.getMessage("not_connected_reloading")}...</Key
                 >
               {:else}
                 {chrome.i18n.getMessage("not_connected_reload_all")} : <Key

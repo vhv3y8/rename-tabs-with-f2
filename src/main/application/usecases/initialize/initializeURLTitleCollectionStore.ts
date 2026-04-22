@@ -9,8 +9,10 @@ export function createInitializeURLTitleCollectionStore(
   urlTitleCollectionStore: URLTitleCollectionStore,
   extensionFacade: PlatformMainFacade,
 ) {
-  return function initializeURLTitleCollectionStore() {
+  return async function initializeURLTitleCollectionStore() {
     // get from extension storage
+    const titles = await extensionFacade.getTitleRecord()
     // set to store
+    urlTitleCollectionStore.initializeCollection(titles)
   }
 }
