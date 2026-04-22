@@ -8,7 +8,7 @@ export class FileAPIStorage implements FileStorage {
   constructor(serializer: Serializer, deserializer: Deserializer) {}
 
   async load() {}
-  async save(data: any) {
+  async saveFile(data: any) {
     return true
   }
 }

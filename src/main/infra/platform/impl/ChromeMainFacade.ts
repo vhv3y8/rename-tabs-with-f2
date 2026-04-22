@@ -3,7 +3,7 @@ import ChromeRuntime from "@lib/chrome/runtime"
 import ChromeStorage from "@lib/chrome/storage"
 import ChromeTabs from "@lib/chrome/tabs"
 import type { PlatformMainFacade } from "@main/application/ports/infra/PlatformMainFacade"
-import type { URLTitleRecord } from "@main/domain/entities/URLTitleCollection"
+import type { TitleRecord } from "@lib/models/TitleRecord"
 
 class ChromeMainFacade implements PlatformMainFacade {
   // tabs
@@ -34,10 +34,10 @@ class ChromeMainFacade implements PlatformMainFacade {
   setSettings(setting: Setting) {
     return ChromeStorage.setting.setSettings(setting)
   }
-  async getTitles(): Promise<URLTitleRecord> {
+  async getTitleRecord(): Promise<TitleRecord> {
     return ChromeStorage.titles.getTitles()
   }
-  async setTitles(titles: URLTitleRecord): Promise<void> {
+  async setTitleRecord(titles: TitleRecord): Promise<void> {
     return ChromeStorage.titles.setTitles(titles)
   }
 

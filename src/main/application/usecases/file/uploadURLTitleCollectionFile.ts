@@ -18,7 +18,7 @@ export function createUploadURLTitleCollectionFile(
   urlTitleCollectionStore: URLTitleCollectionStore,
   fileStorage: FileStorage,
 ) {
-  return function uploadURLTitleCollectionFile() {
+  return function uploadURLTitleCollectionFile(blob: Blob) {
     // get file from input file tag?
     // try appending
     // handle conflicts with life cycle

@@ -13,6 +13,6 @@ export function createExportURLTitleCollectionFile(
     // get collection
     const collection = urlTitleCollectionStore.getCollection()
     // download file
-    await fileStorage.save(collection.toRecord())
+    await fileStorage.saveFile(collection.toRecord())
   }
 }

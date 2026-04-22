@@ -7,4 +7,5 @@ import type {
 export interface URLTitleCollectionStore {
   initializeCollection(record: Record<URLMatch, TabTitle>): void
   getCollection(): URLTitleCollection
+  storeUpdatedCollection(): Promise<void>
 }

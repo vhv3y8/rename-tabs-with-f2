@@ -8,6 +8,7 @@ import {
   type Setting,
 } from "../models/Setting"
 import * as semver from "semver"
+import type { TitleRecord } from "@lib/models/TitleRecord"
 
 const INITIAL_STORAGE = {
   settings: initialSettingPartial,
@@ -58,11 +59,11 @@ const ChromeStorage = {
     },
   },
   titles: {
-    async getTitles() {
+    async getTitles(): Promise<TitleRecord> {
       return chrome.storage.local.get(["titles"]).then((db) => db.titles)
     },
     // TODO
-    async setTitles(titles: unknown) {
+    async setTitles(titles: TitleRecord) {
       return chrome.storage.local.set({ titles })
     },
   },
