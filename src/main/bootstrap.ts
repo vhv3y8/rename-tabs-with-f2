@@ -1,3 +1,4 @@
+import type { URLTitleCollectionStore } from "@application/ports/URLTitleCollectionStore"
 import { InMemorySetting } from "./adapters/ui/components/setting/states/inMemorySetting.svelte"
 import { DOMApplyLifeCycle } from "./adapters/ui/impl/lifecycles/applyLifeCycle"
 import { createInitializeAppLifeCycle } from "./adapters/ui/impl/lifecycles/initializeAppLifeCycle"
@@ -39,31 +40,63 @@ import {
   type ReloadLifeCycle,
 } from "./application/usecases/reloadAllConnectableTabs"
 import { ChromeMainFacade } from "./infra/platform/impl/ChromeMainFacade"
+import { URLTitleCollectionStoreImpl } from "@adapters/impl/urlTitleCollectionStoreImpl"
+import {
+  createInitializeURLTitleCollectionStore,
+  type InitializeURLTitleCollectionStoreUseCase,
+} from "@application/usecases/initialize/initializeURLTitleCollectionStore"
+import {
+  createExportURLTitleCollectionFile,
+  type ExportURLTitleCollectionFileUseCase,
+} from "@application/usecases/file/exportURLTitleCollectionFile"
+import type { Serializer } from "@application/ports/infra/Serializer"
+import { WebAPITextFileStorage } from "@infra/web/impl/WebAPITextFileStorage"
+import type { URLTitleCollection } from "@domain/entities/URLTitleCollection"
+import { URLTitleRecordJSONCodec } from "@infra/web/impl/JSONCodec"
+import type { FileStorage } from "@application/ports/infra/FileStorage"
+import {
+  createUploadURLTitleCollectionFile,
+  type UploadURLTitleCollectionFileUseCase,
+  type UploadURLTitleFileLifeCycle,
+} from "@application/usecases/file/uploadURLTitleCollectionFile"
+import { uploadURLTitleLifeCycle } from "@adapters/ui/impl/lifecycles/uploadURLTitleLifeCycle"
 
 export async function runBootstrap() {
   // create infra impl
+
   const extensionFacade = new ChromeMainFacade() satisfies PlatformMainFacade
   const toastPublisher: ToastPublisher = new Toasts()
 
+  const urlTitleCollectionJSONSerializer: Serializer<
+    URLTitleCollection,
+    string
+  > = new URLTitleRecordJSONCodec()
+  const urlTitleCollectionFileStorage: FileStorage<URLTitleCollection> =
+    new WebAPITextFileStorage(urlTitleCollectionJSONSerializer)
+
   // create output adapter impl
+
   const tabIdxInfoStore = new TabIdxInfoRecordStore() satisfies TabInfoStore
   const notConnected = tabIdxInfoStore.notConnected
+  const urlTitleCollectionStore: URLTitleCollectionStore =
+    new URLTitleCollectionStoreImpl(extensionFacade)
   // adapter only impl?
   const inMemorySetting = await InMemorySetting.build(extensionFacade)
 
   // create lifecycle impl and use cases
+
+  // apply
   const applyLifeCycle: ApplyLifeCycle = DOMApplyLifeCycle
   const applyUseCase: ApplyUseCase = createApplyUseCase(
     tabIdxInfoStore,
+    urlTitleCollectionStore,
     extensionFacade,
     applyLifeCycle,
   )
-
+  // check all tab connection
   const checkAllTabConnectionAndUpdateFlagsUseCase: CheckAllTabConnectionUseCase =
     createCheckAllTabConnectionAndUpdateFlags(tabIdxInfoStore, extensionFacade)
-  const initializeTabInfoStoreUseCase: InitializeTabInfoStoreUseCase =
-    createInitializeTabInfoStore(tabIdxInfoStore, extensionFacade)
-
+  // reload
   const reloadLifeCycle: ReloadLifeCycle = createChromeSvelteReloadLifeCycle(
     tabIdxInfoStore,
     checkAllTabConnectionAndUpdateFlagsUseCase,
@@ -76,15 +109,48 @@ export async function runBootstrap() {
       reloadLifeCycle,
     )
 
+  // files
+  const exportURLTitleCollectionFileUseCase: ExportURLTitleCollectionFileUseCase =
+    createExportURLTitleCollectionFile(
+      urlTitleCollectionStore,
+      urlTitleCollectionFileStorage,
+    )
+  const uploadURLTitleCollectionFileLifeCycle: UploadURLTitleFileLifeCycle =
+    uploadURLTitleLifeCycle
+  const uploadURLTitleCollectionFileUseCase: UploadURLTitleCollectionFileUseCase =
+    createUploadURLTitleCollectionFile(
+      urlTitleCollectionStore,
+      urlTitleCollectionFileStorage,
+      toastPublisher,
+      uploadURLTitleCollectionFileLifeCycle,
+    )
+
+  // initializations
+  // url title collection store
+  const initializeURLTitleCollectionStoreUseCase: InitializeURLTitleCollectionStoreUseCase =
+    createInitializeURLTitleCollectionStore(
+      urlTitleCollectionStore,
+      extensionFacade,
+    )
+  // tab info store
+  const initializeTabInfoStoreUseCase: InitializeTabInfoStoreUseCase =
+    createInitializeTabInfoStore(
+      extensionFacade,
+      urlTitleCollectionStore,
+      tabIdxInfoStore,
+    )
+  // app
   const initializeAppLifeCycle: InitializeAppLifeCycle =
     createInitializeAppLifeCycle(extensionFacade)
   const initializeAppUseCase: InitializeAppUseCase = createInitializeAppUseCase(
+    initializeURLTitleCollectionStoreUseCase,
     initializeTabInfoStoreUseCase,
     checkAllTabConnectionAndUpdateFlagsUseCase,
     initializeAppLifeCycle,
   )
 
   // create input adapters
+
   // apply
   const keydownApplyHandler = createKeydownApplyHandler(applyUseCase)
   const clickApplyHandler = createClickApplyHandler(applyUseCase)
@@ -96,6 +162,7 @@ export async function runBootstrap() {
   const clickReloadUseCaseHandler = createClickReloadUseCaseHandler(
     reloadAllConnectableTabsUseCase,
   )
+  // files
 
   // registering input adapters are delegated to svelte components
 

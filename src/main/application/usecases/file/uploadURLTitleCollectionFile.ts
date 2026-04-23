@@ -2,10 +2,7 @@ import { TOAST_MESSAGES } from "@adapters/ui/impl/toastPublisher.svelte"
 import { type Result } from "@lib/types/Result"
 import type { FileStorage } from "@main/application/ports/infra/FileStorage"
 import type { ToastPublisher } from "@main/application/ports/infra/ToastPublisher"
-import {
-  StoreNotInitializedError,
-  type URLTitleCollectionStore,
-} from "@main/application/ports/URLTitleCollectionStore"
+import { type URLTitleCollectionStore } from "@main/application/ports/URLTitleCollectionStore"
 import type {
   URLTitleCollection,
   URLTitleConfliction,
@@ -62,6 +59,7 @@ export function createUploadURLTitleCollectionFile(
     try {
       existingCollection = urlTitleCollectionStore.getCollection()
     } catch (e) {
+      // probably store not initialized error but it should also not happen
       if (e instanceof Error) {
         toastPublisher.publishToast(
           `Error while getting titles database:\n${e.name}: ${e.message}`,
@@ -83,29 +81,31 @@ export function createUploadURLTitleCollectionFile(
     // wait for user to resolve conflictions
     let resolvedConflictions: URLTitleResolvedConfliction[] = []
     if (0 < conflictions.length) {
-      // probably can remove try catch block
-      try {
-        const conflictResult = await lifeCycle.handleConflicts(conflictions)
-        console.log("[conflictResult]", conflictResult)
-        conflictResult.match({
-          ok: (resolvedItems) => {
-            resolvedConflictions = resolvedItems
-          },
-          err: (error) => {
-            if (error.type === "USER_CANCEL") {
-              toastPublisher.publishToast(TOAST_MESSAGES.UPLOAD_FILE_CANCEL)
-              return
-            }
-          },
-        })
-      } catch (e) {
-        // this should not happen
-        toastPublisher.publishToast(
-          `Error while handling conflictions:\nSomething strange is happening....`,
-        )
-        toastPublisher.publishToast(`Catched: ${e}`)
-        return
-      }
+      // ui runs here
+      const conflictResult = await lifeCycle.handleConflicts(conflictions)
+      console.log("[conflictResult]", conflictResult)
+      conflictResult.match({
+        ok: (resolvedItems) => {
+          resolvedConflictions = resolvedItems
+        },
+        err: (error) => {
+          if (error.type === "USER_CANCEL") {
+            toastPublisher.publishToast(TOAST_MESSAGES.UPLOAD_FILE_CANCEL)
+            // where does this return?
+            return
+          }
+        },
+      })
+      // // probably can remove try catch block
+      // try {
+      // } catch (e) {
+      //   // this should not happen
+      //   toastPublisher.publishToast(
+      //     `Error while handling conflictions:\nSomething strange is happening....`,
+      //   )
+      //   toastPublisher.publishToast(`Catched: ${e}`)
+      //   return
+      // }
     }
 
     console.log(

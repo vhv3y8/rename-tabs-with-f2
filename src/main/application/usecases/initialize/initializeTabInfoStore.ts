@@ -22,7 +22,8 @@ export function createInitializeTabInfoStore(
         index,
         id: id!,
         title: title!,
-        persistedTitle: urlTitleCollection.getTitle(url || "") || "",
+        // TODO: make sure that get title doesnt throw or something?
+        persistedTitle: urlTitleCollection.getTitle(url!) || "",
         favIconUrl: favIconUrl!,
         url: url!,
         status: status!,

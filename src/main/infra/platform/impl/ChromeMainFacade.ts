@@ -7,16 +7,16 @@ import type { TitleRecord } from "@lib/models/TitleRecord"
 
 export class ChromeMainFacade implements PlatformMainFacade {
   // tabs
-  getInitializeTabEntries() {
+  async getInitializeTabEntries() {
     return ChromeTabs.query.getAllCurrentWindowTabsWithoutExtensionPage()
   }
-  checkTabConnection({ tabId }: { tabId: number }) {
+  async checkTabConnection({ tabId }: { tabId: number }) {
     return ChromeTabs.message.isContentScriptConnected({ id: tabId })
   }
-  reloadTab({ tabId }: { tabId: number }) {
+  async reloadTab({ tabId }: { tabId: number }) {
     return ChromeTabs.operate.reloadTab(tabId)
   }
-  renameTabTitle({ tabId, title }: { tabId: number; title: any }) {
+  async renameTabTitle({ tabId, title }: { tabId: number; title: any }) {
     return ChromeTabs.message.fireChangeTitleToContentScript({
       id: tabId,
       title,
@@ -24,14 +24,14 @@ export class ChromeMainFacade implements PlatformMainFacade {
   }
   // focusExtensionPageTabForRefresh(): Promise<unknown>
   // runtime
-  getLastFocusTabId() {
+  async getLastFocusTabId() {
     return ChromeRuntime.getLastFocusTabId()
   }
   // storage
-  getSettings() {
+  async getSettings() {
     return ChromeStorage.setting.getSettings()
   }
-  setSettings(setting: Setting) {
+  async setSettings(setting: Setting) {
     return ChromeStorage.setting.setSettings(setting)
   }
   async getTitleRecord(): Promise<TitleRecord> {

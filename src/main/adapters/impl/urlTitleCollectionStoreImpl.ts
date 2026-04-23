@@ -11,10 +11,8 @@ import {
 } from "@main/domain/entities/URLTitleCollection"
 
 export class URLTitleCollectionStoreImpl implements URLTitleCollectionStore {
-  constructor(
-    public collection: URLTitleCollection | null = null,
-    public extensionFacade: PlatformMainFacade,
-  ) {}
+  public collection: URLTitleCollection | null = null
+  constructor(public extensionFacade: PlatformMainFacade) {}
 
   initializeCollection(record: Record<URLMatch, TabTitle>): void {
     this.collection = new URLTitleRecord().fromRecord(record)

@@ -6,7 +6,7 @@ import type {
   URLTitleConfliction,
   URLTitleResolvedConfliction,
 } from "@domain/entities/URLTitleCollection"
-import type { Result } from "@lib/types/Result"
+import { ok, type Result } from "@lib/types/Result"
 
 export const uploadURLTitleLifeCycle: UploadURLTitleFileLifeCycle = {
   async handleConflicts(
@@ -18,5 +18,6 @@ export const uploadURLTitleLifeCycle: UploadURLTitleFileLifeCycle = {
     // open conflict modal
     // wait until its canceled or resolved
     // resolve result with ok or err
+    return ok([])
   },
 }

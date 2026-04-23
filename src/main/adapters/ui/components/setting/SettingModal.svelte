@@ -4,6 +4,7 @@ import DarkModeEntry from "./settingEntries/DarkModeEntry.svelte"
 import LargerWidthEntry from "./settingEntries/LargerWidthEntry.svelte"
 import HotKeyEntry from "./settingEntries/HotKeyEntry.svelte"
 import PointColorEntry from "./settingEntries/PointColorEntry.svelte"
+import PersistApplyEntry from "./settingEntries/PersistApplyEntry.svelte"
 
 let { onclose } = $props()
 </script>
@@ -15,6 +16,7 @@ let { onclose } = $props()
     <PointColorEntry />
     <DarkModeEntry />
     <LargerWidthEntry />
+    <PersistApplyEntry />
     <HotKeyEntry />
   </ul>
 </Popover>

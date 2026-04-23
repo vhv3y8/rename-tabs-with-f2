@@ -18,9 +18,10 @@ export function createApplyUseCase(
   return async function apply() {
     lifeCycle.beforeStart?.()
 
-    const tabInfosToApply = tabInfoStore.getTabInfosToApply()
     // remove stuffs to remove from url title and save it?
     // empty input -> remove from db if exists
+
+    const tabInfosToApply = tabInfoStore.getTabInfosToApply()
     await Promise.allSettled(
       tabInfosToApply
         // send changed title to each content script

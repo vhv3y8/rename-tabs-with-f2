@@ -8,9 +8,10 @@ export type HotKey = {
   key: string
 }
 export type Setting = {
+  pointColor: "cornflower" | "mutedcoral" | "coralorange"
   darkmode: boolean
   largerWidth: boolean
-  pointColor: "cornflower" | "mutedcoral" | "coralorange"
+  persistAndApplyTitles: boolean
   hotkey: HotKey
 }
 
@@ -23,9 +24,10 @@ export const F2HotKey: HotKey = {
   key: "F2",
 }
 export const initialSettingPartial = {
+  pointColor: "cornflower",
   darkmode: false,
   largerWidth: false,
-  pointColor: "cornflower",
+  persistAndApplyTitles: false,
   hotkey: F2HotKey,
 } satisfies Setting
 
