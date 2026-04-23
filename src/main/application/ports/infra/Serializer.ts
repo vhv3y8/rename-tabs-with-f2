@@ -1,7 +1,4 @@
-export interface Serializer {
-  serialize(data: any): any
-}
-
-export interface Deserializer {
-  deserialize(data: any): any
+export interface Serializer<T, S> {
+  serialize(data: T): S
+  deserialize(data: S): T
 }

@@ -14,12 +14,12 @@ export class URLTitleCollectionStoreImpl implements URLTitleCollectionStore {
   ) {}
 
   initializeCollection(record: Record<URLMatch, TabTitle>): void {
-    this.collection = new URLTitleRecord(record)
+    this.collection = new URLTitleRecord().fromRecord(record)
   }
   getCollection(): URLTitleCollection {
-    if (this.collection === null) {
-      this.collection = new URLTitleRecord({})
-    }
+    // if (this.collection === null) {
+    //   this.collection = new URLTitleRecord()
+    // }
     return this.collection
   }
   async storeUpdatedCollection(): Promise<void> {

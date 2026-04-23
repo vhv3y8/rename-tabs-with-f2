@@ -38,11 +38,11 @@ import {
   type ReloadAllConnectableTabsUseCase,
   type ReloadLifeCycle,
 } from "./application/usecases/reloadAllConnectableTabs"
-import { ChromeFacade } from "./infra/platform/impl/ChromeMainFacade"
+import { ChromeMainFacade } from "./infra/platform/impl/ChromeMainFacade"
 
 export async function runBootstrap() {
   // create infra impl
-  const extensionFacade = ChromeFacade satisfies PlatformMainFacade
+  const extensionFacade = new ChromeMainFacade() satisfies PlatformMainFacade
   const toastPublisher: ToastPublisher = new Toasts()
 
   // create output adapter impl

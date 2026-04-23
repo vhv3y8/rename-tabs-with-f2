@@ -5,7 +5,7 @@ import ChromeTabs from "@lib/chrome/tabs"
 import type { PlatformMainFacade } from "@main/application/ports/infra/PlatformMainFacade"
 import type { TitleRecord } from "@lib/models/TitleRecord"
 
-class ChromeMainFacade implements PlatformMainFacade {
+export class ChromeMainFacade implements PlatformMainFacade {
   // tabs
   getInitializeTabEntries() {
     return ChromeTabs.query.getAllCurrentWindowTabsWithoutExtensionPage()
@@ -45,4 +45,4 @@ class ChromeMainFacade implements PlatformMainFacade {
   // addTabsOnUpdatedHandlerForReload = chrome.tabs.onUpdated.addListener
   // removeTabsOnUpdatedHandlerForReload = chrome.tabs.onUpdated.removeListener
 }
-export const ChromeFacade = new ChromeMainFacade()
+// export const ChromeFacade = new ChromeMainFacade()

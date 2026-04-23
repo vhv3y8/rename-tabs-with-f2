@@ -1,6 +1,7 @@
 import type { FileStorage } from "@main/application/ports/infra/FileStorage"
 import type { URLTitleCollectionStore } from "@main/application/ports/URLTitleCollectionStore"
 import type {
+  URLTitleCollection,
   URLTitleConfliction,
   URLTitleResolvedConfliction,
 } from "@main/domain/entities/URLTitleCollection"
@@ -16,10 +17,11 @@ export type UploadURLTitleCollectionFileUseCase = ReturnType<
 
 export function createUploadURLTitleCollectionFile(
   urlTitleCollectionStore: URLTitleCollectionStore,
-  fileStorage: FileStorage,
+  urlTitleCollectionFileStorage: FileStorage<URLTitleCollection>,
 ) {
-  return function uploadURLTitleCollectionFile(blob: Blob) {
+  return async function uploadURLTitleCollectionFile(blob: Blob) {
     // get file from input file tag?
+    const collection = await urlTitleCollectionFileStorage.loadFile()
     // try appending
     // handle conflicts with life cycle
     // continue with resolved results?

@@ -8,7 +8,10 @@ export type URLTitleConfliction = URLTitleConflictItem[]
 export type URLTitleResolvedConfliction = URLTitleConflictItem
 
 export interface URLTitleCollection {
+  // collection exists at storage as record(object)
+  fromRecord(record: Record<URLMatch, TabTitle>): URLTitleCollection
   toRecord(): Record<URLMatch, TabTitle>
+
   entries(): [URLMatch, TabTitle][]
   removeEntries(urlMatches: URLMatch[]): void
   getTitle(urlMatch: URLMatch): TabTitle | null
@@ -21,13 +24,17 @@ export interface URLTitleCollection {
 }
 
 export class URLTitleRecord implements URLTitleCollection {
-  constructor(public record: Record<URLMatch, TabTitle> = {}) {
-    console.log("[initialize url title record]", record)
+  public record: Record<URLMatch, TabTitle> = {}
+  // use this to initialize
+  fromRecord(record: Record<URLMatch, TabTitle>) {
+    this.record = record
+    console.log("[initialize url title record]", this.record)
+    return this
   }
-
   toRecord() {
     return this.record
   }
+
   entries() {
     return Object.entries(this.record)
   }
