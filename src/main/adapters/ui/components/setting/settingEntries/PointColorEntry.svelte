@@ -1,6 +1,6 @@
 <script lang="ts">
 import Key from "@main/infra/ui/components/Key.svelte"
-import ModalEntry from "../ModalEntry.svelte"
+import SettingModalEntry from "../SettingModalEntry.svelte"
 // import * as view from "../view"
 import { getInjections } from "@main/adapters/ui/injections"
 import type { Setting } from "@lib/models/Setting"
@@ -16,7 +16,7 @@ const initialIdx = pointColorList.indexOf(setting.pointColor)
 let currentIdx = $state(initialIdx)
 </script>
 
-<ModalEntry
+<SettingModalEntry
   title={{
     content: chrome.i18n.getMessage("settings_pointcolor"),
     appearance: "inline",
@@ -34,4 +34,4 @@ let currentIdx = $state(initialIdx)
       },
     }}>{setting.pointColor}</Key
   >
-</ModalEntry>
+</SettingModalEntry>

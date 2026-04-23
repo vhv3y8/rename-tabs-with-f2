@@ -5,7 +5,7 @@ import {
   isValidShortcut,
   stringifyShortcut,
 } from "@lib/shortcut"
-import ModalEntry from "../ModalEntry.svelte"
+import SettingModalEntry from "../SettingModalEntry.svelte"
 import { TOAST_MESSAGES } from "../../../impl/toastPublisher.svelte"
 import { settingModal } from "../states/settingModal.svelte"
 import { F2HotKey } from "@lib/models/Setting"
@@ -42,7 +42,7 @@ function publishToast() {
 
 <svelte:document onkeydown={handleListenHotKey} />
 
-<ModalEntry
+<SettingModalEntry
   title={{
     content: chrome.i18n.getMessage("settings_hotkey"),
     appearance: "block",
@@ -118,7 +118,7 @@ function publishToast() {
       }}>{settingHotkeyText}</Key
     >
   {/if}
-</ModalEntry>
+</SettingModalEntry>
 
 <!-- Style -->
 

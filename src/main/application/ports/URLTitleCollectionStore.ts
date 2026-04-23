@@ -9,3 +9,10 @@ export interface URLTitleCollectionStore {
   getCollection(): URLTitleCollection
   storeUpdatedCollection(): Promise<void>
 }
+
+export class StoreNotInitializedError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = "StoreNotInitializedError"
+  }
+}

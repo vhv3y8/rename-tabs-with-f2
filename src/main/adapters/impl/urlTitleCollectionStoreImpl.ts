@@ -1,5 +1,8 @@
 import type { PlatformMainFacade } from "@main/application/ports/infra/PlatformMainFacade"
-import type { URLTitleCollectionStore } from "@main/application/ports/URLTitleCollectionStore"
+import {
+  StoreNotInitializedError,
+  type URLTitleCollectionStore,
+} from "@main/application/ports/URLTitleCollectionStore"
 import {
   URLTitleRecord,
   type TabTitle,
@@ -17,9 +20,11 @@ export class URLTitleCollectionStoreImpl implements URLTitleCollectionStore {
     this.collection = new URLTitleRecord().fromRecord(record)
   }
   getCollection(): URLTitleCollection {
-    // if (this.collection === null) {
-    //   this.collection = new URLTitleRecord()
-    // }
+    if (this.collection === null) {
+      throw new StoreNotInitializedError(
+        "Tried to read [URL -> Title] Database before it's initialized.",
+      )
+    }
     return this.collection
   }
   async storeUpdatedCollection(): Promise<void> {
