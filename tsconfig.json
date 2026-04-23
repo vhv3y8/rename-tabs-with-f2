@@ -20,14 +20,14 @@
     "typeRoots": ["node_modules/@types"],
     "paths": {
       // global
-      "@lib/*": ["./src/lib/*"],
       "@chrome/*": ["./src/lib/chrome/*"],
+      "@lib/*": ["./src/lib/*"],
       // main
-      "@main/*": ["./src/main/*"],
       "@domain/*": ["./src/main/domain/*"],
       "@application/*": ["./src/main/application/*"],
       "@adapters/*": ["./src/main/adapters/*"],
-      "@infra/*": ["./src/main/infra/*"]
+      "@infra/*": ["./src/main/infra/*"],
+      "@main/*": ["./src/main/*"]
     }
   },
 

@@ -1,20 +1,39 @@
 import type { FileStorage } from "@main/application/ports/infra/FileStorage"
 import type { Serializer } from "@main/application/ports/infra/Serializer"
 
-export class WebFileAPIStorage<T> implements FileStorage<T> {
+export class WebAPITextFileStorage<T> implements FileStorage<T> {
   // single file for now
   blob: Blob | null = null
+  public saveMimeType: string = "text/plain"
+  public saveFileName: string = "file.txt"
   constructor(public serializer: Serializer<T, string>) {}
+  // setSaveConfig("application/json", "RenameTabsWithF2-TitlesData.json")
+  setSaveConfig(saveMimeType: string, saveFileName: string) {
+    this.saveMimeType = saveMimeType
+    this.saveFileName = saveFileName
+  }
 
   async loadFile(): Promise<T> {
     if (this.blob) {
       const blobText = await this.blob.text()
       return Promise.resolve(this.serializer.deserialize(blobText))
     }
-    return Promise.reject()
+    return Promise.reject(new Error("File is not added."))
   }
   async saveFile(data: T) {
-    return true
+    const serialized = this.serializer.serialize(data)
+    // create blob
+    const blob = new Blob([serialized], { type: this.saveMimeType })
+    // create url and <a> tag
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = this.saveFileName
+    // click <a> tag and remove url
+    a.click()
+    setTimeout(() => {
+      URL.revokeObjectURL(url)
+    }, 100)
   }
 
   // use this for input type="file" tag directly

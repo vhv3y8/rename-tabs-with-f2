@@ -5,7 +5,7 @@ export class URLTitleRecordJSONCodec
   implements Serializer<URLTitleRecord, string>
 {
   serialize(record: URLTitleRecord): string {
-    return JSON.stringify(record.toRecord())
+    return JSON.stringify(record.toRecord(), null, 2)
   }
   deserialize(raw: string): URLTitleRecord {
     const parsed = JSON.parse(raw)
