@@ -10,34 +10,40 @@ let { setting } = getInjections()
 <!-- HTML -->
 
 <li class="conflictItem">
-  <div class="urlMatch">{conflictState.urlMatch}</div>
+  <p class="urlMatch">
+    <span>{conflictState.urlMatch}</span>
+  </p>
 
   <div class="existingOrUploaded flex gap-[0.4em]">
     <Key
       props={{
         isKeyDown: !conflictState.isUploadSelected,
         point: setting.pointColor,
-        padding: "0.25em 0",
-        fontSize: "15px",
+        padding: "0.4em 0",
+        fontSize: "16px",
         shadow: "small",
         onclick: () => {
           conflictState.isUploadSelected = false
         },
-      }}>{conflictState.existing.title}</Key
+      }}
     >
+      <span class="title">{conflictState.existing.title}</span>
+    </Key>
 
     <Key
       props={{
         isKeyDown: conflictState.isUploadSelected,
         point: setting.pointColor,
-        padding: "0.25em 0",
-        fontSize: "15px",
+        padding: "0.4em 0",
+        fontSize: "16px",
         shadow: "small",
         onclick: () => {
           conflictState.isUploadSelected = true
         },
-      }}>{conflictState.uploaded.title}</Key
+      }}
     >
+      <span class="title">{conflictState.uploaded.title}</span>
+    </Key>
   </div>
 </li>
 
@@ -61,16 +67,40 @@ li.conflictItem {
   font-size: 14px;
   padding: 0.4em;
   font-family: "Ubuntu";
-  text-overflow: ellipsis;
 
-  border: 2px solid var(--primary-7);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+
+  /* direction: rtl;
+  text-align: left; */
+
+  /* border: 2px solid var(--primary-8); */
+  border: 2px solid transparent;
+  /* background: var(--primary-8);
+  color: var(--bg); */
+  background: var(--shadow-1);
+  color: var(--primary-9);
+  /* border-radius: 1px; */
+  /* box-shadow: 0 0 2px var(--primary-8); */
 }
 .existingOrUploaded {
   & :global(button.key:has(.keyInner)) {
-    width: 50%;
+    /* width: 50%; */
+    flex: 1 0 0;
+    min-width: 0;
   }
   & :global(.keyInner) {
     height: stretch;
+  }
+
+  & :global(.title) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: calc(100% - 1.5em);
   }
 }
 </style>

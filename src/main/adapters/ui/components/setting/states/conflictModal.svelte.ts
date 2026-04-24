@@ -33,19 +33,10 @@ export class ConflictModalState {
     this.isSelectingAllUploaded = $derived(
       this.conflictStates.every(({ isUploadSelected }) => isUploadSelected),
     )
-    // this.currentConflictSelections = $derived(
-    //   this.conflictStates.map((conflictState) => {
-    //     if (conflictState.isUploadSelected) {
-    //       return conflictState.uploaded
-    //     } else {
-    //       return conflictState.existing
-    //     }
-    //   }),
-    // )
     $effect.root(() => {
       $effect(() => {
         // close modal when setting is closed?
-        if (settingModalState.show === false) this.show = false
+        if (settingModalState.show === false) this.cancel()
       })
     })
   }

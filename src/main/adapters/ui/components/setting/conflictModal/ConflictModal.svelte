@@ -15,6 +15,7 @@ let { setting } = getInjections()
 <Popover
   onclose={() => {
     // blink cancel button
+    conflictModal.cancel()
   }}
   padding={"0.6em"}
   zIndex={101}
@@ -23,8 +24,9 @@ let { setting } = getInjections()
     <!--  -->
     <Key
       props={{
-        fontSize: "16px",
+        fontSize: "18px",
         padding: "0.4em",
+        shadow: "small",
         onclick: () => {
           conflictModal.cancel()
         },
@@ -42,7 +44,7 @@ let { setting } = getInjections()
     <div class="selectAllExistingOrUploaded w-full flex gap-[0.3em]">
       <Key
         props={{
-          fontSize: "14px",
+          fontSize: "15px",
           padding: "0.4em",
           shadow: "small",
           point: setting.pointColor,
@@ -60,7 +62,7 @@ let { setting } = getInjections()
 
       <Key
         props={{
-          fontSize: "14px",
+          fontSize: "15px",
           padding: "0.4em",
           shadow: "small",
           point: setting.pointColor,
@@ -90,7 +92,8 @@ let { setting } = getInjections()
     <Key
       props={{
         fontSize: "18px",
-        padding: "0.4em",
+        padding: "0.6em",
+        shadow: "small",
         onclick: () => {
           conflictModal.done()
         },
@@ -110,6 +113,10 @@ ul#handleConflictModalContent {
   gap: 0.4em;
 
   min-width: 18em;
+
+  & :global(button:hover) {
+    cursor: pointer;
+  }
 }
 
 ul#conflictItems {
@@ -118,10 +125,12 @@ ul#conflictItems {
   align-items: center;
   gap: 0.5em;
 
-  max-height: 20em;
+  max-width: 27rem;
+  max-height: 50vh;
   overflow-y: scroll;
+  overflow-x: hidden;
 
-  padding-right: 0.3em;
+  padding-right: 0.35em;
   &::-webkit-scrollbar {
     width: 0.4rem;
     background-color: var(--shadow-1);
@@ -133,6 +142,8 @@ ul#conflictItems {
 }
 
 .selectAllExistingOrUploaded > :global(button) {
-  width: 50%;
+  /* width: 50%; */
+  flex: 1 0 0;
+  min-width: 0;
 }
 </style>

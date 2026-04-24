@@ -78,13 +78,16 @@
     }
   },
   "toast_upload_titles_file_cancel": {
-    "message": "파일 업로드 취소:\n선택된 파일이 적용되지 않았습니다."
+    "message": "파일 업로드 취소:\n불러온 파일이 적용되지 않았습니다."
   },
   "toast_upload_titles_file_success": {
     "message": "파일 업로드 성공:\n탭 이름 데이터가 성공적으로 기존 데이터들에 추가되었습니다."
   },
   "toast_upload_titles_file_inappropriate_format": {
     "message": "파일 업로드 중 에러 발생:\n부적절한 파일 포맷: 선택된 파일이 유효하지 않습니다."
+  },
+  "toast_upload_titles_file_validation_error": {
+    "message": "파일 업로드 중 에러 발생:\n검증 에러: 데이터는 JSON 객체 형식이어야 하며, 모든 키들은 큰따옴표로 감싸진 문자열이어야 합니다."
   },
   "toast_persist_apply_on": {
     "message": "탭 이름 저장 & 적용 옵션을 켰음:\n이제부터 탭 이름 변경 적용들이 저장되며, 해당 탭들을 열 때 자동으로 적용됩니다."

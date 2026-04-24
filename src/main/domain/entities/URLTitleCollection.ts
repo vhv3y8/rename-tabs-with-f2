@@ -22,6 +22,21 @@ export interface URLTitleCollection {
     resolvedConflictions: URLTitleResolvedConfliction[],
   ): void
 }
+export function isValidURLTitleCollectionRecord(
+  data: any,
+): data is Record<string, any> {
+  // only check if data is object. map value with .toString() when using
+  if (typeof data !== "object" || Array.isArray(data) || data === null)
+    return false
+  if (Object.keys(data).some((key) => typeof key !== "string")) return false
+  return true
+}
+export class SchemaValidationError extends SyntaxError {
+  constructor(message: string) {
+    super(message)
+    this.name = "SchemaValidationError"
+  }
+}
 
 export class URLTitleRecord implements URLTitleCollection {
   public record: Record<URLMatch, TabTitle> = {}
@@ -55,34 +70,38 @@ export class URLTitleRecord implements URLTitleCollection {
   checkEntryConflictions(entries: [URLMatch, TabTitle][]) {
     let conflictions = [] as URLTitleConfliction[]
     // check conflictions first
-    for (const [urlMatch, title] of entries) {
-      // if (this.record[urlMatch] !== undefined) {
-      //   conflictions.push([
-      //     // existing
-      //     {
-      //       match: urlMatch,
-      //       title: this.record[urlMatch],
-      //     },
-      //     // given entry
-      //     {
-      //       match: urlMatch,
-      //       title,
-      //     },
-      //   ])
-      // }
+    for (const [urlMatch, entryTitle] of entries) {
+      const existingTitle = this.record[urlMatch]
+      if (existingTitle !== undefined && existingTitle !== "") {
+        // same titles are not confliction
+        if (entryTitle !== "" && entryTitle !== existingTitle) {
+          conflictions.push([
+            // existing
+            {
+              match: urlMatch,
+              title: existingTitle,
+            },
+            // given entry
+            {
+              match: urlMatch,
+              title: entryTitle,
+            },
+          ])
+        }
+      }
       // test
-      conflictions.push([
-        // existing
-        {
-          match: urlMatch,
-          title: this.record[urlMatch],
-        },
-        // given entry
-        {
-          match: urlMatch,
-          title,
-        },
-      ])
+      // conflictions.push([
+      //   // existing
+      //   {
+      //     match: urlMatch,
+      //     title: existingTitle,
+      //   },
+      //   // given entry
+      //   {
+      //     match: urlMatch,
+      //     title,
+      //   },
+      // ])
     }
     console.log("[check entry conflictions]", conflictions)
     return conflictions

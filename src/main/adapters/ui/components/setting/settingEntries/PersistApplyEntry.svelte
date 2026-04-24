@@ -51,6 +51,7 @@ const {
     <Key
       props={{
         padding: "0.6em",
+        fontSize: "17px",
         onclick: () => {
           clickHiddenInputFileTag()
         },
@@ -60,6 +61,7 @@ const {
     <Key
       props={{
         padding: "0.6em",
+        fontSize: "17px",
         onclick: () => {
           clickExportUrlTitleFileHandler()
         },

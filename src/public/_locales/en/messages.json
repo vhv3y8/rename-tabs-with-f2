@@ -77,13 +77,16 @@
     }
   },
   "toast_upload_titles_file_cancel": {
-    "message": "Cancel File Upload:\nSelected file is not applied."
+    "message": "Cancel File Upload:\nLoaded file is not applied."
   },
   "toast_upload_titles_file_success": {
     "message": "File Upload Success:\nTab title datas are successfully appended to existing datas."
   },
   "toast_upload_titles_file_inappropriate_format": {
     "message": "Error while uploading file:\nInappropriate File Format: Selected file is invalid."
+  },
+  "toast_upload_titles_file_validation_error": {
+    "message": "Error while uploading file:\nValidation Error: Data should be JSON object format, and all keys should be string wrapped with double quotes."
   },
   "toast_persist_apply_on": {
     "message": "Persist & Apply Titles Option ON:\nRename applications will be saved from now.\nAnd it'll be automatically applied when opening those tabs."

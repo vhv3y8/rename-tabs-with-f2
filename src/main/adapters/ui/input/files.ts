@@ -2,7 +2,10 @@ import type { ToastPublisher } from "@application/ports/infra/ToastPublisher"
 import type { UploadURLTitleCollectionUseCase } from "@application/usecases/file/uploadURLTitleCollection"
 import { TOAST_MESSAGES } from "../impl/toastPublisher.svelte"
 import type { Serializer } from "@application/ports/infra/Serializer"
-import type { URLTitleCollection } from "@domain/entities/URLTitleCollection"
+import {
+  SchemaValidationError,
+  type URLTitleCollection,
+} from "@domain/entities/URLTitleCollection"
 import type { ExportURLTitleCollectionFileUseCase } from "@application/usecases/file/exportURLTitleCollectionFile"
 
 export function createExportURLTitleFileClickHandler(
@@ -14,7 +17,7 @@ export function createExportURLTitleFileClickHandler(
 }
 
 export class DOMURLTitleFileUploadHandler {
-  // single file fow now
+  // single file for now
   blob: Blob | null = null
   constructor(
     private serializer: Serializer<URLTitleCollection, string>,
@@ -29,17 +32,22 @@ export class DOMURLTitleFileUploadHandler {
         console.log("[blobText]", blobText, typeof blobText)
         // deserialize
         const loadedCollection = this.serializer.deserialize(blobText)
+        // schema check
+        // same field in file?
         // run use case
         this.uploadURLTitleCollectionUseCase(loadedCollection)
       } else {
         throw new Error("Tried to read uploaded file, but it's not set.")
       }
     } catch (e) {
-      if (e instanceof SyntaxError) {
+      if (e instanceof SchemaValidationError) {
+        this.toastPublisher.publishToast(TOAST_MESSAGES.UPLOAD_VALIDATION_ERROR)
+      } else if (e instanceof SyntaxError) {
         // json parse error probably
         this.toastPublisher.publishToast(
           TOAST_MESSAGES.UPLOAD_INAPPROPRIATE_FORMAT,
         )
+        // this.toastPublisher.publishToast(`${e.name}: ${e.message}`)
       } else if (e instanceof Error) {
         this.toastPublisher.publishToast(
           `Error while uploading file:\n${e.name}: ${e.message}`,
