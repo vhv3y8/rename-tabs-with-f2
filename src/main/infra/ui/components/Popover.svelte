@@ -1,10 +1,16 @@
 <script>
-let { directionDown, onclose, children } = $props()
+let {
+  zIndex = 100,
+  opacity = 1,
+  onclose,
+  padding = "0.7em 0.8em",
+  children,
+} = $props()
 </script>
 
 <!-- HTML -->
 
-<div class="popover">
+<div class="popover" style:z-index={zIndex} style:opacity style:padding>
   {@render children?.()}
 </div>
 
@@ -19,12 +25,12 @@ div.popover {
   bottom: calc(100% + 0.4em);
   background-color: inherit;
 
-  padding: 0.7em 0.8em;
+  /* padding: 0.7em 0.8em; */
   border: 2px solid var(--primary-7);
   box-shadow: 0 0 2px 2px var(--shadow-1);
   background: var(--bg);
 
-  z-index: 100;
+  /* z-index: 100; */
 }
 
 button.popoverBackground {

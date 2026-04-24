@@ -4,6 +4,8 @@ import { keydowns } from "./reactivity/keys.svelte"
 import SettingModal from "./setting/SettingModal.svelte"
 import { settingModal } from "./setting/states/settingModal.svelte"
 import { getInjections } from "../injections"
+import { conflictModal } from "./setting/states/conflictModal.svelte"
+import ConflictModal from "./setting/conflictModal/ConflictModal.svelte"
 
 function keydownCloseSettingHandler(e: KeyboardEvent) {
   switch (e.key) {
@@ -47,10 +49,15 @@ const { keydownApplyHandler, clickApplyHandler, setting } = getInjections()
     <!-- setting modal -->
     {#if settingModal.show}
       <SettingModal
+        blur={conflictModal.show}
         onclose={() => {
           settingModal.hide()
         }}
       />
+    {/if}
+    <!-- conflict modal -->
+    {#if conflictModal.show}
+      <ConflictModal />
     {/if}
   </div>
   <!-- save & close -->

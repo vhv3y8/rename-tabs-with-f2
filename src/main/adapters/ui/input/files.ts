@@ -63,6 +63,8 @@ export class DOMURLTitleFileUploadHandler {
       if (0 < files.length) {
         this.blob = files[0]
         await this.deserializeAndRunUploadUseCase()
+        this.blob = null
+        target.value = ""
       }
     }
     return changeFileLoadHandler
@@ -94,12 +96,16 @@ export class DOMURLTitleFileUploadHandler {
       hiddenInput.type = "file"
       hiddenInput.style.display = "none"
       hiddenInput.addEventListener("change", async (e) => {
+        console.log("[hidden input change]")
         const target = e.target as HTMLInputElement
         const files = target.files
         if (files !== null && 0 < files.length) {
           console.log("[hidden input change handler] [files]", files)
           this.blob = files[0]
           await this.deserializeAndRunUploadUseCase()
+          this.blob = null
+          target.value = ""
+          console.log("[set blob to null]")
         } else {
           console.error(
             "[hidden input change handler] [given files are falsy]",
@@ -131,6 +137,8 @@ export class DOMURLTitleFileUploadHandler {
             if (0 < files.length) {
               this.blob = files[0]
               await this.deserializeAndRunUploadUseCase()
+              this.blob = null
+              // target.value = ""
             }
           } else {
             console.error(

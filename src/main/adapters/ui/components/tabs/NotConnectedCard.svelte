@@ -55,8 +55,8 @@ function keydownDismissHandler(e: KeyboardEvent) {
           {chrome.i18n.getMessage("not_connected_description", [
             allCount.toString(),
             1 < allCount
-              ? chrome.i18n.getMessage("note_connected_description_plural")
-              : chrome.i18n.getMessage("note_connected_description_not_plural"),
+              ? chrome.i18n.getMessage("not_connected_description_plural")
+              : chrome.i18n.getMessage("not_connected_description_not_plural"),
           ])}
         </span>
 

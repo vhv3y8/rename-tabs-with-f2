@@ -56,20 +56,33 @@ export class URLTitleRecord implements URLTitleCollection {
     let conflictions = [] as URLTitleConfliction[]
     // check conflictions first
     for (const [urlMatch, title] of entries) {
-      if (this.record[urlMatch] !== undefined) {
-        conflictions.push([
-          // existing
-          {
-            match: urlMatch,
-            title: this.record[urlMatch],
-          },
-          // given entry
-          {
-            match: urlMatch,
-            title,
-          },
-        ])
-      }
+      // if (this.record[urlMatch] !== undefined) {
+      //   conflictions.push([
+      //     // existing
+      //     {
+      //       match: urlMatch,
+      //       title: this.record[urlMatch],
+      //     },
+      //     // given entry
+      //     {
+      //       match: urlMatch,
+      //       title,
+      //     },
+      //   ])
+      // }
+      // test
+      conflictions.push([
+        // existing
+        {
+          match: urlMatch,
+          title: this.record[urlMatch],
+        },
+        // given entry
+        {
+          match: urlMatch,
+          title,
+        },
+      ])
     }
     console.log("[check entry conflictions]", conflictions)
     return conflictions

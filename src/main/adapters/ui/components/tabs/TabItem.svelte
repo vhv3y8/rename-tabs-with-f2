@@ -5,14 +5,14 @@ import { tabItemComponents } from "./states/tabItemComponents.svelte"
 let elem = null
 
 let { tabInfo }: { tabInfo: TabInfoState } = $props()
-let localTitle = $state(tabInfo.titleState)
+let localTitle = $state(tabInfo.title)
 let focusableIdx = $derived(
   tabItemComponents.focusableIdxFromTabIdLookup[tabInfo.id],
 )
 
 function applyLocalTitle() {
   if (!tabInfo.hasChanged) {
-    tabInfo.titleState = localTitle
+    tabInfo.title = localTitle
     tabInfo.hasChanged = true
   }
 }
@@ -43,10 +43,10 @@ export function getTabInfo() {
       width="24"
       height="24"
     />
+    <!-- placeholder={tabInfo.title} -->
     <input
       type="text"
       name=""
-      placeholder={tabInfo.title}
       bind:this={elem}
       bind:value={localTitle}
       spellcheck="false"

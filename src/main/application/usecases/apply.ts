@@ -1,4 +1,5 @@
 // import { tabIdxInfoStore } from "@main/bootstrap"
+import type { TabTitle, URLMatch } from "@domain/entities/URLTitleCollection"
 import type { TabInfoStore } from "../ports/TabInfoStore"
 import type { URLTitleCollectionStore } from "../ports/URLTitleCollectionStore"
 import type { PlatformMainFacade } from "../ports/infra/PlatformMainFacade"
@@ -18,6 +19,18 @@ export function createApplyUseCase(
   return async function apply() {
     lifeCycle.beforeStart?.()
 
+    // save to titles
+    const urlTitleCollection = urlTitleCollectionStore.getCollection()
+    const titleInfosToSave = tabInfoStore.getTitleInfosToSave()
+    const titleEntries = titleInfosToSave.map(({ url, title }) => [
+      url,
+      title,
+    ]) as [URLMatch, TabTitle][]
+    console.log("[apply] [title entries]", titleEntries)
+    urlTitleCollection.appendEntriesWithResolvedConflictions(titleEntries, [])
+    urlTitleCollectionStore.storeUpdatedCollection()
+    console.log("[apply] [stored collection]")
+
     // remove stuffs to remove from url title and save it?
     // empty input -> remove from db if exists
 
@@ -34,6 +47,6 @@ export function createApplyUseCase(
         ),
     )
 
-    lifeCycle.closePageAfterFinish?.()
+    // lifeCycle.closePageAfterFinish?.()
   }
 }

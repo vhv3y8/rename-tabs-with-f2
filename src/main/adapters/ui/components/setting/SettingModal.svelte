@@ -6,12 +6,12 @@ import HotKeyEntry from "./settingEntries/HotKeyEntry.svelte"
 import PointColorEntry from "./settingEntries/PointColorEntry.svelte"
 import PersistApplyEntry from "./settingEntries/PersistApplyEntry.svelte"
 
-let { onclose } = $props()
+let { blur, onclose } = $props()
 </script>
 
 <!-- HTML -->
 
-<Popover {onclose} directionDown={false}>
+<Popover {onclose} zIndex={100} opacity={blur ? 0.5 : 1}>
   <ul id="settingsPopoverContent">
     <PointColorEntry />
     <DarkModeEntry />

@@ -77,7 +77,7 @@
     }
   },
   "toast_upload_titles_file_cancel": {
-    "message": "Canceled File Upload:\nSelected file is not applied."
+    "message": "Cancel File Upload:\nSelected file is not applied."
   },
   "toast_upload_titles_file_success": {
     "message": "File Upload Success:\nTab title datas are successfully appended to existing datas."
