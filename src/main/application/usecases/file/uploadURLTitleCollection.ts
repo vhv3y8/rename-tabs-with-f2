@@ -1,6 +1,5 @@
 import { TOAST_MESSAGES } from "@adapters/ui/impl/toastPublisher.svelte"
 import { type Result } from "@lib/types/Result"
-import type { FileStorage } from "@main/application/ports/infra/FileStorage"
 import type { ToastPublisher } from "@main/application/ports/infra/ToastPublisher"
 import { type URLTitleCollectionStore } from "@main/application/ports/URLTitleCollectionStore"
 import type {
@@ -9,51 +8,28 @@ import type {
   URLTitleResolvedConfliction,
 } from "@main/domain/entities/URLTitleCollection"
 
-export interface UploadURLTitleFileLifeCycle {
+export interface UploadURLTitleCollectionLifeCycle {
   handleConflicts(
     conflictions: URLTitleConfliction[],
-  ): Promise<
-    Result<URLTitleResolvedConfliction[], UploadURLTitleFileConflictError>
-  >
+  ): Promise<Result<URLTitleResolvedConfliction[], UploadURLTitleConflictError>>
 }
-export type UploadURLTitleFileConflictError = {
+export type UploadURLTitleConflictError = {
   type: "USER_CANCEL"
 }
 
-export type UploadURLTitleCollectionFileUseCase = ReturnType<
-  typeof createUploadURLTitleCollectionFile
+export type UploadURLTitleCollectionUseCase = ReturnType<
+  typeof createUploadURLTitleCollection
 >
 
-export function createUploadURLTitleCollectionFile(
+export function createUploadURLTitleCollection(
   urlTitleCollectionStore: URLTitleCollectionStore,
-  urlTitleCollectionFileStorage: FileStorage<URLTitleCollection>,
   toastPublisher: ToastPublisher,
-  lifeCycle: UploadURLTitleFileLifeCycle,
+  lifeCycle: UploadURLTitleCollectionLifeCycle,
 ) {
-  return async function uploadURLTitleCollectionFile() {
-    let loadedCollection: URLTitleCollection
-    let loadedEntries: ReturnType<typeof loadedCollection.entries>
-    // get loaded collection
-    try {
-      loadedCollection = await urlTitleCollectionFileStorage.loadFile()
-      loadedEntries = loadedCollection.entries()
-    } catch (e) {
-      if (e instanceof SyntaxError) {
-        // json parse error only, for now
-        toastPublisher.publishToast(TOAST_MESSAGES.UPLOAD_INAPPROPRIATE_FORMAT)
-      } else if (e instanceof Error) {
-        toastPublisher.publishToast(
-          `Error while uploading file:\n${e.name}: ${e.message}`,
-        )
-      } else {
-        // this should not happen
-        toastPublisher.publishToast(
-          `Error while uploading file:\nSomething strange is happening....`,
-        )
-        toastPublisher.publishToast(`Catched: ${e}`)
-      }
-      return
-    }
+  return async function uploadURLTitleCollection(
+    loadedCollection: URLTitleCollection,
+  ) {
+    const loadedEntries = loadedCollection.entries()
     // get existing collection
     let existingCollection: URLTitleCollection
     try {
@@ -96,16 +72,6 @@ export function createUploadURLTitleCollectionFile(
           }
         },
       })
-      // // probably can remove try catch block
-      // try {
-      // } catch (e) {
-      //   // this should not happen
-      //   toastPublisher.publishToast(
-      //     `Error while handling conflictions:\nSomething strange is happening....`,
-      //   )
-      //   toastPublisher.publishToast(`Catched: ${e}`)
-      //   return
-      // }
     }
 
     console.log(

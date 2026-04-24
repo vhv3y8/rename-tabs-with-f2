@@ -10,6 +10,7 @@ let {
   title: {
     content: string
     appearance: "inline" | "block"
+    marginBottom?: string
   }
   liClassName?: string
   flexCol?: boolean
@@ -21,9 +22,11 @@ let {
 
 <li class={`${liClassName ? liClassName : ""}`} class:flexCol>
   {#if title.appearance === "inline"}
-    <span>{title.content} :</span>
+    <span style:margin-bottom={title.marginBottom}>{title.content} :</span>
   {:else if title.appearance === "block"}
-    <p><span>{title.content} :</span></p>
+    <p style:margin-bottom={title.marginBottom}>
+      <span>{title.content} :</span>
+    </p>
   {/if}
 
   {@render children()}

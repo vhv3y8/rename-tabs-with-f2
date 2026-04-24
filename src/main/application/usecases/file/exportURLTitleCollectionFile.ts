@@ -1,4 +1,4 @@
-import type { FileStorage } from "@main/application/ports/infra/FileStorage"
+import type { FileExporter } from "@application/ports/infra/FileExporter"
 import type { URLTitleCollectionStore } from "@main/application/ports/URLTitleCollectionStore"
 import type { URLTitleCollection } from "@main/domain/entities/URLTitleCollection"
 
@@ -8,12 +8,13 @@ export type ExportURLTitleCollectionFileUseCase = ReturnType<
 
 export function createExportURLTitleCollectionFile(
   urlTitleCollectionStore: URLTitleCollectionStore,
-  urlTitleCollectionFileStorage: FileStorage<URLTitleCollection>,
+  // urlTitleCollectionFileStorage: FileStorage<URLTitleCollection>,
+  urlTitleCollectionFileExporter: FileExporter<URLTitleCollection>,
 ) {
   return async function exportURLTitleCollectionFile() {
     // get collection
     const collection = urlTitleCollectionStore.getCollection()
     // download file
-    await urlTitleCollectionFileStorage.saveFile(collection)
+    await urlTitleCollectionFileExporter.export(collection)
   }
 }

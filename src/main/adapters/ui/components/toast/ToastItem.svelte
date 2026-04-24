@@ -3,7 +3,7 @@ import { fade, fly, scale } from "svelte/transition"
 import { getInjections } from "../../injections"
 
 const { toasts } = getInjections()
-let { text, id } = $props()
+let { content, id } = $props()
 </script>
 
 <!-- HTML -->
@@ -17,7 +17,7 @@ let { text, id } = $props()
   in:fly={{ y: "5px" }}
   out:fade={{ duration: 200 }}
 >
-  {#each text.split("\n") as line}
+  {#each content.split("\n") as line}
     <p>{line}</p>
   {/each}
 </button>
@@ -30,7 +30,7 @@ button {
 
   display: flex;
   flex-flow: column nowrap;
-  gap: 0.4em;
+  gap: 6px;
 
   font-size: 1rem;
   padding: 1em;
@@ -56,6 +56,7 @@ p {
 
   font-family: "Ubuntu";
   font-size: 1rem;
-  line-height: 1.4;
+  /* line-height: 1.4; */
+  line-height: 1.6;
 }
 </style>

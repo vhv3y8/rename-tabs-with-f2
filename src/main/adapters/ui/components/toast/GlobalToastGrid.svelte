@@ -9,7 +9,7 @@ const { toasts } = getInjections()
 
 <ul id="globalToastGrid">
   {#each toasts.getAll() as toastItem (toastItem.id)}
-    <ToastItem text={toastItem.text} id={toastItem.id} />
+    <ToastItem content={toastItem.content} id={toastItem.id} />
   {/each}
 </ul>
 

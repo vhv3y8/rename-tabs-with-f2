@@ -9,6 +9,7 @@ export class URLTitleRecordJSONCodec
   }
   deserialize(raw: string): URLTitleRecord {
     const parsed = JSON.parse(raw)
+    // TODO: check schema and throw SyntaxError "ParseError: asdf"
     return new URLTitleRecord().fromRecord(parsed)
   }
 }

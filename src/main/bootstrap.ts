@@ -50,16 +50,20 @@ import {
   type ExportURLTitleCollectionFileUseCase,
 } from "@application/usecases/file/exportURLTitleCollectionFile"
 import type { Serializer } from "@application/ports/infra/Serializer"
-import { WebAPITextFileStorage } from "@infra/web/impl/WebAPITextFileStorage"
 import type { URLTitleCollection } from "@domain/entities/URLTitleCollection"
 import { URLTitleRecordJSONCodec } from "@infra/web/impl/JSONCodec"
-import type { FileStorage } from "@application/ports/infra/FileStorage"
-import {
-  createUploadURLTitleCollectionFile,
-  type UploadURLTitleCollectionFileUseCase,
-  type UploadURLTitleFileLifeCycle,
-} from "@application/usecases/file/uploadURLTitleCollectionFile"
 import { uploadURLTitleLifeCycle } from "@adapters/ui/impl/lifecycles/uploadURLTitleLifeCycle"
+import {
+  createExportURLTitleFileClickHandler,
+  DOMURLTitleFileUploadHandler,
+} from "@adapters/ui/input/files"
+import type { FileExporter } from "@application/ports/infra/FileExporter"
+import { WebTextFileExporter } from "@infra/web/impl/WebFileExporter"
+import {
+  createUploadURLTitleCollection,
+  type UploadURLTitleCollectionLifeCycle,
+  type UploadURLTitleCollectionUseCase,
+} from "@application/usecases/file/uploadURLTitleCollection"
 
 export async function runBootstrap() {
   // create infra impl
@@ -71,8 +75,12 @@ export async function runBootstrap() {
     URLTitleCollection,
     string
   > = new URLTitleRecordJSONCodec()
-  const urlTitleCollectionFileStorage: FileStorage<URLTitleCollection> =
-    new WebAPITextFileStorage(urlTitleCollectionJSONSerializer)
+  const urlTitleCollectionFileExporter: FileExporter<URLTitleCollection> =
+    new WebTextFileExporter(
+      urlTitleCollectionJSONSerializer,
+      "application/json",
+      "RenameTabsWithF2-TitlesData.json",
+    )
 
   // create output adapter impl
 
@@ -113,16 +121,15 @@ export async function runBootstrap() {
   const exportURLTitleCollectionFileUseCase: ExportURLTitleCollectionFileUseCase =
     createExportURLTitleCollectionFile(
       urlTitleCollectionStore,
-      urlTitleCollectionFileStorage,
+      urlTitleCollectionFileExporter,
     )
-  const uploadURLTitleCollectionFileLifeCycle: UploadURLTitleFileLifeCycle =
+  const uploadURLTitleCollectionLifeCycle: UploadURLTitleCollectionLifeCycle =
     uploadURLTitleLifeCycle
-  const uploadURLTitleCollectionFileUseCase: UploadURLTitleCollectionFileUseCase =
-    createUploadURLTitleCollectionFile(
+  const uploadURLTitleCollectionFileUseCase: UploadURLTitleCollectionUseCase =
+    createUploadURLTitleCollection(
       urlTitleCollectionStore,
-      urlTitleCollectionFileStorage,
       toastPublisher,
-      uploadURLTitleCollectionFileLifeCycle,
+      uploadURLTitleCollectionLifeCycle,
     )
 
   // initializations
@@ -163,6 +170,14 @@ export async function runBootstrap() {
     reloadAllConnectableTabsUseCase,
   )
   // files
+  const urlTitleFileUploadHandler = new DOMURLTitleFileUploadHandler(
+    urlTitleCollectionJSONSerializer,
+    uploadURLTitleCollectionFileUseCase,
+    toastPublisher,
+  )
+  const clickExportUrlTitleFileHandler = createExportURLTitleFileClickHandler(
+    exportURLTitleCollectionFileUseCase,
+  )
 
   // registering input adapters are delegated to svelte components
 
@@ -181,5 +196,7 @@ export async function runBootstrap() {
     clickApplyHandler,
     keydownReloadUseCaseHandler,
     clickReloadUseCaseHandler,
+    urlTitleFileUploadHandler,
+    clickExportUrlTitleFileHandler,
   }
 }

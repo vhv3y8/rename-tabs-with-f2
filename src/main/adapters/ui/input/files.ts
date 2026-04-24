@@ -1,49 +1,68 @@
-import type { FileStorage } from "@main/application/ports/infra/FileStorage"
-import type { Serializer } from "@main/application/ports/infra/Serializer"
+import type { ToastPublisher } from "@application/ports/infra/ToastPublisher"
+import type { UploadURLTitleCollectionUseCase } from "@application/usecases/file/uploadURLTitleCollection"
+import { TOAST_MESSAGES } from "../impl/toastPublisher.svelte"
+import type { Serializer } from "@application/ports/infra/Serializer"
+import type { URLTitleCollection } from "@domain/entities/URLTitleCollection"
+import type { ExportURLTitleCollectionFileUseCase } from "@application/usecases/file/exportURLTitleCollectionFile"
 
-export class WebAPITextFileStorage<T> implements FileStorage<T> {
-  // single file for now
+export function createExportURLTitleFileClickHandler(
+  exportURLTitleFileUseCase: ExportURLTitleCollectionFileUseCase,
+) {
+  return function exportURLTitleFileClickHandler() {
+    exportURLTitleFileUseCase()
+  }
+}
+
+export class DOMURLTitleFileUploadHandler {
+  // single file fow now
   blob: Blob | null = null
-  public saveMimeType: string = "text/plain"
-  public saveFileName: string = "file.txt"
-  constructor(public serializer: Serializer<T, string>) {}
-  // setSaveConfig("application/json", "RenameTabsWithF2-TitlesData.json")
-  setSaveConfig(saveMimeType: string, saveFileName: string) {
-    this.saveMimeType = saveMimeType
-    this.saveFileName = saveFileName
-  }
+  constructor(
+    private serializer: Serializer<URLTitleCollection, string>,
+    private uploadURLTitleCollectionUseCase: UploadURLTitleCollectionUseCase,
+    private toastPublisher: ToastPublisher,
+  ) {}
 
-  async loadFile(): Promise<T> {
-    if (this.blob) {
-      const blobText = await this.blob.text()
-      return Promise.resolve(this.serializer.deserialize(blobText))
+  private async deserializeAndRunUploadUseCase() {
+    try {
+      if (this.blob) {
+        const blobText = await this.blob.text()
+        console.log("[blobText]", blobText, typeof blobText)
+        // deserialize
+        const loadedCollection = this.serializer.deserialize(blobText)
+        // run use case
+        this.uploadURLTitleCollectionUseCase(loadedCollection)
+      } else {
+        throw new Error("Tried to read uploaded file, but it's not set.")
+      }
+    } catch (e) {
+      if (e instanceof SyntaxError) {
+        // json parse error probably
+        this.toastPublisher.publishToast(
+          TOAST_MESSAGES.UPLOAD_INAPPROPRIATE_FORMAT,
+        )
+      } else if (e instanceof Error) {
+        this.toastPublisher.publishToast(
+          `Error while uploading file:\n${e.name}: ${e.message}`,
+        )
+      } else {
+        // this should not happen
+        this.toastPublisher.publishToast(
+          `Error while uploading file:\nSomething strange is happening....`,
+        )
+        this.toastPublisher.publishToast(`Catched: ${e}`)
+      }
     }
-    return Promise.reject(new Error("File is not added."))
-  }
-  async saveFile(data: T) {
-    const serialized = this.serializer.serialize(data)
-    // create blob
-    const blob = new Blob([serialized], { type: this.saveMimeType })
-    // create url and <a> tag
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement("a")
-    a.href = url
-    a.download = this.saveFileName
-    // click <a> tag and remove url
-    a.click()
-    setTimeout(() => {
-      URL.revokeObjectURL(url)
-    }, 100)
   }
 
   // use this for input type="file" tag directly
   createFileLoadInputChangeHandler(): (e: Event) => void {
     // have to be arrow function to use `this`
-    const changeFileLoadHandler = (e: Event) => {
+    const changeFileLoadHandler = async (e: Event) => {
       const target = e.target as HTMLInputElement
       const files = target.files || []
       if (0 < files.length) {
         this.blob = files[0]
+        await this.deserializeAndRunUploadUseCase()
       }
     }
     return changeFileLoadHandler
@@ -51,8 +70,8 @@ export class WebAPITextFileStorage<T> implements FileStorage<T> {
   // use this when creating custom element for input
   createFileLoadCustomUIHandlers(
     options: {
-      click: boolean
-      dragndrop: boolean
+      click?: boolean
+      dragndrop?: boolean
     } = { click: true, dragndrop: true },
   ): {
     // click method will trigger hidden input type="file" tag click
@@ -74,13 +93,13 @@ export class WebAPITextFileStorage<T> implements FileStorage<T> {
       const hiddenInput = document.createElement("input")
       hiddenInput.type = "file"
       hiddenInput.style.display = "none"
-      hiddenInput.addEventListener("change", (e) => {
+      hiddenInput.addEventListener("change", async (e) => {
         const target = e.target as HTMLInputElement
         const files = target.files
         if (files !== null && 0 < files.length) {
           console.log("[hidden input change handler] [files]", files)
-          // single file for now
           this.blob = files[0]
+          await this.deserializeAndRunUploadUseCase()
         } else {
           console.error(
             "[hidden input change handler] [given files are falsy]",
@@ -100,7 +119,7 @@ export class WebAPITextFileStorage<T> implements FileStorage<T> {
           e.preventDefault()
         },
         // have to be arrow function to use `this`
-        dropFileLoadHandler: (e) => {
+        dropFileLoadHandler: async (e) => {
           e.preventDefault()
           if (e.dataTransfer) {
             const files = e.dataTransfer.files
@@ -110,8 +129,8 @@ export class WebAPITextFileStorage<T> implements FileStorage<T> {
               files,
             )
             if (0 < files.length) {
-              // single file for now
               this.blob = files[0]
+              await this.deserializeAndRunUploadUseCase()
             }
           } else {
             console.error(

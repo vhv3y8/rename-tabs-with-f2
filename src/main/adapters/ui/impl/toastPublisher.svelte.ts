@@ -16,12 +16,15 @@ export const TOAST_MESSAGES = {
   UPLOAD_INAPPROPRIATE_FORMAT: chrome.i18n.getMessage(
     "toast_upload_titles_file_inappropriate_format",
   ),
+  PERSIST_APPLY_ON: chrome.i18n.getMessage("toast_persist_apply_on"),
   PERSIST_APPLY_OFF: chrome.i18n.getMessage(
     "toast_persist_apply_off_data_remains",
   ),
 }
 
-// type ToastItem = { id: number; text: any; duration: number }
+// interface ToastItemImpl extends ToastItem {
+//   duration: number
+// }
 export class Toasts implements ToastPublisher {
   list: ToastItem[] = $state([])
   private timers: Map<number, ReturnType<typeof setTimeout>> = new Map()
@@ -34,18 +37,18 @@ export class Toasts implements ToastPublisher {
     // })
   }
 
-  publishToast(text: string): number {
+  publishToast(content: string, duration?: number): number {
     const toastId = this.nextId
-    console.log("[appending toast]", {
+    console.log("[appending toast]", "[given duration]", duration, {
       id: toastId,
-      text,
-      duration: this.DURATION,
+      content,
+      duration: duration || this.DURATION,
     })
 
     this.list.unshift({
       id: toastId,
-      text,
-      duration: this.DURATION,
+      content,
+      duration: duration || this.DURATION,
     })
     // add timer
     if (!this.timers.has(toastId)) {

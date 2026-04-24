@@ -43,10 +43,10 @@
   },
 
   "settings_upload_titles_file": {
-    "message": "load file"
+    "message": "load titles"
   },
   "settings_save_titles_file": {
-    "message": "save file"
+    "message": "save titles"
   },
   "settings_resolve_conflicts": {
     "message": "Resolve Conflicts"
@@ -83,10 +83,13 @@
     "message": "File Upload Success:\nTab title datas are successfully appended to existing datas."
   },
   "toast_upload_titles_file_inappropriate_format": {
-    "message": "Inappropriate file format:\nSelected file is invalid."
+    "message": "Error while uploading file:\nInappropriate File Format: Selected file is invalid."
+  },
+  "toast_persist_apply_on": {
+    "message": "Persist & Apply Titles Option ON:\nRename applications will be saved from now.\nAnd it'll be automatically applied when opening those tabs."
   },
   "toast_persist_apply_off_data_remains": {
-    "message": "Turned Persist & Apply Titles Option Off:\nExisting tab title datas remain, but "
+    "message": "Persist & Apply Titles Option OFF:\nTitles will not be automatically applied or saved from now.\nExisting datas will remain."
   },
 
   "not_connected_description_not_plural": {

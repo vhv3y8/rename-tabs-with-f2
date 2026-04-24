@@ -1,18 +1,18 @@
 import type {
-  UploadURLTitleFileLifeCycle,
-  UploadURLTitleFileConflictError,
-} from "@application/usecases/file/uploadURLTitleCollectionFile"
+  UploadURLTitleCollectionLifeCycle,
+  UploadURLTitleConflictError,
+} from "@application/usecases/file/uploadURLTitleCollection"
 import type {
   URLTitleConfliction,
   URLTitleResolvedConfliction,
 } from "@domain/entities/URLTitleCollection"
 import { ok, type Result } from "@lib/types/Result"
 
-export const uploadURLTitleLifeCycle: UploadURLTitleFileLifeCycle = {
+export const uploadURLTitleLifeCycle: UploadURLTitleCollectionLifeCycle = {
   async handleConflicts(
     conflictions: URLTitleConfliction[],
   ): Promise<
-    Result<URLTitleResolvedConfliction[], UploadURLTitleFileConflictError>
+    Result<URLTitleResolvedConfliction[], UploadURLTitleConflictError>
   > {
     // set conflict state values
     // open conflict modal

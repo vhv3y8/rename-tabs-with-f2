@@ -44,10 +44,10 @@
   },
 
   "settings_upload_titles_file": {
-    "message": "파일 로드"
+    "message": "탭이름들 로드"
   },
   "settings_save_titles_file": {
-    "message": "파일 저장"
+    "message": "탭이름들 저장"
   },
   "settings_resolve_conflicts": {
     "message": "충돌 해결"
@@ -84,10 +84,13 @@
     "message": "파일 업로드 성공:\n탭 이름 데이터가 성공적으로 기존 데이터들에 추가되었습니다."
   },
   "toast_upload_titles_file_inappropriate_format": {
-    "message": "부적절한 파일 포맷:\n선택된 파일이 유효하지 않습니다."
+    "message": "파일 업로드 중 에러 발생:\n부적절한 파일 포맷: 선택된 파일이 유효하지 않습니다."
+  },
+  "toast_persist_apply_on": {
+    "message": "탭 이름 저장 & 적용 옵션을 켰음:\n이제부터 탭 이름 변경 적용들이 저장되며, 해당 탭들을 열 때 자동으로 적용됩니다."
   },
   "toast_persist_apply_off_data_remains": {
-    "message": "탭 이름 저장 & 적용 옵션을 껐음:\n기존의 탭 이름 데이터들은 남아있지만, 추가 저장 및 적용은 이루어지지 않습니다."
+    "message": "탭 이름 저장 & 적용 옵션을 껐음:\n이제부터 탭 이름들이 자동으로 적용되거나 저장되지 않습니다. 기존의 데이터들은 유지됩니다."
   },
 
   "not_connected_description_not_plural": {
