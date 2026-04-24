@@ -1,4 +1,3 @@
-import type { TabInfoState } from "@main/adapters/ui/components/tabs/states/tabInfoRecord.svelte"
 import type { PlatformMainFacade } from "@main/application/ports/infra/PlatformMainFacade"
 import type { TabInfoStore } from "@main/application/ports/TabInfoStore"
 import type { URLTitleCollectionStore } from "@main/application/ports/URLTitleCollectionStore"
@@ -22,11 +21,10 @@ export function createInitializeTabInfoStore(
         index,
         id: id!,
         title: title!,
-        // TODO: make sure that get title doesnt throw or something?
-        persistedTitle: urlTitleCollection.getTitle(url!) || "",
         favIconUrl: favIconUrl!,
         url: url!,
         status: status!,
+        persistedTitle: url ? urlTitleCollection.getTitle(url) : null,
         connected: false,
       }),
     )

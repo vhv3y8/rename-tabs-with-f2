@@ -67,19 +67,8 @@ export function createUploadURLTitleCollection(
           toastPublisher.publishToast(TOAST_MESSAGES.UPLOAD_FILE_CANCEL)
           return
         }
+        return
       }
-      // conflictResult.match({
-      //   ok: (resolvedItems) => {
-      //     resolvedConflictions = resolvedItems
-      //   },
-      //   err: (error) => {
-      //     if (error.type === "USER_CANCEL") {
-      //       toastPublisher.publishToast(TOAST_MESSAGES.UPLOAD_FILE_CANCEL)
-      //       // where does this return?
-      //       return null
-      //     }
-      //   },
-      // })
     }
 
     console.log(

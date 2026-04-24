@@ -1,6 +1,7 @@
 import ChromeStorage from "@lib/chrome/storage"
 import ChromeTabs from "@lib/chrome/tabs"
 import ChromeWindows from "@lib/chrome/windows"
+import { createOnInstalledHandler } from "./input/onInstalled"
 
 let winIdLastFocusTabIdMap = new Map()
 let extensionTabIdSet = new Set()
@@ -75,22 +76,28 @@ chrome.tabs.onRemoved.addListener(async (tabId, { windowId }) => {
   }
 })
 
-// Storage
-chrome.runtime.onInstalled.addListener(({ reason, previousVersion }) => {
-  if (reason === "install") {
-    console.log("[installed]")
-    ChromeStorage.initializeStorage().then(() => {
-      ChromeTabs.create.openMainPage()
-    })
-  } else if (reason === "update") {
-    console.log(
-      "[updated] [previous version]",
-      previousVersion,
-      typeof previousVersion,
-    )
-    ChromeStorage.migrateStorage(
-      // maybe | "1.0.0" ?
-      previousVersion!,
-    )
-  }
-})
+// create input adapters? use cases?
+
+const onInstalledStorageHandler = createOnInstalledHandler()
+
+// register input adapters
+
+chrome.runtime.onInstalled.addListener(onInstalledStorageHandler)
+// chrome.runtime.onInstalled.addListener(({ reason, previousVersion }) => {
+//   if (reason === "install") {
+//     console.log("[installed]")
+//     ChromeStorage.initializeStorage().then(() => {
+//       ChromeTabs.create.openMainPage()
+//     })
+//   } else if (reason === "update") {
+//     console.log(
+//       "[updated] [previous version]",
+//       previousVersion,
+//       typeof previousVersion,
+//     )
+//     ChromeStorage.migrateStorage(
+//       // maybe | "1.0.0" ?
+//       previousVersion!,
+//     )
+//   }
+// })

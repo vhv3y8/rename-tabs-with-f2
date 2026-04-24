@@ -26,6 +26,7 @@ export class TabIdxInfoRecord implements Partial<TabInfoStore> {
     )
   }
   getTitleInfosToSave() {
+    // persistedTitle is not null and title is ""
     // for test
     return this.getAllTabInfos()
   }
@@ -43,11 +44,11 @@ export class TabIdxInfoRecord implements Partial<TabInfoStore> {
         {
           id,
           title,
-          persistedTitle,
           favIconUrl,
           url,
           index,
           status,
+          persistedTitle,
           connected,
         },
       ) => {
@@ -55,13 +56,12 @@ export class TabIdxInfoRecord implements Partial<TabInfoStore> {
         acc[index] = {
           id,
           title,
-          // titleState: title,
-          persistedTitle,
           favIconUrl,
           url,
           status,
           index,
           connected,
+          persistedTitle,
           hasChanged: false,
         }
         return acc

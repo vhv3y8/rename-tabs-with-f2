@@ -4,9 +4,9 @@ export interface TabInfo {
   index: number
   url: string
   title: string
-  persistedTitle: string
   favIconUrl: string
   status: string
 
+  persistedTitle: string | null
   connected: boolean
 }

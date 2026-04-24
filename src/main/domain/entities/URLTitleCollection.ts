@@ -62,6 +62,7 @@ export class URLTitleRecord implements URLTitleCollection {
     }
   }
   getTitle(url: string) {
+    if (url === "") return null
     // exact match
     const urlMatch = url
     return this.record[urlMatch] || null

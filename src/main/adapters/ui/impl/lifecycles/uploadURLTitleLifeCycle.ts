@@ -23,9 +23,10 @@ export const uploadURLTitleLifeCycle: UploadURLTitleCollectionLifeCycle = {
     // wait until its canceled or resolved
     await waitUntil(() => conflictModal.finished, true)
     // resolve result with ok or err
-    return conflictModal.finishResult.match({
-      ok: (resolvedConflictions) => ok(resolvedConflictions),
-      err: (error) => err(error),
-    })
+    return conflictModal.finishResult
+    // .match({
+    //   ok: (resolvedConflictions) => ok(resolvedConflictions),
+    //   err: (error) => err(error),
+    // })
   },
 }
