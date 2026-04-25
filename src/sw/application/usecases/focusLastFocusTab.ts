@@ -1,18 +1,15 @@
 import type { IdCollectionStore } from "../ports/IdCollectionStore"
-import type { PlatformSWFacade } from "../ports/PlatformSWFacade"
+import type { PlatformSWFacade } from "../ports/infra/PlatformSWFacade"
 
-export type CheckAndFocusLastFocusTabUseCase = ReturnType<
-  typeof createCheckAndFocusLastFocusTab
+export type FocusLastFocusTabUseCase = ReturnType<
+  typeof createFocusLastFocusTab
 >
 
-export function createCheckAndFocusLastFocusTab(
+export function createFocusLastFocusTab(
   idCollectionStore: IdCollectionStore,
   extensionFacade: PlatformSWFacade,
 ) {
-  return async function checkAndFocusLastFocusTab(
-    windowId: number,
-    tabId: number,
-  ) {
+  return async function focusLastFocusTab(windowId: number, tabId: number) {
     if (
       idCollectionStore.isMainPageTab(tabId) &&
       idCollectionStore.windowHasLastFocusTab(windowId)

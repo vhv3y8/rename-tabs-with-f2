@@ -39,9 +39,7 @@ export function createCheckAllTabConnectionAndUpdateFlags(
       .map((res) => res.value)
 
     for (const { index: tabIndex, isConnected } of fulfilledConnections) {
-      if (isConnected) {
-        tabInfoStore.setConnectedFlag(tabIndex, isConnected)
-      }
+      tabInfoStore.setConnectedFlag(tabIndex, isConnected)
     }
   }
 }

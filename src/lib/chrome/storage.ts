@@ -67,6 +67,18 @@ const ChromeStorage = {
       return chrome.storage.local.set({ titles })
     },
   },
+  session: {
+    async getIdCollection() {
+      return chrome.storage.session
+        .get(["idCollection"])
+        .then((db) => db.idCollection)
+    },
+    async setIdCollection(idCollection: IdCol) {
+      return chrome.storage.session.set({ idCollection })
+    },
+    async getTitleApplyingInfos() {},
+    async setTitleApplyingInfos() {},
+  },
 }
 
 export default ChromeStorage

@@ -1,7 +1,7 @@
 import ChromeStorage from "@chrome/storage"
 import ChromeTabs from "@chrome/tabs"
 import ChromeWindows from "@chrome/windows"
-import type { PlatformSWFacade } from "../../application/ports/PlatformSWFacade"
+import type { PlatformSWFacade } from "../application/ports/infra/PlatformSWFacade"
 
 export const ChromeSWFacade: PlatformSWFacade = {
   // storage

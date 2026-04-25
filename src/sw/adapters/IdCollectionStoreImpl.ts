@@ -1,5 +1,6 @@
 import type { IdCollectionStore } from "../application/ports/IdCollectionStore"
 
+// session storage
 export class IdCollectionStoreImpl implements IdCollectionStore {
   initialize() {}
 

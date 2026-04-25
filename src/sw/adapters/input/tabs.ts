@@ -1,4 +1,4 @@
-import type { CheckAndFocusLastFocusTabUseCase } from "../../application/usecases/checkAndFocusLastFocusTab"
+import type { CheckAndFocusLastFocusTabUseCase } from "../../application/usecases/focusLastFocusTab"
 
 export function createTabsOnRemovedHandler(
   checkAndFocusLastFocusTabUseCase: CheckAndFocusLastFocusTabUseCase,

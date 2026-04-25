@@ -1,11 +1,13 @@
-import type {
-  TitleApplyingInfo,
-  TitleApplyingStore,
-} from "../ports/TitleApplyingStore"
+import type { TitleApplyingStore } from "../ports/TitleApplyingStore"
 
 export type SaveOriginalTitleBeforeApplyUseCase = ReturnType<
   typeof createSaveOriginalTitleBeforeApply
 >
+
+export type TitleApplyingInfo = {
+  id: number
+  originalTitle: string
+}
 
 export function createSaveOriginalTitleBeforeApply(
   titleApplyingStore: TitleApplyingStore,

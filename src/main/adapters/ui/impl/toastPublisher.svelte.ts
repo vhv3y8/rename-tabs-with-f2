@@ -55,7 +55,10 @@ export class Toasts implements ToastPublisher {
     })
     // add timer
     if (!this.timers.has(toastId)) {
-      const timer = setTimeout(() => this.removeToast(toastId), this.DURATION)
+      const timer = setTimeout(
+        () => this.removeToast(toastId),
+        duration || this.DURATION,
+      )
       this.timers.set(toastId, timer)
     }
     this.nextId += 1

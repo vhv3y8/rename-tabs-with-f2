@@ -7,14 +7,14 @@ import {
   type OpenMainPageUseCase,
 } from "./application/usecases/openMainPage"
 import { createMessageHandler } from "./adapters/input/message"
-import type { PlatformSWFacade } from "./application/ports/PlatformSWFacade"
+import type { PlatformSWFacade } from "./application/ports/infra/PlatformSWFacade"
 import { ChromeSWFacade } from "./adapters/infra/ChromeSWFacade"
 import type { IdCollectionStore } from "./application/ports/IdCollectionStore"
 import { IdCollectionStoreImpl } from "./adapters/IdCollectionStoreImpl"
 import {
   createCheckAndFocusLastFocusTab,
   type CheckAndFocusLastFocusTabUseCase,
-} from "./application/usecases/checkAndFocusLastFocusTab"
+} from "./application/usecases/focusLastFocusTab"
 
 let winIdLastFocusTabIdMap = new Map()
 let extensionTabIdSet = new Set()

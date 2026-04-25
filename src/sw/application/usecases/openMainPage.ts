@@ -1,5 +1,5 @@
 import type { IdCollectionStore } from "../ports/IdCollectionStore"
-import type { PlatformSWFacade } from "../ports/PlatformSWFacade"
+import type { PlatformSWFacade } from "../ports/infra/PlatformSWFacade"
 
 export type OpenMainPageUseCase = ReturnType<typeof createOpenMainPage>
 

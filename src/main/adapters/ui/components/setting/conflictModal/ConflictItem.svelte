@@ -64,7 +64,9 @@ li.conflictItem {
 }
 
 .urlMatch {
-  font-size: 14px;
+  /* font-size: 14px;
+  padding: 0.4em; */
+  font-size: 15px;
   padding: 0.4em;
   font-family: "Ubuntu";
 
