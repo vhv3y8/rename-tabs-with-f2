@@ -1,7 +1,20 @@
-import ChromeStorage from "@lib/chrome/storage"
 import ChromeTabs from "@lib/chrome/tabs"
 import ChromeWindows from "@lib/chrome/windows"
-import { createOnInstalledHandler } from "./input/onInstalled"
+import { createOnInstalledStorageHandler } from "./adapters/input/onInstalled"
+import { createIconClickHandler } from "./adapters/input/action"
+import {
+  createOpenMainPage,
+  type OpenMainPageUseCase,
+} from "./application/usecases/openMainPage"
+import { createMessageHandler } from "./adapters/input/message"
+import type { PlatformSWFacade } from "./application/ports/PlatformSWFacade"
+import { ChromeSWFacade } from "./adapters/infra/ChromeSWFacade"
+import type { IdCollectionStore } from "./application/ports/IdCollectionStore"
+import { IdCollectionStoreImpl } from "./adapters/IdCollectionStoreImpl"
+import {
+  createCheckAndFocusLastFocusTab,
+  type CheckAndFocusLastFocusTabUseCase,
+} from "./application/usecases/checkAndFocusLastFocusTab"
 
 let winIdLastFocusTabIdMap = new Map()
 let extensionTabIdSet = new Set()
@@ -34,7 +47,6 @@ async function setIdCollectionsAndOpenPage() {
 }
 
 // Icon click open
-chrome.action.onClicked.addListener(setIdCollectionsAndOpenPage)
 
 // Message
 chrome.runtime.onMessage.addListener(async (msg, sender, sendRes) => {
@@ -76,28 +88,28 @@ chrome.tabs.onRemoved.addListener(async (tabId, { windowId }) => {
   }
 })
 
-// create input adapters? use cases?
+// create adapters
 
-const onInstalledStorageHandler = createOnInstalledHandler()
+const extensionSWFacade: PlatformSWFacade = ChromeSWFacade
+const idCollectionStore: IdCollectionStore = new IdCollectionStoreImpl()
+
+// create use cases
+
+const openMainPageUseCase: OpenMainPageUseCase = createOpenMainPage(
+  idCollectionStore,
+  extensionSWFacade,
+)
+const checkAndFocusLastFocusTabUseCase: CheckAndFocusLastFocusTabUseCase =
+  createCheckAndFocusLastFocusTab(idCollectionStore, extensionSWFacade)
+
+// create input adapters
+
+const onInstalledStorageHandler = createOnInstalledStorageHandler()
+const iconClickHandler = createIconClickHandler(openMainPageUseCase)
+const messageHandler = createMessageHandler(openMainPageUseCase)
 
 // register input adapters
 
 chrome.runtime.onInstalled.addListener(onInstalledStorageHandler)
-// chrome.runtime.onInstalled.addListener(({ reason, previousVersion }) => {
-//   if (reason === "install") {
-//     console.log("[installed]")
-//     ChromeStorage.initializeStorage().then(() => {
-//       ChromeTabs.create.openMainPage()
-//     })
-//   } else if (reason === "update") {
-//     console.log(
-//       "[updated] [previous version]",
-//       previousVersion,
-//       typeof previousVersion,
-//     )
-//     ChromeStorage.migrateStorage(
-//       // maybe | "1.0.0" ?
-//       previousVersion!,
-//     )
-//   }
-// })
+chrome.action.onClicked.addListener(iconClickHandler)
+chrome.runtime.onMessage.addListener(messageHandler)

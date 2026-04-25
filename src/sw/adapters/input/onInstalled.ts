@@ -1,9 +1,9 @@
-import { ChromeSWFacade } from "../adapters/ChromeSWFacade"
+import { ChromeSWFacade } from "../infra/ChromeSWFacade"
 
-export function createOnInstalledHandler(): Parameters<
+export function createOnInstalledStorageHandler(): Parameters<
   typeof chrome.runtime.onInstalled.addListener
 >[0] {
-  return function onInstalledHandler({ reason, previousVersion }) {
+  return function onInstalledStorageHandler({ reason, previousVersion }) {
     if (reason === "install") {
       console.log("[installed]")
       ChromeSWFacade.initializeStorage().then(() => {
