@@ -38,6 +38,8 @@ const commonConfig = {
       "@application": "/main/application",
       "@adapters": "/main/adapters",
       "@infra": "/main/infra",
+      // sw
+      "@sw": "/sw",
     },
   },
   define: {

@@ -1,5 +1,3 @@
 export interface SettingStore {
-  saveStore(): Promise<void>
-
-  shouldApplyTitles(): boolean
+  shouldApplyTitles(): Promise<boolean>
 }

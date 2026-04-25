@@ -8,7 +8,7 @@ export type SaveOriginalTitleBeforeApplyUseCase = ReturnType<
 export function createSaveOriginalTitleBeforeApply(
   titleApplyingStore: TitleApplyingStore,
 ) {
-  return function saveOriginalTitleBeforeApply(
+  return async function saveOriginalTitleBeforeApply(
     titleApplyingInfo: Pick<TitleApplyingInfo, "id" | "originalTitle">,
   ) {
     const { id, originalTitle } = titleApplyingInfo

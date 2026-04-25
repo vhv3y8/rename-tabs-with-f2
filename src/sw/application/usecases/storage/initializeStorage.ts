@@ -11,6 +11,6 @@ export function createInitializeStorage(
 ) {
   return async function initializeStorage() {
     await extensionFacade.initializeStorage()
-    await openMainPageUseCase()
+    openMainPageUseCase()
   }
 }

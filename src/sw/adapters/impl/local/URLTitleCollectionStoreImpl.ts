@@ -1,6 +1,6 @@
-import type { PlatformSWFacade } from "../../../application/ports/infra/PlatformSWFacade"
-import type { URLTitleCollectionSWStore } from "../../../application/ports/URLTitleCollectionSWStore"
-import { URLTitleRecordSW } from "../../../domain/entities/URLTitleCollectionSW"
+import type { PlatformSWFacade } from "@sw/application/ports/infra/PlatformSWFacade"
+import type { URLTitleCollectionSWStore } from "@sw/application/ports/URLTitleCollectionSWStore"
+import { URLTitleRecordSW } from "@sw/domain/entities/URLTitleCollectionSW"
 
 export class URLTitleRecordStoreImpl implements URLTitleCollectionSWStore {
   private constructor(
@@ -11,7 +11,7 @@ export class URLTitleRecordStoreImpl implements URLTitleCollectionSWStore {
   }
 
   async getCollection() {
-    // read every time
+    // read every time for now
     const titleRecord = await this.extensionFacade.getTitleRecord()
     this.collection.fromRecord(titleRecord)
     return this.collection

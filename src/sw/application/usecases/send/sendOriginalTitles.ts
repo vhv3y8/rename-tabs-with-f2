@@ -7,12 +7,12 @@ export type SendOriginalTitlesUseCase = ReturnType<
 export function createSendOriginalTitles(
   originalTitleStore: TitleApplyingStore,
 ) {
-  return function sendOriginalTitles(
+  return async function sendOriginalTitles(
     tabIds: number[],
     sendFunction: (originalTitles: [number | null][]) => void,
   ) {
     const originalTitles =
-      originalTitleStore.getAllAppliedTitleOriginals(tabIds)
+      await originalTitleStore.getAllAppliedTitleOriginals(tabIds)
     sendFunction(originalTitles)
   }
 }

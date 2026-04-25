@@ -1,7 +1,7 @@
 import ChromeStorage from "@chrome/storage"
 import ChromeTabs from "@chrome/tabs"
 import ChromeWindows from "@chrome/windows"
-import type { PlatformSWFacade } from "../application/ports/infra/PlatformSWFacade"
+import type { PlatformSWFacade } from "@sw/application/ports/infra/PlatformSWFacade"
 
 export const ChromeSWFacade: PlatformSWFacade = {
   // storage
@@ -17,6 +17,18 @@ export const ChromeSWFacade: PlatformSWFacade = {
   async getTitleRecord() {
     return ChromeStorage.titles.getTitles()
   },
+
+  async getIdCollections() {
+    return chrome.storage.session
+      .get(["idCollection"])
+      .then((db) => db.idCollection)
+  },
+  // TODO
+  async setIdCollections(idCollection: IdCol) {
+    return chrome.storage.session.set({ idCollection })
+  },
+  async getTitleApplyingInfos() {},
+  async setTitleApplyingInfos() {},
 
   // tabs
   async openMainPage() {

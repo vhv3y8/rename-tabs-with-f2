@@ -1,6 +1,6 @@
 import type { Setting } from "@lib/models/Setting"
-import type { PlatformSWFacade } from "../../../application/ports/infra/PlatformSWFacade"
-import type { SettingStore } from "../../../application/ports/SettingStore"
+import type { PlatformSWFacade } from "@sw/application/ports/infra/PlatformSWFacade"
+import type { SettingStore } from "@sw/application/ports/SettingStore"
 
 export class SettingStoreImpl implements SettingStore {
   private constructor(
@@ -16,7 +16,7 @@ export class SettingStoreImpl implements SettingStore {
   async update() {
     this.setting = await this.extensionFacade.getSettings()
   }
-  shouldApplyTitles() {
+  async shouldApplyTitles() {
     if (this.setting.persistAndApplyTitles) return true
     else return false
   }

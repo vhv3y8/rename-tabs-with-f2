@@ -27,7 +27,9 @@
       "@application/*": ["./src/main/application/*"],
       "@adapters/*": ["./src/main/adapters/*"],
       "@infra/*": ["./src/main/infra/*"],
-      "@main/*": ["./src/main/*"]
+      "@main/*": ["./src/main/*"],
+      // sw
+      "@sw/*": ["./src/sw/*"]
     }
   },
 
