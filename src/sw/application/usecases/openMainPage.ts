@@ -13,6 +13,7 @@ export function createOpenMainPage(
     const currentWindowActiveTab =
       await extensionFacade.getCurrentWindowActiveTab()
     const lastFocusTabId = currentWindowActiveTab.id
+
     // set id to store
     if (currentWindowId !== null && lastFocusTabId !== undefined)
       idCollectionStore.setLastFocusTabId(currentWindowId, lastFocusTabId)

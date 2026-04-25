@@ -14,7 +14,7 @@ export function createFocusLastFocusTab(
       idCollectionStore.isMainPageTab(tabId) &&
       idCollectionStore.windowHasLastFocusTab(windowId)
     ) {
-      const lastFocusTabId = idCollectionStore.getLastFocusTabId()
+      const lastFocusTabId = idCollectionStore.getLastFocusTabId(windowId)
 
       // focus last focus tab
       await extensionFacade.focusTab(lastFocusTabId)

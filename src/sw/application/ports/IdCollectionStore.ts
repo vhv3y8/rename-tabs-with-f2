@@ -1,14 +1,15 @@
 export interface IdCollectionStore {
-  initialize(): void
+  updateMainTabIdCollection(): Promise<void>
+  updateLastFocusTabIdCollection(): Promise<void>
 
   // extension main page tab
-  setMainPageTabId(tabId: number): void
   isMainPageTab(tabId: number): boolean
-  removeMainPageTabId(tabId: number): void
+  setMainPageTabId(tabId: number): Promise<void>
+  removeMainPageTabId(tabId: number): Promise<void>
 
   // last focus tab
-  setLastFocusTabId(windowId: number, lastFocusTabId: number): void
-  getLastFocusTabId(): number
   windowHasLastFocusTab(windowId: number): boolean
-  removeLastFocusTabId(id: number): void
+  getLastFocusTabId(windowId: number): number
+  setLastFocusTabId(windowId: number, lastFocusTabId: number): Promise<void>
+  removeLastFocusTabId(id: number): Promise<void>
 }

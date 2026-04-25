@@ -1,19 +1,15 @@
 import type { TitleApplyingStore } from "../ports/TitleApplyingStore"
+import type { TitleApplyingInfo } from "./checkAndApplyTitle"
 
 export type SaveOriginalTitleBeforeApplyUseCase = ReturnType<
   typeof createSaveOriginalTitleBeforeApply
 >
 
-export type TitleApplyingInfo = {
-  id: number
-  originalTitle: string
-}
-
 export function createSaveOriginalTitleBeforeApply(
   titleApplyingStore: TitleApplyingStore,
 ) {
   return function saveOriginalTitleBeforeApply(
-    titleApplyingInfo: TitleApplyingInfo,
+    titleApplyingInfo: Pick<TitleApplyingInfo, "id" | "originalTitle">,
   ) {
     const { id, originalTitle } = titleApplyingInfo
     titleApplyingStore.setOriginalTitle(id, originalTitle)
