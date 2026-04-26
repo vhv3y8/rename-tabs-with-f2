@@ -1,7 +1,7 @@
 import type { URLTitleCollectionStore } from "@application/ports/URLTitleCollectionStore"
 import { InMemorySetting } from "./adapters/ui/components/setting/states/inMemorySetting.svelte"
 import { DOMApplyLifeCycle } from "./adapters/ui/impl/lifecycles/applyLifeCycle"
-import { createInitializeAppLifeCycle } from "./adapters/ui/impl/lifecycles/initializeAppLifeCycle"
+// import { createInitializeAppLifeCycle } from "./adapters/ui/impl/lifecycles/initializeAppLifeCycle"
 import { createChromeSvelteReloadLifeCycle } from "./adapters/ui/impl/lifecycles/reloadLifeCycle"
 import { TabIdxInfoRecordStore } from "./adapters/ui/impl/tabInfoStore.svelte"
 import { Toasts } from "./adapters/ui/impl/toastPublisher.svelte"
@@ -40,7 +40,6 @@ import {
   type ReloadLifeCycle,
 } from "./application/usecases/reloadAllConnectableTabs"
 import { ChromeMainFacade } from "./infra/platform/impl/ChromeMainFacade"
-import { URLTitleCollectionStoreImpl } from "@adapters/impl/urlTitleCollectionStoreImpl"
 import {
   createInitializeURLTitleCollectionStore,
   type InitializeURLTitleCollectionStoreUseCase,
@@ -64,6 +63,10 @@ import {
   type UploadURLTitleCollectionLifeCycle,
   type UploadURLTitleCollectionUseCase,
 } from "@application/usecases/file/uploadURLTitleCollection"
+import { URLTitleRecordStore } from "@adapters/impl/URLTitleRecordStore"
+import type { SettingStore } from "@application/ports/SettingStore"
+import { TabItemComponents } from "@adapters/ui/components/tabs/states/tabItemComponents.svelte"
+import type { TabInfo } from "@domain/entities/TabInfo"
 
 export async function runBootstrap() {
   // create infra impl
@@ -84,12 +87,19 @@ export async function runBootstrap() {
 
   // create output adapter impl
 
+  const urlTitleCollectionStore: URLTitleCollectionStore =
+    await URLTitleRecordStore.build(extensionFacade)
+
   const tabIdxInfoStore = new TabIdxInfoRecordStore() satisfies TabInfoStore
   const notConnected = tabIdxInfoStore.notConnected
-  const urlTitleCollectionStore: URLTitleCollectionStore =
-    new URLTitleCollectionStoreImpl(extensionFacade)
-  // adapter only impl?
-  const inMemorySetting = await InMemorySetting.build(extensionFacade)
+
+  const inMemorySetting = (await InMemorySetting.build(
+    extensionFacade,
+  )) satisfies SettingStore
+
+  // initialize dirty impls
+
+  const tabItemComponents = await TabItemComponents.build(extensionFacade)
 
   // create lifecycle impl and use cases
 
@@ -98,15 +108,18 @@ export async function runBootstrap() {
   const applyUseCase: ApplyUseCase = createApplyUseCase(
     tabIdxInfoStore,
     urlTitleCollectionStore,
+    inMemorySetting,
     extensionFacade,
     applyLifeCycle,
   )
+
   // check all tab connection
   const checkAllTabConnectionAndUpdateFlagsUseCase: CheckAllTabConnectionUseCase =
     createCheckAllTabConnectionAndUpdateFlags(tabIdxInfoStore, extensionFacade)
   // reload
   const reloadLifeCycle: ReloadLifeCycle = createChromeSvelteReloadLifeCycle(
     tabIdxInfoStore,
+    tabItemComponents,
     checkAllTabConnectionAndUpdateFlagsUseCase,
   )
   const reloadAllConnectableTabsUseCase: ReloadAllConnectableTabsUseCase =
@@ -134,27 +147,48 @@ export async function runBootstrap() {
 
   // initializations
   // url title collection store
-  const initializeURLTitleCollectionStoreUseCase: InitializeURLTitleCollectionStoreUseCase =
-    createInitializeURLTitleCollectionStore(
-      urlTitleCollectionStore,
-      extensionFacade,
-    )
-  // tab info store
-  const initializeTabInfoStoreUseCase: InitializeTabInfoStoreUseCase =
-    createInitializeTabInfoStore(
-      extensionFacade,
-      urlTitleCollectionStore,
-      tabIdxInfoStore,
-    )
-  // app
-  const initializeAppLifeCycle: InitializeAppLifeCycle =
-    createInitializeAppLifeCycle(extensionFacade)
-  const initializeAppUseCase: InitializeAppUseCase = createInitializeAppUseCase(
-    initializeURLTitleCollectionStoreUseCase,
-    initializeTabInfoStoreUseCase,
-    checkAllTabConnectionAndUpdateFlagsUseCase,
-    initializeAppLifeCycle,
+  // const initializeURLTitleCollectionStoreUseCase: InitializeURLTitleCollectionStoreUseCase =
+  //   createInitializeURLTitleCollectionStore(
+  //     urlTitleCollectionStore,
+  //     extensionFacade,
+  //   )
+  // // tab info store
+  // const initializeTabInfoStoreUseCase: InitializeTabInfoStoreUseCase =
+  //   createInitializeTabInfoStore(
+  //     extensionFacade,
+  //     urlTitleCollectionStore,
+  //     tabIdxInfoStore,
+  //   )
+  // // app
+  // const initializeAppLifeCycle: InitializeAppLifeCycle =
+  //   createInitializeAppLifeCycle(extensionFacade)
+  // const initializeAppUseCase: InitializeAppUseCase = createInitializeAppUseCase(
+  //   initializeURLTitleCollectionStoreUseCase,
+  //   initializeTabInfoStoreUseCase,
+  //   checkAllTabConnectionAndUpdateFlagsUseCase,
+  //   initializeAppLifeCycle,
+  // )
+
+  // const lastFocusTabId = await extensionFacade.getLastFocusTabId()
+  // console.log("[lastFocusTabId]", lastFocusTabId)
+
+  // initializations
+
+  const tabsToInitialize = await extensionFacade.getInitializeTabEntries()
+  const urlTitleCollection = await urlTitleCollectionStore.getCollection()
+  const tabInfos: TabInfo[] = tabsToInitialize.map(
+    ({ id, title, favIconUrl, url, index, status }) => ({
+      index,
+      id: id!,
+      title: title!,
+      favIconUrl: favIconUrl!,
+      url: url!,
+      status: status!,
+      persistedTitle: url ? urlTitleCollection.getTitle(url) : null,
+      connected: false,
+    }),
   )
+  tabIdxInfoStore.clearAndSetTabInfos(tabInfos)
 
   // create input adapters
 
@@ -182,11 +216,13 @@ export async function runBootstrap() {
   // registering input adapters are delegated to svelte components
 
   // run initializing use cases
-  await initializeAppUseCase()
+  // await initializeAppUseCase()
 
   // detailed instances to DI into ui components
   return {
     toasts: toastPublisher,
+    // adapter only
+    tabItemComponents,
     // output adapters
     tabIdxInfoStore,
     notConnected,

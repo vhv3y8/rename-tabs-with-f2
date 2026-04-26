@@ -27,6 +27,10 @@ export function createTabsOnUpdatedHandler(
         originalTitle: tab.title || "",
         url: tab.url || "",
       })
+    } else if (changeInfo.title) {
+      // TODO
+      // if should apply and not same as collection persisted,
+      // apply title
     }
   }
 }

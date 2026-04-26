@@ -1,3 +1,4 @@
+import type { PlatformMainFacade } from "@application/ports/infra/PlatformMainFacade"
 import type TabItem from "../TabItem.svelte"
 
 type TabItemComponent = ReturnType<typeof TabItem>
@@ -7,10 +8,74 @@ export class TabItemComponents {
   private focusableComponents: TabItemComponent[]
   focusableIdxFromTabIdLookup: Record<number, number>
 
-  private lastFocusTabId: number = $state(-1)
+  private lastFocusTabId: number
   private currentFocusInputIdx: number
   private initialFocusInputIdx: number
-  constructor() {
+  // constructor() {
+  //   // components related
+  //   this.focusableComponents = $derived(
+  //     this.components.filter((elem) => elem.isContentScriptConnected()),
+  //   )
+  //   this.focusableIdxFromTabIdLookup = $derived.by(() => {
+  //     let record = {} as Record<number, number>
+  //     for (const [focusableIdx, { getTabId }] of Object.entries(
+  //       this.focusableComponents,
+  //     )) {
+  //       record[getTabId()] = Number(focusableIdx)
+  //     }
+  //     return record
+  //   })
+  //   // indexes
+  //   this.initialFocusInputIdx = $derived.by(() => {
+  //     const lastFocusTabIdx =
+  //       this.focusableIdxFromTabIdLookup[this.lastFocusTabId]
+  //     console.log(
+  //       "[last focus tab id]",
+  //       this.lastFocusTabId,
+  //       "[lastFocusTabIdx]",
+  //       lastFocusTabIdx,
+  //     )
+  //     if (lastFocusTabIdx) return lastFocusTabIdx
+  //     else return 0
+  //   })
+  //   this.currentFocusInputIdx = $state(this.initialFocusInputIdx)
+  //   $effect.root(() => {
+  //     $effect(() => {
+  //       this.currentFocusInputIdx = this.initialFocusInputIdx
+  //     })
+  //   })
+  //   $effect.root(() => {
+  //     $effect(() => {
+  //       console.log(
+  //         "[focusable components update] [focusableIdxFromTabIdLookup]",
+  //         this.focusableIdxFromTabIdLookup,
+  //       )
+  //     })
+  //     $effect(() => {
+  //       console.log(
+  //         "[focusable components update] [tab infos]",
+  //         this.focusableComponents.map(({ getTabInfo }) => {
+  //           const { id, index, title } = getTabInfo()
+  //           return { id, index, title }
+  //         }),
+  //       )
+  //     })
+  //     $effect(() => {
+  //       console.log(
+  //         "[focusable initial focus input idx update]",
+  //         this.initialFocusInputIdx,
+  //       )
+  //     })
+  //     $effect(() => {
+  //       console.log(
+  //         "[focusable current focus input idx update]",
+  //         this.currentFocusInputIdx,
+  //       )
+  //     })
+  //   })
+  // }
+  private constructor(lastFocusTabId: number) {
+    this.lastFocusTabId = $state(lastFocusTabId)
     // components related
     this.focusableComponents = $derived(
       this.components.filter((elem) => elem.isContentScriptConnected()),
@@ -28,12 +93,6 @@ export class TabItemComponents {
     this.initialFocusInputIdx = $derived.by(() => {
       const lastFocusTabIdx =
         this.focusableIdxFromTabIdLookup[this.lastFocusTabId]
-      console.log(
-        "[last focus tab id]",
-        this.lastFocusTabId,
-        "[lastFocusTabIdx]",
-        lastFocusTabIdx,
-      )
       if (lastFocusTabIdx) return lastFocusTabIdx
       else return 0
     })
@@ -43,6 +102,7 @@ export class TabItemComponents {
         this.currentFocusInputIdx = this.initialFocusInputIdx
       })
     })
+
     $effect.root(() => {
       $effect(() => {
         console.log(
@@ -73,10 +133,16 @@ export class TabItemComponents {
       })
     })
   }
-  setLastFocusTabIdForInitialFocus(lastFocusTabId: number) {
-    this.lastFocusTabId = lastFocusTabId
-    // index changes are triggered by effect
+  // use this to build instance
+  static async build(extensionFacade: PlatformMainFacade) {
+    const lastFocusTabId = await extensionFacade.getLastFocusTabId()
+    return new TabItemComponents(lastFocusTabId || -1)
   }
+
+  // setLastFocusTabIdForInitialFocus(lastFocusTabId: number) {
+  //   this.lastFocusTabId = lastFocusTabId
+  //   // index changes are triggered by effect
+  // }
 
   // mouse click
   updateCurrentFocusIdx(idx: number) {
@@ -124,4 +190,4 @@ export class TabItemComponents {
   }
 }
 //
-export const tabItemComponents = new TabItemComponents()
+// export const tabItemComponents = new TabItemComponents()

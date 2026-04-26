@@ -3,13 +3,15 @@ import {
   reload,
   type ReloadingTabStatus,
 } from "../../components/tabs/states/reload.svelte"
-import { tabItemComponents } from "../../components/tabs/states/tabItemComponents.svelte"
+// import { tabItemComponents } from "../../components/tabs/states/tabItemComponents.svelte"
 import type { TabInfoStore } from "@main/application/ports/TabInfoStore"
 import type { CheckAllTabConnectionUseCase } from "@main/application/usecases/checkAllTabConnection"
 import { waitUntil } from "../../components/util.svelte"
+import type { TabItemComponents } from "@adapters/ui/components/tabs/states/tabItemComponents.svelte"
 
 export function createChromeSvelteReloadLifeCycle(
   tabInfoStore: TabInfoStore,
+  tabItemComponents: TabItemComponents,
   checkAllTabConnectionAndUpdateFlags: CheckAllTabConnectionUseCase,
 ): ReloadLifeCycle {
   const chromeReloadLifeCycle: ReloadLifeCycle = {

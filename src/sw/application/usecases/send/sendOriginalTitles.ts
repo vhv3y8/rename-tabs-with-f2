@@ -1,11 +1,11 @@
-import type { TitleApplyingStore } from "../../ports/TitleApplyingStore"
+import type { OriginalTitleStore } from "../../ports/OriginalTitleStore"
 
 export type SendOriginalTitlesUseCase = ReturnType<
   typeof createSendOriginalTitles
 >
 
 export function createSendOriginalTitles(
-  originalTitleStore: TitleApplyingStore,
+  originalTitleStore: OriginalTitleStore,
 ) {
   return async function sendOriginalTitles(
     tabIds: number[],

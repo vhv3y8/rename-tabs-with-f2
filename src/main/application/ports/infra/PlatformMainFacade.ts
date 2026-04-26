@@ -6,17 +6,15 @@ import type { TitleApplyingInfosReord } from "@sw/application/ports/infra/Platfo
 export interface PlatformMainFacade {
   // tabs
   getInitializeTabEntries(): Promise<chrome.tabs.Tab[]>
-  checkTabConnection(options: {
-    tabId: number
-  }): Promise<boolean | undefined | unknown>
+  checkTabConnection(options: { tabId: number }): Promise<boolean>
   reloadTab(options: { tabId: number }): Promise<void>
-  renameTabTitle(options: { tabId: number; title: any }): Promise<unknown>
+  renameTabTitle(options: { tabId: number; title: any }): Promise<void>
   // TODO: fix refresh
   // focusExtensionPageTabForRefresh(): Promise<unknown>
 
   // runtime
-  getLastFocusTabId(): Promise<number>
-  fetchExistingTitleApplyingInfos(
+  getLastFocusTabId(): Promise<number | null>
+  fetchExistingOriginalTitles(
     tabIds: number[],
   ): Promise<TitleApplyingInfosReord>
 

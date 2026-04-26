@@ -24,23 +24,19 @@ export function createCheckAndApplyTitle(
     // check setting
     if (await settingStore.shouldApplyTitles()) {
       console.log("[check and apply title] [setting] [should apply titles]")
-
       // check persisted title
       const titleCollection = await urlTitleCollectionSWStore.getCollection()
       const persistedTitle = titleCollection.getMatchingTitle(tabInfo.url)
-
       if (persistedTitle !== null) {
         console.log(
-          "[check and apply title] [persisted title exists]",
-          persistedTitle,
+          "[check and apply title] [persisted title exists] [saved original title]",
+          {
+            id: tabInfo.id,
+            originalTitle: tabInfo.originalTitle,
+          },
         )
-
         // fire and forget
         saveOriginalTitleBeforeApplyUseCase({
-          id: tabInfo.id,
-          originalTitle: tabInfo.originalTitle,
-        })
-        console.log("[check and apply title] [saved original title]", {
           id: tabInfo.id,
           originalTitle: tabInfo.originalTitle,
         })

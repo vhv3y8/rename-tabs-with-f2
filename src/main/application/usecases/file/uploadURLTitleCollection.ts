@@ -1,4 +1,4 @@
-import { TOAST_MESSAGES } from "@adapters/ui/impl/toastPublisher.svelte"
+import { TOAST_MESSAGES } from "@lib/toast"
 import { type Result } from "@lib/types/Result"
 import type { ToastPublisher } from "@main/application/ports/infra/ToastPublisher"
 import { type URLTitleCollectionStore } from "@main/application/ports/URLTitleCollectionStore"
@@ -33,7 +33,7 @@ export function createUploadURLTitleCollection(
     // get existing collection
     let existingCollection: URLTitleCollection
     try {
-      existingCollection = urlTitleCollectionStore.getCollection()
+      existingCollection = await urlTitleCollectionStore.getCollection()
     } catch (e) {
       // probably store not initialized error but it should also not happen
       if (e instanceof Error) {

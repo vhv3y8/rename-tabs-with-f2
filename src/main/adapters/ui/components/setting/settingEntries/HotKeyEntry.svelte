@@ -6,10 +6,10 @@ import {
   stringifyShortcut,
 } from "@lib/shortcut"
 import SettingModalEntry from "../SettingModalEntry.svelte"
-import { TOAST_MESSAGES } from "../../../impl/toastPublisher.svelte"
 import { settingModal } from "../states/settingModal.svelte"
 import { F2HotKey } from "@lib/models/Setting"
 import { getInjections } from "@main/adapters/ui/injections"
+import { TOAST_MESSAGES } from "@lib/toast"
 
 const { setting, toasts } = getInjections()
 const settingHotkeyText = $derived.by(() => {

@@ -29,7 +29,6 @@ export function createOpenMainPage(
     const mainPageTab = await extensionFacade.openMainPage()
     if (mainPageTab.id) {
       idCollectionStore.setMainPageTabId(mainPageTab.id)
-
       console.log("[open main page] [saved main page tab id]", mainPageTab.id)
     }
   }

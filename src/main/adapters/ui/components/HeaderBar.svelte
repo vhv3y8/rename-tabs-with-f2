@@ -2,10 +2,10 @@
 import Key from "@infra/ui/components/Key.svelte"
 import { cancelAllMoveAroundKeydowns, keydowns } from "./reactivity/keys.svelte"
 import { settingModal } from "./setting/states/settingModal.svelte"
-import { tabItemComponents } from "./tabs/states/tabItemComponents.svelte"
+// import { tabItemComponents } from "./tabs/states/tabItemComponents.svelte"
 import { getInjections } from "../injections"
 
-const { setting } = getInjections()
+const { setting, tabItemComponents } = getInjections()
 
 // move around tab components
 function keydownMoveAroundTabItemsHandler(e: KeyboardEvent) {

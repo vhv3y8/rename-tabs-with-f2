@@ -5,8 +5,8 @@ import type {
 } from "@main/domain/entities/URLTitleCollection"
 
 export interface URLTitleCollectionStore {
-  initializeCollection(record: Record<URLMatch, TabTitle>): void
-  getCollection(): URLTitleCollection
+  // initializeCollection(record: Record<URLMatch, TabTitle>): Promise<void>
+  getCollection(): Promise<URLTitleCollection>
   storeUpdatedCollection(): Promise<void>
 }
 

@@ -1,6 +1,8 @@
 <script lang="ts">
+import { getInjections } from "@adapters/ui/injections"
 import type { TabInfoState } from "./states/tabInfoRecord.svelte"
-import { tabItemComponents } from "./states/tabItemComponents.svelte"
+
+let { tabItemComponents } = getInjections()
 
 let elem = null
 

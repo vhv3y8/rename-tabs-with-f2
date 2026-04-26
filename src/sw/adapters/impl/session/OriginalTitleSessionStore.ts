@@ -2,9 +2,9 @@ import type {
   PlatformSWFacade,
   TitleApplyingInfosReord,
 } from "@sw/application/ports/infra/PlatformSWFacade"
-import type { TitleApplyingStore } from "@sw/application/ports/TitleApplyingStore"
+import type { OriginalTitleStore } from "@sw/application/ports/OriginalTitleStore"
 
-export class TitleApplyingSessionStore implements TitleApplyingStore {
+export class OriginalTitleSessionStore implements OriginalTitleStore {
   private constructor(
     public titleApplyingInfos: TitleApplyingMap,
     private extensionFacade: PlatformSWFacade,
@@ -12,7 +12,7 @@ export class TitleApplyingSessionStore implements TitleApplyingStore {
   static async build(extensionFacade: PlatformSWFacade) {
     const titleApplyingRecord =
       await extensionFacade.getSessionTitleApplyingInfos()
-    return new TitleApplyingSessionStore(
+    return new OriginalTitleSessionStore(
       new TitleApplyingMap(titleApplyingRecord || []),
       extensionFacade,
     )
@@ -40,7 +40,7 @@ export class TitleApplyingSessionStore implements TitleApplyingStore {
   }
 }
 
-export class TitleApplyingMap implements Partial<TitleApplyingStore> {
+export class TitleApplyingMap implements Partial<OriginalTitleStore> {
   tabIdOriginalTitleMap: Map<number, string>
   constructor(storageValue: TitleApplyingInfosReord) {
     this.tabIdOriginalTitleMap = new Map(

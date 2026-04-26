@@ -14,7 +14,7 @@ export function createInitializeTabInfoStore(
 ) {
   return async function initializeTabInfoStore() {
     const tabsToInitialize = await extensionFacade.getInitializeTabEntries()
-    const urlTitleCollection = urlTitleCollectionStore.getCollection()
+    const urlTitleCollection = await urlTitleCollectionStore.getCollection()
 
     const tabInfos: TabInfo[] = tabsToInitialize.map(
       ({ id, title, favIconUrl, url, index, status }) => ({

@@ -27,8 +27,8 @@ export class ChromeMainFacade implements PlatformMainFacade {
   async getLastFocusTabId() {
     return ChromeRuntime.getLastFocusTabId()
   }
-  async fetchExistingTitleApplyingInfos(tabIds: number[]) {
-    return ChromeRuntime.fetchExistingTitleApplyingInfos(tabIds)
+  async fetchExistingOriginalTitles(tabIds: number[]) {
+    return ChromeRuntime.fetchExistingOriginalTitles(tabIds)
   }
 
   // storage

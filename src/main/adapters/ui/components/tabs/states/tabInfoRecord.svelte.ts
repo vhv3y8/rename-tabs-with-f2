@@ -37,7 +37,6 @@ export class TabIdxInfoRecord implements Partial<TabInfoStore> {
     else return filtered[0]
   }
   clearAndSetTabInfos(tabInfos: TabInfo[]) {
-    //  Record<number, TabInfo>
     const tabInfoStateRecord = tabInfos.reduce(
       (
         acc,

@@ -1,9 +1,18 @@
 <script lang="ts">
-import { tabItemComponents } from "./states/tabItemComponents.svelte"
+// import { tabItemComponents } from "./states/tabItemComponents.svelte"
 import TabItem from "./TabItem.svelte"
 import { getInjections } from "../../injections"
+import { onMount } from "svelte"
 
-const { tabIdxInfoStore } = getInjections()
+const { tabIdxInfoStore, tabItemComponents } = getInjections()
+
+// onMount(() => {
+//   tabItemComponents.setLastFocusTabIdForInitialFocus(lastFocusTabId || -1)
+//   tabItemComponents.focusInitialItem()
+// })
+// onMount(() => {
+//   tabItemComponents.focusInitialItem()
+// })
 </script>
 
 <!-- HTML -->

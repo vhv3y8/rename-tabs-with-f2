@@ -8,12 +8,11 @@ export type ExportURLTitleCollectionFileUseCase = ReturnType<
 
 export function createExportURLTitleCollectionFile(
   urlTitleCollectionStore: URLTitleCollectionStore,
-  // urlTitleCollectionFileStorage: FileStorage<URLTitleCollection>,
   urlTitleCollectionFileExporter: FileExporter<URLTitleCollection>,
 ) {
   return async function exportURLTitleCollectionFile() {
     // get collection
-    const collection = urlTitleCollectionStore.getCollection()
+    const collection = await urlTitleCollectionStore.getCollection()
     // download file
     await urlTitleCollectionFileExporter.export(collection)
   }

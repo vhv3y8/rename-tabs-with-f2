@@ -13,6 +13,6 @@ export function createInitializeURLTitleCollectionStore(
     // get from extension storage
     const titles = await extensionFacade.getTitleRecord()
     // set to store
-    urlTitleCollectionStore.initializeCollection(titles)
+    await urlTitleCollectionStore.initializeCollection(titles)
   }
 }

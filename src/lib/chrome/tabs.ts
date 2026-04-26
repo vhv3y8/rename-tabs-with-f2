@@ -51,19 +51,26 @@ const ChromeTabs = {
     },
   },
   message: {
-    async fireChangeTitleToContentScript({
-      id,
-      title,
-    }: {
+    async fireChangeTitleToContentScript(info: {
       id: number
       title: any
-    }): Promise<unknown> {
-      return chrome.tabs.sendMessage(id, {
-        title,
-      })
+    }): Promise<void> {
+      try {
+        await chrome.tabs.sendMessage(info.id, {
+          title: info.title,
+        })
+      } catch {}
     },
-    async isContentScriptConnected({ id }: { id: number }): Promise<unknown> {
-      return chrome.tabs.sendMessage(id, "SEND_TRUE_CONTENT_SCRIPT")
+    async isContentScriptConnected({ id }: { id: number }): Promise<boolean> {
+      try {
+        const trueIfAlive = await chrome.tabs.sendMessage(
+          id,
+          "SEND_TRUE_CONTENT_SCRIPT",
+        )
+        return trueIfAlive
+      } catch {
+        return false
+      }
     },
   },
 }

@@ -1,7 +1,8 @@
+import type { SettingStore } from "@application/ports/SettingStore"
 import { type Setting } from "@lib/models/Setting"
 import type { PlatformMainFacade } from "@main/application/ports/infra/PlatformMainFacade"
 
-export class InMemorySetting {
+export class InMemorySetting implements SettingStore {
   setting: Setting
   private constructor(
     private _setting: Setting,
@@ -21,5 +22,9 @@ export class InMemorySetting {
   static async build(extensionFacade: PlatformMainFacade) {
     const setting = await extensionFacade.getSettings()
     return new InMemorySetting(setting, extensionFacade)
+  }
+
+  async shouldPersistTitles() {
+    return this.setting.persistAndApplyTitles
   }
 }

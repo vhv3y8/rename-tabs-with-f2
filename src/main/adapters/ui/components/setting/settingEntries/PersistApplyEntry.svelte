@@ -3,7 +3,7 @@ import Key from "@main/infra/ui/components/Key.svelte"
 import SettingModalEntry from "../SettingModalEntry.svelte"
 import { getInjections } from "@main/adapters/ui/injections"
 import HorizontalLine from "@infra/ui/components/HorizontalLine.svelte"
-import { TOAST_MESSAGES } from "@adapters/ui/impl/toastPublisher.svelte"
+import { TOAST_MESSAGES } from "@lib/toast"
 
 const {
   setting,

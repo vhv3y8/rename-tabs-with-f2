@@ -1,3 +1,4 @@
 export interface OriginalTitleStore {
-  getOriginalTitlesFromTabIds(tabIds: number[]): (string | null)[]
+  // initialize(): Promise<void>
+  getOriginalTitlesFromTabIds(tabIds: number[]): Promise<(string | null)[]>
 }

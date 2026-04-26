@@ -2,7 +2,7 @@ import type { PlatformMainFacade } from "@application/ports/infra/PlatformMainFa
 import type { OriginalTitleStore } from "@application/ports/OriginalTitleStore"
 import type { TitleApplyingInfosReord } from "@sw/application/ports/infra/PlatformSWFacade"
 
-export class OriginalTitleStoreImpl implements OriginalTitleStore {
+export class OriginalTitleRecordStore implements OriginalTitleStore {
   tabIdOriginalTitleRecord: Record<number, string>
   private constructor(existingOriginalTitles: TitleApplyingInfosReord) {
     this.tabIdOriginalTitleRecord = Object.fromEntries(
@@ -12,10 +12,10 @@ export class OriginalTitleStoreImpl implements OriginalTitleStore {
   static async build(extensionFacade: PlatformMainFacade, tabIds: number[]) {
     const originalTitleRecords =
       await extensionFacade.fetchExistingTitleApplyingInfos(tabIds)
-    return new OriginalTitleStoreImpl(originalTitleRecords)
+    return new OriginalTitleRecordStore(originalTitleRecords)
   }
 
-  getOriginalTitlesFromTabIds(tabIds: number[]): (string | null)[] {
+  async getOriginalTitlesFromTabIds(tabIds: number[]) {
     return tabIds.map((id) => this.tabIdOriginalTitleRecord[id] || null)
   }
 }

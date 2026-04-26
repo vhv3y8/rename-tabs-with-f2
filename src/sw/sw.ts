@@ -16,8 +16,6 @@ import type { SettingStore } from "./application/ports/SettingStore"
 import { SettingLocalStore } from "./adapters/impl/local/SettingLocalStore"
 import type { URLTitleCollectionSWStore } from "./application/ports/URLTitleCollectionSWStore"
 import { URLTitleRecordLocalStore } from "./adapters/impl/local/URLTitleRecordLocalStore"
-import type { TitleApplyingStore } from "./application/ports/TitleApplyingStore"
-import { TitleApplyingSessionStore } from "./adapters/impl/session/TitleApplyingSessionStore"
 import {
   createCheckAndApplyTitle,
   type CheckAndApplyTitleUseCase,
@@ -56,6 +54,8 @@ import {
 } from "./adapters/input/tabs"
 import { ChromeSWFacade } from "./infra/ChromeSWFacade"
 import { createStorageChangeHandler } from "./adapters/input/storage"
+import type { OriginalTitleStore } from "./application/ports/OriginalTitleStore"
+import { OriginalTitleSessionStore } from "./adapters/impl/session/OriginalTitleSessionStore"
 
 // let winIdLastFocusTabIdMap = new Map()
 // let extensionTabIdSet = new Set()
@@ -142,7 +142,7 @@ export async function bootstrapInstancesAsynchronously() {
   // infra
   const extensionSWFacade: PlatformSWFacade = ChromeSWFacade
 
-  // repositories have to be initialized asynchronously
+  // repositories requires being initialized asynchronously
   // local storage
   const settingStore: SettingStore =
     await SettingLocalStore.build(extensionSWFacade)
@@ -152,8 +152,8 @@ export async function bootstrapInstancesAsynchronously() {
   // session storage
   const idCollectionStore: IdCollectionStore =
     await IdCollectionSessionStore.build(extensionSWFacade)
-  const titleApplyingStore: TitleApplyingStore =
-    await TitleApplyingSessionStore.build(extensionSWFacade)
+  const titleApplyingStore: OriginalTitleStore =
+    await OriginalTitleSessionStore.build(extensionSWFacade)
 
   // create use cases
 

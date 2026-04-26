@@ -1,4 +1,4 @@
-export interface TitleApplyingStore {
+export interface OriginalTitleStore {
   // fetchTitleApplyingInfos(): Promise<void>
 
   getAllAppliedTitleOriginals(
