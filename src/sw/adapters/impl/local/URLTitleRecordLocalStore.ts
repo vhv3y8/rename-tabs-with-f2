@@ -6,8 +6,13 @@ export class URLTitleRecordLocalStore implements URLTitleCollectionSWStore {
   private constructor(
     private urlTitleRecord: URLTitleRecordSW,
     private extensionFacade: PlatformSWFacade,
-  ) {
-    this.urlTitleRecord = new URLTitleRecordSW()
+  ) {}
+  static async build(extensionFacade: PlatformSWFacade) {
+    const titleRecord = await extensionFacade.getTitleRecord()
+    return new URLTitleRecordLocalStore(
+      new URLTitleRecordSW().fromRecord(titleRecord),
+      extensionFacade,
+    )
   }
 
   async fetchCollection() {

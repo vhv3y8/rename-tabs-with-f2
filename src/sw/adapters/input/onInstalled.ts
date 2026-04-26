@@ -2,10 +2,14 @@ import type { InitializeStorageUseCase } from "../../application/usecases/storag
 import type { MigrateStorageUseCase } from "../../application/usecases/storage/migrateStorage"
 
 export function createOnInstalledStorageHandler(
-  initializeStorageUseCase: InitializeStorageUseCase,
-  migrateStorageUseCase: MigrateStorageUseCase,
+  bootstrapPromise: Promise<{
+    initializeStorageUseCase: InitializeStorageUseCase
+    migrateStorageUseCase: MigrateStorageUseCase
+  }>,
 ): Parameters<typeof chrome.runtime.onInstalled.addListener>[0] {
   return async function onInstalledStorageHandler({ reason, previousVersion }) {
+    const { initializeStorageUseCase, migrateStorageUseCase } =
+      await bootstrapPromise
     if (reason === "install") {
       console.log("[installed]")
       // extensionSWFacade.initializeStorage().then(() => {

@@ -2,10 +2,14 @@ import type { OpenMainPageUseCase } from "../../application/usecases/openMainPag
 import type { SendLastFocusTabIdUseCase } from "../../application/usecases/send/sendLastFocusTabId"
 
 export function createMessageHandler(
-  openMainPageUseCase: OpenMainPageUseCase,
-  sendLastFocusTabIdUseCase: SendLastFocusTabIdUseCase,
+  bootstrapPromise: Promise<{
+    openMainPageUseCase: OpenMainPageUseCase
+    sendLastFocusTabIdUseCase: SendLastFocusTabIdUseCase
+  }>,
 ): Parameters<typeof chrome.runtime.onMessage.addListener>[0] {
   return async function messageHandler(msg, sender, sendRes) {
+    const { openMainPageUseCase, sendLastFocusTabIdUseCase } =
+      await bootstrapPromise
     switch (msg.cmd) {
       // shortcut open
       case "OPEN": {

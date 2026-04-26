@@ -2,17 +2,23 @@ import type { CheckAndApplyTitleUseCase } from "../../application/usecases/check
 import type { FocusLastFocusTabUseCase } from "../../application/usecases/focusLastFocusTab"
 
 export function createTabsOnRemovedHandler(
-  focusLastFocusTabUseCase: FocusLastFocusTabUseCase,
+  bootstrapPromise: Promise<{
+    focusLastFocusTabUseCase: FocusLastFocusTabUseCase
+  }>,
 ): Parameters<typeof chrome.tabs.onRemoved.addListener>[0] {
   return async function tabsOnRemovedHandler(tabId, { windowId }) {
+    const { focusLastFocusTabUseCase } = await bootstrapPromise
     focusLastFocusTabUseCase(windowId, tabId)
   }
 }
 
 export function createTabsOnUpdatedHandler(
-  checkAndApplyTitleUseCase: CheckAndApplyTitleUseCase,
+  bootstrapPromise: Promise<{
+    checkAndApplyTitleUseCase: CheckAndApplyTitleUseCase
+  }>,
 ): Parameters<typeof chrome.tabs.onUpdated.addListener>[0] {
   return async function tabsOnUpdatedHandler(tabId, changeInfo, tab) {
+    const { checkAndApplyTitleUseCase } = await bootstrapPromise
     console.log("[tabs on updated] [changeInfo]", changeInfo)
 
     if (changeInfo.status === "complete") {
