@@ -1,5 +1,5 @@
 export interface IdCollectionStore {
-  fetchIdCollections(): Promise<void>
+  // fetchIdCollections(): Promise<void>
 
   // extension main page tab
   isMainPageTab(tabId: number): Promise<boolean>

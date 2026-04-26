@@ -47,6 +47,7 @@ const commonConfig = {
   },
   build: {
     outDir: buildDist2ForTest ? "../dist2" : "../dist",
+    sourcemap: !isProduction,
     rollupOptions: {
       output: {
         assetFileNames: "[name][extname]",
@@ -62,7 +63,6 @@ const createSvelteConfig = (input, last = false) => {
     build: {
       assetsDir: ".", // if not set to ".", js/css files are created at dist/assets/
       target: "esnext", // to use top level await
-      sourcemap: !isProduction,
       rollupOptions: {
         input,
       },

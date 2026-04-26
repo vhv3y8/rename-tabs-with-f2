@@ -8,5 +8,6 @@ export interface TabInfo {
   status: string
 
   persistedTitle: string | null
+  // originalTitle: string | null
   connected: boolean
 }

@@ -14,24 +14,24 @@ export class IdCollectionSessionStore implements IdCollectionStore {
   static async build(extensionFacade: PlatformSWFacade) {
     const idCollectionRecord = await extensionFacade.getSessionIdCollections()
     return new IdCollectionSessionStore(
-      new ExtensionTabIdSet(idCollectionRecord.extensionTabIdCollection),
+      new ExtensionTabIdSet(idCollectionRecord?.extensionTabIdCollection || []),
       new WindowIdLastFocusTabIdMap(
-        idCollectionRecord.windowIdLastFocusTabIdCollection,
+        idCollectionRecord?.windowIdLastFocusTabIdCollection || [],
       ),
       extensionFacade,
     )
   }
   // fetch and sync session
-  async fetchIdCollections() {
-    const fetched: IdCollectionRecord =
-      await this.extensionFacade.getSessionIdCollections()
-    this.extensionTabIdCollection.resetFromStorageValue(
-      fetched.extensionTabIdCollection,
-    )
-    this.windowIdLastFocusTabIdCollection.resetFromStorageValue(
-      fetched.windowIdLastFocusTabIdCollection,
-    )
-  }
+  // async fetchIdCollections() {
+  //   const fetched: IdCollectionRecord =
+  //     await this.extensionFacade.getSessionIdCollections()
+  //   this.extensionTabIdCollection.resetFromStorageValue(
+  //     fetched.extensionTabIdCollection,
+  //   )
+  //   this.windowIdLastFocusTabIdCollection.resetFromStorageValue(
+  //     fetched.windowIdLastFocusTabIdCollection,
+  //   )
+  // }
   // always sync after value update
   async syncIdCollections() {
     const storageFormat: IdCollectionRecord = {

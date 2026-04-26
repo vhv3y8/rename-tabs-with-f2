@@ -55,6 +55,7 @@ import {
   createTabsOnUpdatedHandler,
 } from "./adapters/input/tabs"
 import { ChromeSWFacade } from "./infra/ChromeSWFacade"
+import { createStorageChangeHandler } from "./adapters/input/storage"
 
 // let winIdLastFocusTabIdMap = new Map()
 // let extensionTabIdSet = new Set()
@@ -141,6 +142,7 @@ export async function bootstrapInstancesAsynchronously() {
   // infra
   const extensionSWFacade: PlatformSWFacade = ChromeSWFacade
 
+  // repositories have to be initialized asynchronously
   // local storage
   const settingStore: SettingStore =
     await SettingLocalStore.build(extensionSWFacade)
@@ -228,6 +230,10 @@ const tabRemovedHandler = createTabsOnRemovedHandler(bootstrapInstancesPromise)
 const tabUpdatedHandler = createTabsOnUpdatedHandler(bootstrapInstancesPromise)
 // action
 const iconClickHandler = createIconClickHandler(bootstrapInstancesPromise)
+// storage
+const storageChangeHandler = createStorageChangeHandler(
+  bootstrapInstancesPromise,
+)
 
 // register input adapters
 
@@ -240,3 +246,14 @@ chrome.tabs.onUpdated.addListener(tabUpdatedHandler)
 chrome.tabs.onRemoved.addListener(tabRemovedHandler)
 // action
 chrome.action.onClicked.addListener(iconClickHandler)
+
+// storage
+chrome.storage.onChanged.addListener(
+  (
+    changes: chrome.storage.StorageChange,
+    areaName: chrome.storage.AreaName,
+  ) => {
+    console.log("[storage changed]", { changes, areaName })
+  },
+)
+chrome.storage.onChanged.addListener(storageChangeHandler)

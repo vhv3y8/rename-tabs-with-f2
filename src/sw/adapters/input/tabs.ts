@@ -20,12 +20,12 @@ export function createTabsOnUpdatedHandler(
   return async function tabsOnUpdatedHandler(tabId, changeInfo, tab) {
     const { checkAndApplyTitleUseCase } = await bootstrapPromise
     console.log("[tabs on updated] [changeInfo]", changeInfo)
-
     if (changeInfo.status === "complete") {
+      console.log("[tabs on updated] [status is complete]", tab)
       await checkAndApplyTitleUseCase({
         id: tabId,
-        originalTitle: changeInfo.title,
-        url: changeInfo.url,
+        originalTitle: tab.title || "",
+        url: tab.url || "",
       })
     }
   }

@@ -16,12 +16,21 @@ export function createFocusLastFocusTab(
     ) {
       const lastFocusTabId = await idCollectionStore.getLastFocusTabId(windowId)
       if (lastFocusTabId) {
+        console.log("[focus last focus tab] [id exists] [focusing]")
+
         // focus last focus tab
         await extensionFacade.focusTab(lastFocusTabId)
 
         // remove from collections
         idCollectionStore.removeLastFocusTabId(lastFocusTabId)
         idCollectionStore.removeMainPageTabId(tabId)
+
+        console.log(
+          "[focus last focus tab] [focused last focus tab id]",
+          lastFocusTabId,
+          "[main page tab id]",
+          tabId,
+        )
       }
     }
   }

@@ -18,9 +18,12 @@ export class URLTitleRecordLocalStore implements URLTitleCollectionSWStore {
   async fetchCollection() {
     const fetchedRecord = await this.extensionFacade.getTitleRecord()
     this.urlTitleRecord = new URLTitleRecordSW().fromRecord(fetchedRecord)
+    console.log("[fetched url title record]", this.urlTitleRecord)
   }
 
   async getCollection() {
+    // update every time for now
+    await this.fetchCollection()
     return this.urlTitleRecord
   }
 }

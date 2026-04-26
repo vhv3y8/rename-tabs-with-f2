@@ -10,6 +10,12 @@ const ChromeRuntime = {
       cmd: "LAST_FOCUS_TAB_ID",
     })
   },
+  fetchExistingTitleApplyingInfos(tabIds: number[]) {
+    return chrome.runtime.sendMessage({
+      cmd: "EXISTING_TITLE_APPLYING_INFOS",
+      tabIds,
+    })
+  },
   fireOpenExtensionPage() {
     return chrome.runtime.sendMessage({ cmd: "OPEN" })
   },

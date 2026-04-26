@@ -6,6 +6,11 @@ export interface IdCollectionRecord {
   windowIdLastFocusTabIdCollection: [number, number][]
 }
 
+// id: number, originalTitle: string
+// export type TitleApplyingInfosReord = {
+//   [tabId: number]: string
+// }[]
+
 export type TitleApplyingInfosReord = {
   id: number
   originalTitle: string

@@ -12,6 +12,7 @@ export function createSendLastFocusTabId(idCollectionStore: IdCollectionStore) {
     if (await idCollectionStore.windowHasLastFocusTab(senderWindowId)) {
       const lastFocusTabId =
         await idCollectionStore.getLastFocusTabId(senderWindowId)
+      console.log("[sending last focus tab id]", lastFocusTabId)
       sendFunction(lastFocusTabId)
     }
   }

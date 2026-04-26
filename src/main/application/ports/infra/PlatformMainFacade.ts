@@ -1,5 +1,6 @@
 import type { Setting } from "@lib/models/Setting"
 import type { TitleRecord } from "@lib/models/TitleRecord"
+import type { TitleApplyingInfosReord } from "@sw/application/ports/infra/PlatformSWFacade"
 
 // depend on chrome for now
 export interface PlatformMainFacade {
@@ -15,6 +16,9 @@ export interface PlatformMainFacade {
 
   // runtime
   getLastFocusTabId(): Promise<number>
+  fetchExistingTitleApplyingInfos(
+    tabIds: number[],
+  ): Promise<TitleApplyingInfosReord>
 
   // storage
   getSettings(): Promise<Setting>

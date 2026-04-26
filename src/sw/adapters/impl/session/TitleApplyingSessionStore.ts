@@ -13,17 +13,17 @@ export class TitleApplyingSessionStore implements TitleApplyingStore {
     const titleApplyingRecord =
       await extensionFacade.getSessionTitleApplyingInfos()
     return new TitleApplyingSessionStore(
-      new TitleApplyingMap(titleApplyingRecord),
+      new TitleApplyingMap(titleApplyingRecord || []),
       extensionFacade,
     )
   }
 
   // fetch and sync session
-  async fetchTitleApplyingInfos() {
-    const titleApplyingRecord: TitleApplyingInfosReord =
-      await this.extensionFacade.getSessionTitleApplyingInfos()
-    this.titleApplyingInfos = new TitleApplyingMap(titleApplyingRecord)
-  }
+  // async fetchTitleApplyingInfos() {
+  //   const titleApplyingRecord: TitleApplyingInfosReord =
+  //     await this.extensionFacade.getSessionTitleApplyingInfos()
+  //   this.titleApplyingInfos = new TitleApplyingMap(titleApplyingRecord)
+  // }
   // always sync after value update
   async syncTitleApplyingInfos() {
     const storageFormat: TitleApplyingInfosReord =
@@ -63,7 +63,9 @@ export class TitleApplyingMap implements Partial<TitleApplyingStore> {
   }
 
   async getAllAppliedTitleOriginals(tabIds: number[]) {
-    return tabIds.map((tabId) => this.tabIdOriginalTitleMap.get(tabId) || null)
+    if (tabIds.length === 0) {
+      return this.toStorageValue()
+    } else return this.toStorageValue().filter(({ id }) => tabIds.includes(id))
   }
   async setOriginalTitle(tabId: number, originalTitle: string) {
     this.tabIdOriginalTitleMap.set(tabId, originalTitle)

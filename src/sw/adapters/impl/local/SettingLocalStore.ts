@@ -15,9 +15,13 @@ export class SettingLocalStore implements SettingStore {
 
   async fetchSetting() {
     this.setting = await this.extensionFacade.getSettings()
+    console.log("[fetched setting]", this.setting)
   }
 
   async shouldApplyTitles() {
+    // update every time for now
+    await this.fetchSetting()
+    console.log("[setting]", this.setting)
     if (this.setting.persistAndApplyTitles) return true
     else return false
   }
