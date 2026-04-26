@@ -15,6 +15,7 @@ import {
   createCheckAndFocusLastFocusTab,
   type CheckAndFocusLastFocusTabUseCase,
 } from "./application/usecases/focusLastFocusTab"
+import { IdCollectionSessionStore } from "./adapters/impl/session/IdCollectionSessionStore"
 
 let winIdLastFocusTabIdMap = new Map()
 let extensionTabIdSet = new Set()
@@ -91,7 +92,8 @@ chrome.tabs.onRemoved.addListener(async (tabId, { windowId }) => {
 // create adapters
 
 const extensionSWFacade: PlatformSWFacade = ChromeSWFacade
-const idCollectionStore: IdCollectionStore = new IdCollectionStoreImpl()
+const idCollectionStore: IdCollectionStore =
+  IdCollectionSessionStore.build(extensionSWFacade)
 
 // create use cases
 

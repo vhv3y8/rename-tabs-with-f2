@@ -16,18 +16,18 @@ export type TitleApplyingInfo = {
 export function createCheckAndApplyTitle(
   extensionFacade: PlatformSWFacade,
   settingStore: SettingStore,
-  urlTitleCollectionStore: URLTitleCollectionSWStore,
+  urlTitleCollectionSWStore: URLTitleCollectionSWStore,
   saveOriginalTitleBeforeApplyUseCase: SaveOriginalTitleBeforeApplyUseCase,
 ) {
   return async function checkAndApplyTitle(tabInfo: TitleApplyingInfo) {
     // check setting
     if (await settingStore.shouldApplyTitles()) {
       // check persisted title
-      const titleCollection = await urlTitleCollectionStore.getCollection()
+      const titleCollection = await urlTitleCollectionSWStore.getCollection()
       const persistedTitle = titleCollection.getMatchingTitle(tabInfo.url)
 
       if (persistedTitle !== null) {
-        // save original title
+        // fire and forget
         saveOriginalTitleBeforeApplyUseCase({
           id: tabInfo.id,
           originalTitle: tabInfo.originalTitle,

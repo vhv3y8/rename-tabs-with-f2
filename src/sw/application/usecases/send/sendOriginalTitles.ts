@@ -9,7 +9,7 @@ export function createSendOriginalTitles(
 ) {
   return async function sendOriginalTitles(
     tabIds: number[],
-    sendFunction: (originalTitles: [number | null][]) => void,
+    sendFunction: (originalTitles: (string | null)[]) => void,
   ) {
     const originalTitles =
       await originalTitleStore.getAllAppliedTitleOriginals(tabIds)

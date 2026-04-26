@@ -1,7 +1,11 @@
 import ChromeStorage from "@chrome/storage"
 import ChromeTabs from "@chrome/tabs"
 import ChromeWindows from "@chrome/windows"
-import type { PlatformSWFacade } from "@sw/application/ports/infra/PlatformSWFacade"
+import {
+  type PlatformSWFacade,
+  type IdCollectionRecord,
+  type TitleApplyingInfosReord,
+} from "@sw/application/ports/infra/PlatformSWFacade"
 
 export const ChromeSWFacade: PlatformSWFacade = {
   // storage
@@ -18,17 +22,27 @@ export const ChromeSWFacade: PlatformSWFacade = {
     return ChromeStorage.titles.getTitles()
   },
 
-  async getIdCollections() {
+  // service-worker-only session storage
+  async getSessionIdCollections() {
     return chrome.storage.session
       .get(["idCollection"])
       .then((db) => db.idCollection)
   },
-  // TODO
-  async setIdCollections(idCollection: IdCol) {
-    return chrome.storage.session.set({ idCollection })
+  async setSessionIdCollections(idCollectionRecord: IdCollectionRecord) {
+    return chrome.storage.session.set({ idCollection: idCollectionRecord })
   },
-  async getTitleApplyingInfos() {},
-  async setTitleApplyingInfos() {},
+  async getSessionTitleApplyingInfos() {
+    return chrome.storage.session
+      .get(["titleApplyingInfos"])
+      .then((db) => db.titleApplyingInfos)
+  },
+  async setSessionTitleApplyingInfos(
+    titleApplyingInfosRecord: TitleApplyingInfosReord,
+  ) {
+    return chrome.storage.session.set({
+      titleApplyingInfos: titleApplyingInfosRecord,
+    })
+  },
 
   // tabs
   async openMainPage() {

@@ -15,13 +15,14 @@ export function createFocusLastFocusTab(
       (await idCollectionStore.windowHasLastFocusTab(windowId))
     ) {
       const lastFocusTabId = await idCollectionStore.getLastFocusTabId(windowId)
+      if (lastFocusTabId) {
+        // focus last focus tab
+        await extensionFacade.focusTab(lastFocusTabId)
 
-      // focus last focus tab
-      await extensionFacade.focusTab(lastFocusTabId)
-
-      // remove from collections
-      idCollectionStore.removeLastFocusTabId(lastFocusTabId)
-      idCollectionStore.removeMainPageTabId(tabId)
+        // remove from collections
+        idCollectionStore.removeLastFocusTabId(lastFocusTabId)
+        idCollectionStore.removeMainPageTabId(tabId)
+      }
     }
   }
 }

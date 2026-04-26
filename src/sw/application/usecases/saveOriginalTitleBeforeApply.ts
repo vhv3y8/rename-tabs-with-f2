@@ -12,6 +12,6 @@ export function createSaveOriginalTitleBeforeApply(
     titleApplyingInfo: Pick<TitleApplyingInfo, "id" | "originalTitle">,
   ) {
     const { id, originalTitle } = titleApplyingInfo
-    titleApplyingStore.setOriginalTitle(id, originalTitle)
+    await titleApplyingStore.setOriginalTitle(id, originalTitle)
   }
 }

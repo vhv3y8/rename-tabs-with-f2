@@ -7,7 +7,7 @@ export type SendLastFocusTabIdUseCase = ReturnType<
 export function createSendLastFocusTabId(idCollectionStore: IdCollectionStore) {
   return async function sendLastFocusTabId(
     senderWindowId: number,
-    sendFunction: (lastFocusTabId: number) => void,
+    sendFunction: (lastFocusTabId: number | null) => void,
   ) {
     if (await idCollectionStore.windowHasLastFocusTab(senderWindowId)) {
       const lastFocusTabId =

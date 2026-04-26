@@ -6,7 +6,7 @@ export interface IdCollectionStore {
 
   // last focus tab
   windowHasLastFocusTab(windowId: number): Promise<boolean>
-  getLastFocusTabId(windowId: number): Promise<number>
+  getLastFocusTabId(windowId: number): Promise<number | null>
   setLastFocusTabId(windowId: number, lastFocusTabId: number): Promise<void>
   removeLastFocusTabId(id: number): Promise<void>
 }

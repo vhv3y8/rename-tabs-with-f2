@@ -1,4 +1,4 @@
 export interface TitleApplyingStore {
-  getAllAppliedTitleOriginals(tabIds: number[]): Promise<[string | null][]>
+  getAllAppliedTitleOriginals(tabIds: number[]): Promise<(string | null)[]>
   setOriginalTitle(tabId: number, originalTitle: string): Promise<void>
 }
