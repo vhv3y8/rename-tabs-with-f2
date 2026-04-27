@@ -29,6 +29,14 @@ const ChromeTabs = {
         ({ id }) => !currentWindowExtensionTabIds.includes(id!),
       )
     },
+    async tabExists(tabId: number): Promise<boolean> {
+      try {
+        await chrome.tabs.get(tabId)
+        return true
+      } catch {
+        return false
+      }
+    },
   },
   create: {
     async openMainPage(): Promise<chrome.tabs.Tab> {

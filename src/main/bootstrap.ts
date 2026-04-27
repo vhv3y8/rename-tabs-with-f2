@@ -171,14 +171,12 @@ export async function runBootstrap() {
 
   async function runInitializations() {
     const tabsToInitialize = await extensionFacade.getInitializeTabEntries()
-    const urlTitleCollection = await urlTitleCollectionStore.getCollection()
+    // const urlTitleCollection = await urlTitleCollectionStore.getCollection()
     const tabIdOriginalTitleLookup =
       await originalTitleStore.getOriginalTitlesFromTabIds(
         tabsToInitialize.map(({ id }) => id).filter((id) => id !== undefined),
       )
-    // TODO
-    // if should apply titles is false, give null for persisted / original
-    const persistedTitlesApplied = await inMemorySetting.shouldPersistTitles()
+    // const persistedTitlesApplied = await inMemorySetting.shouldPersistTitles()
     const tabInfos: TabInfo[] = tabsToInitialize.map(
       ({ id, title, favIconUrl, url, index, status }) => ({
         index,
@@ -188,12 +186,13 @@ export async function runBootstrap() {
         status: status!,
         title: title!,
         userInputTitle: title!,
-        persistedTitle:
-          persistedTitlesApplied && url
-            ? urlTitleCollection.getTitle(url)
-            : null,
-        originalTitle:
-          persistedTitlesApplied && id ? tabIdOriginalTitleLookup[id] : null,
+        // do not give persisted title if option is set to false
+        // persistedTitle:
+        //   persistedTitlesApplied && url
+        //     ? urlTitleCollection.getTitle(url)
+        //     : null,
+        // even if persisted option is false, user can re open page after applying
+        originalTitle: id ? tabIdOriginalTitleLookup[id] : null,
         connected: false,
       }),
     )

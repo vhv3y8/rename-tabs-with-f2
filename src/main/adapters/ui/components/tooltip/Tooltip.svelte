@@ -1,20 +1,22 @@
 <script lang="ts">
 import { onMount } from "svelte"
+import { cubicIn, cubicOut } from "svelte/easing"
+import { fade } from "svelte/transition"
 
-let { children } = $props()
-
-let show = $state(false)
+let { content } = $props()
 
 onMount(() => {})
 </script>
 
 <!-- HTML -->
 
-{#if show}
-  <div class="tooltip">
-    {@render children?.()}
-  </div>
-{/if}
+<div
+  class="tooltip"
+  in:fade={{ duration: 0.1, easing: cubicIn }}
+  out:fade={{ duration: 0.1, easing: cubicOut }}
+>
+  {content}
+</div>
 
 <!-- Style -->
 

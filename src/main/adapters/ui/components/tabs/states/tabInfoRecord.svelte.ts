@@ -25,11 +25,11 @@ export class TabIdxInfoRecord implements Partial<TabInfoStore> {
       (tabInfo) => tabInfo.hasChanged && tabInfo.connected,
     )
   }
-  getTitleInfosToSave() {
-    // persistedTitle is not null and title is ""
-    // for test
-    return this.getAllTabInfos()
-  }
+  // getTitleInfosToSave() {
+  //   // persistedTitle is not null and title is ""
+  //   // for test
+  //   return this.getAllTabInfos()
+  // }
 
   getById(tabId: number) {
     let filtered = this.allTabInfos.filter(({ id }) => id === Number(tabId))
@@ -48,7 +48,7 @@ export class TabIdxInfoRecord implements Partial<TabInfoStore> {
           status,
           title,
           userInputTitle,
-          persistedTitle,
+          // persistedTitle,
           originalTitle,
           connected,
         },
@@ -62,7 +62,7 @@ export class TabIdxInfoRecord implements Partial<TabInfoStore> {
           index,
           title,
           userInputTitle,
-          persistedTitle,
+          // persistedTitle,
           originalTitle,
           connected,
           hasChanged: false,

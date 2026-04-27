@@ -40,6 +40,7 @@
     "vitest": "^4.0.9"
   },
   "dependencies": {
+    "@floating-ui/dom": "^1.7.6",
     "semver": "^7.7.4"
   }
 }

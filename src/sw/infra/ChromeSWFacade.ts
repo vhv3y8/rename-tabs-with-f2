@@ -58,6 +58,9 @@ export const ChromeSWFacade: PlatformSWFacade = {
   async applyPersistedTitle(id: number, title: any) {
     return ChromeTabs.message.fireChangeTitleToContentScript({ id, title })
   },
+  async tabExists(tabId: number) {
+    return ChromeTabs.query.tabExists(tabId)
+  },
 
   // windows
   async getCurrentWindowId() {

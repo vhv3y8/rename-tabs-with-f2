@@ -12,7 +12,13 @@ function keydownCloseSettingHandler(e: KeyboardEvent) {
     case "Escape": {
       if (settingModal.show && !settingModal.listen) {
         e.preventDefault()
-        settingModal.hide()
+        if (conflictModal.show) {
+          conflictModal.cancel()
+        } else if (settingModal.warnClearTitles) {
+          settingModal.hideClearTitlesWarning()
+        } else {
+          settingModal.hide()
+        }
       }
     }
   }

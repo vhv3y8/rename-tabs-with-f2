@@ -163,7 +163,6 @@ div.warningContainer {
 
   & > :global(button) {
     flex: 1 0 auto;
-    /* min-width: 0; */
   }
   &.fix > :global(button) {
     flex: 1 0 0;

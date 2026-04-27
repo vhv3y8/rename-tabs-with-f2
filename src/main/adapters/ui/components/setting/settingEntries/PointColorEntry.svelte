@@ -11,6 +11,7 @@ const pointColorList: Setting["pointColor"][] = [
   "cornflower",
   "coralorange",
   "mutedcoral",
+  "forestgreen",
 ]
 const initialIdx = pointColorList.indexOf(setting.pointColor)
 let currentIdx = $state(initialIdx)

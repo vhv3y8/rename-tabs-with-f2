@@ -176,6 +176,7 @@ export class TabItemComponents {
     })
     if (0 < this.focusableComponents.length) {
       this.focusableComponents[this.initialFocusInputIdx].focusTabInput()
+      this.currentFocusInputIdx = this.initialFocusInputIdx
     }
   }
   focusCurrentItem() {

@@ -3,8 +3,54 @@
 import TabItem from "./TabItem.svelte"
 import { getInjections } from "../../injections"
 import { onMount } from "svelte"
+import { settingModal } from "../setting/states/settingModal.svelte"
+import {
+  cancelAllMoveAroundKeydowns,
+  keydowns,
+} from "../reactivity/keys.svelte"
 
 const { tabIdxInfoStore, tabItemComponents } = getInjections()
+
+function keydownMoveAroundTabItemsHandler(e: KeyboardEvent) {
+  if (settingModal.listen) return
+
+  switch (e.key) {
+    case "Tab": {
+      e.preventDefault()
+      if (e.shiftKey) {
+        keydowns.shiftTab = true
+        tabItemComponents.focusPreviousItem()
+      } else {
+        keydowns.tab = true
+        tabItemComponents.focusNextItem()
+      }
+      break
+    }
+    case "Enter": {
+      e.preventDefault()
+      if (e.shiftKey) {
+        keydowns.shiftEnter = true
+        tabItemComponents.focusPreviousItem()
+      } else {
+        keydowns.enter = true
+        tabItemComponents.focusNextItem()
+      }
+      break
+    }
+    case "Escape": {
+      e.preventDefault()
+      // if (settingModal.hideIfVisible()) break
+      // TODO
+      if (settingModal.show) break
+      keydowns.esc = true
+      tabItemComponents.focusInitialItem()
+      break
+    }
+    default: {
+      cancelAllMoveAroundKeydowns()
+    }
+  }
+}
 
 onMount(() => {
   tabItemComponents.focusInitialItem()
@@ -12,6 +58,8 @@ onMount(() => {
 </script>
 
 <!-- HTML -->
+
+<svelte:document onkeydown={keydownMoveAroundTabItemsHandler} />
 
 <ul>
   {#each tabIdxInfoStore.getAllTabInfos() as tabInfo, idx}

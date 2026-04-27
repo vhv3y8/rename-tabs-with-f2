@@ -8,7 +8,7 @@ export type HotKey = {
   key: string
 }
 export type Setting = {
-  pointColor: "cornflower" | "mutedcoral" | "coralorange"
+  pointColor: "cornflower" | "mutedcoral" | "coralorange" | "forestgreen"
   darkmode: boolean
   largerWidth: boolean
   persistAndApplyTitles: boolean

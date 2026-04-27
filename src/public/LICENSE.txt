@@ -1,0 +1,25 @@
+Copyright (c) 2026 JeongHyeon Ryu (vhv3y8). All rights reserved.
+
+Source code of this extension is opened for educational and personal use: https://github.com/vhv3y8/rename-tabs-with-f2
+
+THIRD PARTY LICENSES :
+
+========== Fonts ==========
+
+Ubuntu, Ubuntu Mono (https://design.ubuntu.com/font)
+Copyright 2010,2011 Canonical Ltd.
+License: UBUNTU FONT LICENCE Version 1.0
+License File: licenses/UBUNTU-FONT-LICENSE-1.0.txt
+
+Open Sans
+Copyright 2020 The Open Sans Project Authors (https://github.com/googlefonts/opensans)
+License: SIL OPEN FONT LICENSE Version 1.1
+License File: licenses/SIL-OPEN-FONT-LICENSE-v1.1.txt
+
+========== Icons ==========
+
+Scarlab Icons (https://github.com/la-moore/scarlab-icons)
+> Globe (globe-alt)
+Copyright (c) 2026 Alex Moore
+License: MIT License
+License File: licenses/MIT-LICENSE.txt

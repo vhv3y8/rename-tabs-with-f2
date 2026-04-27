@@ -36,6 +36,7 @@ export interface PlatformSWFacade {
   applyPersistedTitle(id: number, title: any): Promise<unknown>
   focusTab(tabId: number): Promise<void>
   getCurrentWindowActiveTab(): Promise<chrome.tabs.Tab>
+  tabExists(tabId: number): Promise<boolean>
 
   // windows
   // TODO

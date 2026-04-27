@@ -177,6 +177,6 @@ async function run() {
   }
 }
 
-// await emptyOutDirOnce()
+await emptyOutDirOnce()
 await run()
 if (buildDist2ForTest) await updateExtensionVersion()

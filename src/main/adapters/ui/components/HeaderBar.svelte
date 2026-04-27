@@ -7,52 +7,52 @@ import { getInjections } from "../injections"
 
 const { setting, tabItemComponents } = getInjections()
 
-// move around tab components
-function keydownMoveAroundTabItemsHandler(e: KeyboardEvent) {
-  if (settingModal.listen) return
+// // move around tab components
+// function keydownMoveAroundTabItemsHandler(e: KeyboardEvent) {
+//   if (settingModal.listen) return
 
-  switch (e.key) {
-    case "Tab": {
-      e.preventDefault()
-      if (e.shiftKey) {
-        keydowns.shiftTab = true
-        tabItemComponents.focusPreviousItem()
-      } else {
-        keydowns.tab = true
-        tabItemComponents.focusNextItem()
-      }
-      break
-    }
-    case "Enter": {
-      e.preventDefault()
-      if (e.shiftKey) {
-        keydowns.shiftEnter = true
-        tabItemComponents.focusPreviousItem()
-      } else {
-        keydowns.enter = true
-        tabItemComponents.focusNextItem()
-      }
-      break
-    }
-    case "Escape": {
-      e.preventDefault()
-      // if (settingModal.hideIfVisible()) break
-      // TODO
-      if (settingModal.show) break
-      keydowns.esc = true
-      tabItemComponents.focusInitialItem()
-      break
-    }
-    default: {
-      cancelAllMoveAroundKeydowns()
-    }
-  }
-}
+//   switch (e.key) {
+//     case "Tab": {
+//       e.preventDefault()
+//       if (e.shiftKey) {
+//         keydowns.shiftTab = true
+//         tabItemComponents.focusPreviousItem()
+//       } else {
+//         keydowns.tab = true
+//         tabItemComponents.focusNextItem()
+//       }
+//       break
+//     }
+//     case "Enter": {
+//       e.preventDefault()
+//       if (e.shiftKey) {
+//         keydowns.shiftEnter = true
+//         tabItemComponents.focusPreviousItem()
+//       } else {
+//         keydowns.enter = true
+//         tabItemComponents.focusNextItem()
+//       }
+//       break
+//     }
+//     case "Escape": {
+//       e.preventDefault()
+//       // if (settingModal.hideIfVisible()) break
+//       // TODO
+//       if (settingModal.show) break
+//       keydowns.esc = true
+//       tabItemComponents.focusInitialItem()
+//       break
+//     }
+//     default: {
+//       cancelAllMoveAroundKeydowns()
+//     }
+//   }
+// }
 </script>
 
 <!-- HTML -->
 
-<svelte:document onkeydown={keydownMoveAroundTabItemsHandler} />
+<!-- <svelte:document onkeydown={keydownMoveAroundTabItemsHandler} /> -->
 
 <header>
   <span

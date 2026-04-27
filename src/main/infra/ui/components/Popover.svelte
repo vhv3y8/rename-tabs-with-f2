@@ -15,7 +15,12 @@ let {
 </div>
 
 <!-- svelte-ignore a11y_consider_explicit_label -->
-<button type="button" class="popoverBackground" onclick={onclose}></button>
+<button
+  type="button"
+  style:z-index={zIndex - 1}
+  class="popoverBackground"
+  onclick={onclose}
+></button>
 
 <!-- Style -->
 
@@ -43,6 +48,6 @@ button.popoverBackground {
   border: none;
   background-color: transparent;
 
-  z-index: 99;
+  /* z-index: 99; */
 }
 </style>

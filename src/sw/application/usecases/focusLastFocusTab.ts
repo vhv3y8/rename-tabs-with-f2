@@ -18,8 +18,11 @@ export function createFocusLastFocusTab(
       if (lastFocusTabId) {
         console.log("[focus last focus tab] [id exists] [focusing]")
 
-        // focus last focus tab
-        await extensionFacade.focusTab(lastFocusTabId)
+        // tab could have been closed
+        if (await extensionFacade.tabExists(lastFocusTabId)) {
+          // focus last focus tab
+          await extensionFacade.focusTab(lastFocusTabId)
+        }
 
         // remove from collections
         idCollectionStore.removeLastFocusTabId(lastFocusTabId)

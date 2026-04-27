@@ -10,7 +10,7 @@ type KeyProps = {
   padding: string | null
   fontSize: string | null
   special: boolean
-  point: "cornflower" | "mutedcoral" | "coralorange"
+  point: "cornflower" | "mutedcoral" | "coralorange" | "forestgreen"
   onOpposite: boolean
   pointOnHover: boolean
   id?: string
@@ -115,6 +115,7 @@ let elem: HTMLElement | null = $state(null)
     class:cornflower={point === "cornflower"}
     class:mutedcoral={point === "mutedcoral"}
     class:coralorange={point === "coralorange"}
+    class:forestgreen={point === "forestgreen"}
     class:noShadow={shadow === "none"}
     class:smallShadow={shadow === "small"}
     class:largeShadow={shadow === "base"}
@@ -214,6 +215,18 @@ let elem: HTMLElement | null = $state(null)
   &.coralorange.onOpposite.pointOnHover:active {
     --background-color: var(--point-coralorange-opposite);
   }
+  /* forestgreen */
+  &.forestgreen.keydown,
+  &.forestgreen.pointOnHover:hover,
+  &.forestgreen.pointOnHover:active {
+    --background-color: var(--point-forestgreen-default);
+  }
+  &.forestgreen.special.keydown,
+  &.forestgreen.onOpposite.keydown,
+  &.forestgreen.onOpposite.pointOnHover:hover,
+  &.forestgreen.onOpposite.pointOnHover:active {
+    --background-color: var(--point-forestgreen-opposite);
+  }
 
   /* special */
   &.special {
@@ -228,6 +241,9 @@ let elem: HTMLElement | null = $state(null)
     }
     &.mutedcoral {
       --background-color: var(--point-mutedcoral-opposite);
+    }
+    &.forestgreen {
+      --background-color: var(--point-forestgreen-opposite);
     }
   }
 }

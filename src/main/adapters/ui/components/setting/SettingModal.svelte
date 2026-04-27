@@ -11,8 +11,8 @@ let { blur, onclose } = $props()
 
 <!-- HTML -->
 
-<Popover {onclose} zIndex={100} opacity={blur ? 0.5 : 1}>
-  <ul id="settingsPopoverContent">
+<Popover {onclose} zIndex={100} opacity={blur ? 0.7 : 1}>
+  <ul id="settingsPopoverContent" class:otherModal={blur}>
     <PointColorEntry />
     <DarkModeEntry />
     <LargerWidthEntry />
@@ -34,6 +34,10 @@ ul {
   display: flex;
   flex-flow: column nowrap;
   gap: 0.55em;
+
+  &.otherModal {
+    pointer-events: none;
+  }
 }
 :global(ul#settingsPopoverContent li button.key) {
   font-size: 0.9em;

@@ -18,7 +18,7 @@ let { setting } = getInjections()
     conflictModal.cancel()
   }}
   padding={"0.6em"}
-  zIndex={101}
+  zIndex={102}
 >
   <ul id="handleConflictModalContent" class="p-0 list-none">
     <!--  -->
@@ -45,7 +45,7 @@ let { setting } = getInjections()
       <Key
         props={{
           fontSize: "15px",
-          padding: "0.4em",
+          padding: "0.5em",
           shadow: "small",
           point: setting.pointColor,
           isKeyDown: conflictModal.isSelectingAllExisting,
@@ -63,7 +63,7 @@ let { setting } = getInjections()
       <Key
         props={{
           fontSize: "15px",
-          padding: "0.4em",
+          padding: "0.5em",
           shadow: "small",
           point: setting.pointColor,
           isKeyDown: conflictModal.isSelectingAllUploaded,
@@ -116,6 +116,14 @@ ul#handleConflictModalContent {
 
   & :global(button:hover) {
     cursor: pointer;
+  }
+
+  & :global(button.key) {
+    display: flex;
+  }
+  & :global(div.keyInner) {
+    flex: 1 0 0;
+    min-width: 0;
   }
 }
 

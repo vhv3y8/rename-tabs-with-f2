@@ -1,13 +1,13 @@
-import type { OriginalTitleStore } from "@application/ports/OriginalTitleStore"
+// import type { OriginalTitleStore } from "@application/ports/OriginalTitleStore"
 
-export type InitializeOriginalTitleStoreUseCase = ReturnType<
-  typeof createInitializeOriginalTitleStore
->
+// export type InitializeOriginalTitleStoreUseCase = ReturnType<
+//   typeof createInitializeOriginalTitleStore
+// >
 
-export function createInitializeOriginalTitleStore(
-  originalTitleStore: OriginalTitleStore,
-) {
-  return async function initializeOriginalTitleStore() {
-    await originalTitleStore.initialize()
-  }
-}
+// export function createInitializeOriginalTitleStore(
+//   originalTitleStore: OriginalTitleStore,
+// ) {
+//   return async function initializeOriginalTitleStore() {
+//     await originalTitleStore.initialize()
+//   }
+// }
