@@ -20,14 +20,25 @@ export function createApplyUseCase(
   return async function apply() {
     lifeCycle.beforeStart?.()
     const tabInfosToApply = tabInfoStore.getTabInfosToApply()
-    console.log("[apply] [tab infos to apply]", tabInfosToApply)
+    console.log(
+      "[apply] [tab infos to apply]",
+      tabInfosToApply.map(
+        ({ url, title, originalTitle, persistedTitle, userInputTitle }) => ({
+          url,
+          userInputTitle,
+          persistedTitle,
+          originalTitle,
+          title,
+        }),
+      ),
+    )
 
     if (await settingStore.shouldPersistTitles()) {
       const urlTitleCollection = await urlTitleCollectionStore.getCollection()
 
       // remove empty title entries from db
       const tabInfosToRemove = tabInfosToApply.filter(
-        ({ title }) => title === "",
+        ({ userInputTitle }) => userInputTitle === "",
       )
       const urlsToRemove = tabInfosToRemove.map(({ url }) => url)
       urlTitleCollection.removeEntries(urlsToRemove)
@@ -35,29 +46,38 @@ export function createApplyUseCase(
 
       // add or update title entries
       const entriesToAddOrUpdate = tabInfosToApply
-        .filter(({ title }) => title !== "")
-        .map(({ url, title }) => [url, title]) as [URLMatch, TabTitle][]
+        .filter(({ userInputTitle }) => userInputTitle !== "")
+        .map(({ url, userInputTitle }) => [url, userInputTitle]) as [
+        URLMatch,
+        TabTitle,
+      ][]
       urlTitleCollection.appendEntriesWithResolvedConflictions(
         entriesToAddOrUpdate,
         [],
       )
       console.log("[apply] [add or updated entries]", entriesToAddOrUpdate)
 
-      // update store
       urlTitleCollectionStore.storeUpdatedCollection()
-      console.log("[apply] [stored collection]")
+      console.log("[apply] [stored collection]", urlTitleCollection)
     }
 
     await Promise.allSettled(
       tabInfosToApply
         // send changed title to each content script
-        .map(({ id, title }) =>
-          extensionFacade.renameTabTitle({
+        .map(({ id, title, userInputTitle, originalTitle }) => {
+          let titleToApply = userInputTitle || originalTitle || title
+          console.log("[applying]", {
+            userInputTitle,
+            originalTitle,
+            title,
+            titleToApply,
+          })
+          return extensionFacade.renameTabTitle({
             // why this can be null/undefined??
             tabId: id!,
-            title: title!,
-          }),
-        ),
+            title: titleToApply,
+          })
+        }),
     )
 
     // lifeCycle.closePageAfterFinish?.()

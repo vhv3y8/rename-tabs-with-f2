@@ -1,5 +1,5 @@
 import type { URLTitleCollectionStore } from "@application/ports/URLTitleCollectionStore"
-import { InMemorySetting } from "./adapters/ui/components/setting/states/inMemorySetting.svelte"
+import { InMemorySetting } from "./adapters/ui/impl/inMemorySetting.svelte"
 import { DOMApplyLifeCycle } from "./adapters/ui/impl/lifecycles/applyLifeCycle"
 import { createChromeSvelteReloadLifeCycle } from "./adapters/ui/impl/lifecycles/reloadLifeCycle"
 import { TabIdxInfoRecordStore } from "./adapters/ui/impl/tabInfoStore.svelte"
@@ -169,36 +169,46 @@ export async function runBootstrap() {
     clearURLTitleCollectionUseCase,
   )
 
-  // run initializations
-
-  const tabsToInitialize = await extensionFacade.getInitializeTabEntries()
-  const urlTitleCollection = await urlTitleCollectionStore.getCollection()
-  const tabIdOriginalTitleLookup =
-    await originalTitleStore.getOriginalTitlesFromTabIds(
-      tabsToInitialize.map(({ id }) => id).filter((id) => id !== undefined),
+  async function runInitializations() {
+    const tabsToInitialize = await extensionFacade.getInitializeTabEntries()
+    const urlTitleCollection = await urlTitleCollectionStore.getCollection()
+    const tabIdOriginalTitleLookup =
+      await originalTitleStore.getOriginalTitlesFromTabIds(
+        tabsToInitialize.map(({ id }) => id).filter((id) => id !== undefined),
+      )
+    // TODO
+    // if should apply titles is false, give null for persisted / original
+    const persistedTitlesApplied = await inMemorySetting.shouldPersistTitles()
+    const tabInfos: TabInfo[] = tabsToInitialize.map(
+      ({ id, title, favIconUrl, url, index, status }) => ({
+        index,
+        id: id!,
+        favIconUrl: favIconUrl!,
+        url: url!,
+        status: status!,
+        title: title!,
+        userInputTitle: title!,
+        persistedTitle:
+          persistedTitlesApplied && url
+            ? urlTitleCollection.getTitle(url)
+            : null,
+        originalTitle:
+          persistedTitlesApplied && id ? tabIdOriginalTitleLookup[id] : null,
+        connected: false,
+      }),
     )
-  // TODO
-  // if should apply titles is false, give null for persisted / original
-  const tabInfos: TabInfo[] = tabsToInitialize.map(
-    ({ id, title, favIconUrl, url, index, status }) => ({
-      index,
-      id: id!,
-      title: title!,
-      favIconUrl: favIconUrl!,
-      url: url!,
-      status: status!,
-      persistedTitle: url ? urlTitleCollection.getTitle(url) : null,
-      originalTitle: id ? tabIdOriginalTitleLookup[id] : null,
-      connected: false,
-    }),
-  )
-  console.log("[initializing] [tab infos]", tabInfos)
-  tabIdxInfoStore.clearAndSetTabInfos(tabInfos)
+    console.log("[initializing] [tab infos]", tabInfos)
+    tabIdxInfoStore.clearAndSetTabInfos(tabInfos)
 
-  await checkAllTabConnectionAndUpdateFlagsUseCase()
-  // tabItemComponents.focusInitialItem()
+    await checkAllTabConnectionAndUpdateFlagsUseCase()
+    // tabItemComponents.focusInitialItem()
+  }
+
+  // run initializations
+  await runInitializations()
 
   // registering input adapters are delegated to svelte components
+
   return {
     toasts: toastPublisher,
     // adapter only

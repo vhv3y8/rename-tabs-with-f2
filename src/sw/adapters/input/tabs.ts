@@ -19,18 +19,21 @@ export function createTabsOnUpdatedHandler(
 ): Parameters<typeof chrome.tabs.onUpdated.addListener>[0] {
   return async function tabsOnUpdatedHandler(tabId, changeInfo, tab) {
     const { checkAndApplyTitleUseCase } = await bootstrapPromise
-    console.log("[tabs on updated] [changeInfo]", changeInfo)
+    console.log("[sw] [tabs on updated] [changeInfo]", changeInfo)
     if (changeInfo.status === "complete") {
-      console.log("[tabs on updated] [status is complete]", tab)
+      console.log("[sw] [tabs on updated] [apply by status complete]", tab)
       await checkAndApplyTitleUseCase({
         id: tabId,
-        originalTitle: tab.title || "",
+        title: tab.title || "",
         url: tab.url || "",
       })
     } else if (changeInfo.title) {
-      // TODO
-      // if should apply and not same as collection persisted,
-      // apply title
+      console.log("[sw] [tabs on updated] [apply by change info title]")
+      await checkAndApplyTitleUseCase({
+        id: tabId,
+        title: changeInfo.title,
+        url: tab.url || "",
+      })
     }
   }
 }

@@ -7,13 +7,13 @@ let { tabItemComponents } = getInjections()
 let elem = null
 
 let { tabInfo }: { tabInfo: TabInfoState } = $props()
-let localTitle = $state(tabInfo.titleState)
+let localTitle = $state(tabInfo.userInputTitle)
 let focusableIdx = $derived(
   tabItemComponents.focusableIdxFromTabIdLookup[tabInfo.id],
 )
 
 function applyLocalTitle() {
-  tabInfo.titleState = localTitle
+  tabInfo.userInputTitle = localTitle
   if (!tabInfo.hasChanged) tabInfo.hasChanged = true
 }
 

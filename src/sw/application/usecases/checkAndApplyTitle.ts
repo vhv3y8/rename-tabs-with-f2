@@ -10,7 +10,7 @@ export type CheckAndApplyTitleUseCase = ReturnType<
 export type TitleApplyingInfo = {
   id: number
   url: string
-  originalTitle: string
+  title: string
 }
 
 export function createCheckAndApplyTitle(
@@ -19,31 +19,35 @@ export function createCheckAndApplyTitle(
   urlTitleCollectionSWStore: URLTitleCollectionSWStore,
   saveOriginalTitleBeforeApplyUseCase: SaveOriginalTitleBeforeApplyUseCase,
 ) {
-  return async function checkAndApplyTitle(tabInfo: TitleApplyingInfo) {
-    console.log("[check and apply title] [given input]", tabInfo)
+  return async function checkAndApplyTitle({
+    id,
+    url,
+    title,
+  }: TitleApplyingInfo) {
+    console.log("[check and apply title] [given input]", {
+      id,
+      url,
+      title,
+    })
     // check setting
     if (await settingStore.shouldApplyTitles()) {
       console.log("[check and apply title] [setting] [should apply titles]")
+
       // check persisted title
       const titleCollection = await urlTitleCollectionSWStore.getCollection()
-      const persistedTitle = titleCollection.getMatchingTitle(tabInfo.url)
-      if (persistedTitle !== null) {
+      const persistedTitle = titleCollection.getMatchingTitle(url)
+      // can be fired by title change event
+      if (persistedTitle !== null && title !== persistedTitle) {
+        // fire and forget
+        saveOriginalTitleBeforeApplyUseCase({ id, originalTitle: title })
         console.log(
           "[check and apply title] [persisted title exists] [saved original title]",
-          {
-            id: tabInfo.id,
-            originalTitle: tabInfo.originalTitle,
-          },
+          { id, title },
         )
-        // fire and forget
-        saveOriginalTitleBeforeApplyUseCase({
-          id: tabInfo.id,
-          originalTitle: tabInfo.originalTitle,
-        })
 
-        console.log("[applying title]")
+        console.log("[applying title]", persistedTitle)
         // apply title
-        await extensionFacade.applyPersistedTitle(tabInfo.id, persistedTitle)
+        await extensionFacade.applyPersistedTitle(id, persistedTitle)
       }
     }
   }

@@ -8,9 +8,11 @@ export interface TabInfo {
 
   // title queried from platform (chrome)
   title: string
+  // title state
+  userInputTitle: string
   // saved rename application value
   persistedTitle: string | null
-  // titles saved right before automatic rename application
+  // title saved right before automatic rename application
   originalTitle: string | null
 
   connected: boolean
