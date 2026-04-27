@@ -7,16 +7,14 @@ let { tabItemComponents } = getInjections()
 let elem = null
 
 let { tabInfo }: { tabInfo: TabInfoState } = $props()
-let localTitle = $state(tabInfo.title)
+let localTitle = $state(tabInfo.titleState)
 let focusableIdx = $derived(
   tabItemComponents.focusableIdxFromTabIdLookup[tabInfo.id],
 )
 
 function applyLocalTitle() {
-  if (!tabInfo.hasChanged) {
-    tabInfo.title = localTitle
-    tabInfo.hasChanged = true
-  }
+  tabInfo.titleState = localTitle
+  if (!tabInfo.hasChanged) tabInfo.hasChanged = true
 }
 
 export function focusTabInput(): void {
@@ -45,9 +43,9 @@ export function getTabInfo() {
       width="24"
       height="24"
     />
-    <!-- placeholder={tabInfo.title} -->
     <input
       type="text"
+      placeholder={tabInfo.originalTitle || tabInfo.title}
       name=""
       bind:this={elem}
       bind:value={localTitle}

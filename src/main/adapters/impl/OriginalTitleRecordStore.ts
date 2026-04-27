@@ -9,13 +9,18 @@ export class OriginalTitleRecordStore implements OriginalTitleStore {
       existingOriginalTitles.map((val) => [val.id, val.originalTitle]),
     )
   }
-  static async build(extensionFacade: PlatformMainFacade, tabIds: number[]) {
+  static async build(extensionFacade: PlatformMainFacade) {
+    // fetch all for now
     const originalTitleRecords =
-      await extensionFacade.fetchExistingTitleApplyingInfos(tabIds)
+      await extensionFacade.fetchExistingOriginalTitles([])
     return new OriginalTitleRecordStore(originalTitleRecords)
   }
 
   async getOriginalTitlesFromTabIds(tabIds: number[]) {
-    return tabIds.map((id) => this.tabIdOriginalTitleRecord[id] || null)
+    const record = {} as Record<number, string | null>
+    for (const id of tabIds) {
+      record[id] = this.tabIdOriginalTitleRecord[id] || null
+    }
+    return record
   }
 }

@@ -89,8 +89,10 @@ function publishToast() {
             settingModal.endListening()
             localHotKey = setting.hotkey
           },
-        }}>{chrome.i18n.getMessage("settings_cancel")}</Key
+        }}
       >
+        {chrome.i18n.getMessage("settings_cancel")}
+      </Key>
 
       <Key
         props={{
@@ -103,8 +105,10 @@ function publishToast() {
             setting.hotkey = localHotKey
             publishToast()
           },
-        }}>{chrome.i18n.getMessage("settings_ok")}</Key
+        }}
       >
+        {chrome.i18n.getMessage("settings_ok")}
+      </Key>
     </div>
   {:else}
     <Key
@@ -115,8 +119,10 @@ function publishToast() {
         onclick: () => {
           settingModal.startListening()
         },
-      }}>{settingHotkeyText}</Key
+      }}
     >
+      {settingHotkeyText}
+    </Key>
   {/if}
 </SettingModalEntry>
 

@@ -7,12 +7,21 @@ import {
 } from "@domain/entities/URLTitleCollection"
 import type { ExportURLTitleCollectionFileUseCase } from "@application/usecases/file/exportURLTitleCollectionFile"
 import { TOAST_MESSAGES } from "@lib/toast"
+import type { ClearURLTitleCollectionUseCase } from "@application/usecases/file/clearURLTitleCollection"
 
 export function createExportURLTitleFileClickHandler(
   exportURLTitleFileUseCase: ExportURLTitleCollectionFileUseCase,
 ) {
   return function exportURLTitleFileClickHandler() {
     exportURLTitleFileUseCase()
+  }
+}
+
+export function createClearURLTitleFileClickHandler(
+  clearURLTitleCollectionUseCase: ClearURLTitleCollectionUseCase,
+) {
+  return async function clearURLTitleFileClickHandler() {
+    await clearURLTitleCollectionUseCase()
   }
 }
 

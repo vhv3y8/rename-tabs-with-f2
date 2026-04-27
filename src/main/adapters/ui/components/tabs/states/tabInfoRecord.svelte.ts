@@ -2,7 +2,7 @@ import type { TabInfoStore } from "@application/ports/TabInfoStore"
 import type { TabInfo } from "@domain/entities/TabInfo"
 
 export interface TabInfoState extends TabInfo {
-  // titleState: string
+  titleState: string
   hasChanged: boolean
 }
 export class TabIdxInfoRecord implements Partial<TabInfoStore> {
@@ -21,9 +21,14 @@ export class TabIdxInfoRecord implements Partial<TabInfoStore> {
     return this.allTabInfos
   }
   getTabInfosToApply() {
-    return this.allTabInfos.filter(
-      (tabInfo) => tabInfo.hasChanged && tabInfo.connected,
-    )
+    return this.allTabInfos
+      .filter((tabInfo) => tabInfo.hasChanged && tabInfo.connected)
+      .map((tabInfo) => {
+        return {
+          ...tabInfo,
+          title: tabInfo.titleState,
+        }
+      })
   }
   getTitleInfosToSave() {
     // persistedTitle is not null and title is ""
@@ -42,25 +47,28 @@ export class TabIdxInfoRecord implements Partial<TabInfoStore> {
         acc,
         {
           id,
-          title,
           favIconUrl,
           url,
           index,
           status,
+          title,
           persistedTitle,
+          originalTitle,
           connected,
         },
       ) => {
         // key have to be index. index is tab's position on current window tabs array
         acc[index] = {
           id,
-          title,
           favIconUrl,
           url,
           status,
           index,
-          connected,
+          title,
+          titleState: title,
           persistedTitle,
+          originalTitle,
+          connected,
           hasChanged: false,
         }
         return acc

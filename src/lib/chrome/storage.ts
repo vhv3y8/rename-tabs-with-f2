@@ -35,6 +35,8 @@ const ChromeStorage = {
     migratedStorage.settings = new MigrationAggregator(
       settingMigrationMap,
     ).migrate(userStorage.settings, previousVersion)
+    // keep titles
+    migratedStorage.titles = userStorage.titles
 
     // always set version
     const version = chrome.runtime.getManifest().version

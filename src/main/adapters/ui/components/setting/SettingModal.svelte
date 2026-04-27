@@ -43,6 +43,13 @@ ul {
   }
 }
 
+ul :global(button.key) {
+  display: flex;
+  & > :global(div.keyInner) {
+    flex: 1 0 0;
+  }
+}
+
 :global(button.key.small) {
   padding: 0.4em 0.5em;
 }

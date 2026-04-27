@@ -48,6 +48,12 @@
   "settings_save_titles_file": {
     "message": "save titles"
   },
+  "settings_clear_title_datas": {
+    "message": "clear titles"
+  },
+  "settings_clear_title_datas_warn": {
+    "message": "Remove all title datas?"
+  },
   "settings_resolve_conflicts": {
     "message": "Resolve Conflicts"
   },
@@ -93,6 +99,14 @@
   },
   "toast_persist_apply_off_data_remains": {
     "message": "Persist & Apply Titles Option OFF:\nTitles will not be automatically applied or saved from now.\nExisting datas will remain."
+  },
+  "toast_cleared_title_datas": {
+    "message": "Cleared all title datas. (count: $COUNT$)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
   },
 
   "not_connected_description_not_plural": {

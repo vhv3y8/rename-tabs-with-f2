@@ -18,4 +18,6 @@ export const TOAST_MESSAGES = {
   PERSIST_APPLY_OFF: chrome.i18n.getMessage(
     "toast_persist_apply_off_data_remains",
   ),
+  CLEARED_TITLES: (count: number) =>
+    chrome.i18n.getMessage("toast_cleared_title_datas", [count.toString()]),
 }

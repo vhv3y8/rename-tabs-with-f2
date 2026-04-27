@@ -6,13 +6,9 @@ import { onMount } from "svelte"
 
 const { tabIdxInfoStore, tabItemComponents } = getInjections()
 
-// onMount(() => {
-//   tabItemComponents.setLastFocusTabIdForInitialFocus(lastFocusTabId || -1)
-//   tabItemComponents.focusInitialItem()
-// })
-// onMount(() => {
-//   tabItemComponents.focusInitialItem()
-// })
+onMount(() => {
+  tabItemComponents.focusInitialItem()
+})
 </script>
 
 <!-- HTML -->

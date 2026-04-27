@@ -25,10 +25,11 @@ export function createApplyUseCase(
     if (await settingStore.shouldPersistTitles()) {
       const urlTitleCollection = await urlTitleCollectionStore.getCollection()
 
-      // remove empty title entries
-      const urlsToRemove = tabInfosToApply
-        .filter(({ title }) => title === "")
-        .map(({ url }) => url)
+      // remove empty title entries from db
+      const tabInfosToRemove = tabInfosToApply.filter(
+        ({ title }) => title === "",
+      )
+      const urlsToRemove = tabInfosToRemove.map(({ url }) => url)
       urlTitleCollection.removeEntries(urlsToRemove)
       console.log("[apply] [removed empty title entries]", urlsToRemove)
 
@@ -59,6 +60,6 @@ export function createApplyUseCase(
         ),
     )
 
-    lifeCycle.closePageAfterFinish?.()
+    // lifeCycle.closePageAfterFinish?.()
   }
 }

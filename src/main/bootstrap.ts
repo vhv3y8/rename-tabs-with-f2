@@ -1,7 +1,6 @@
 import type { URLTitleCollectionStore } from "@application/ports/URLTitleCollectionStore"
 import { InMemorySetting } from "./adapters/ui/components/setting/states/inMemorySetting.svelte"
 import { DOMApplyLifeCycle } from "./adapters/ui/impl/lifecycles/applyLifeCycle"
-// import { createInitializeAppLifeCycle } from "./adapters/ui/impl/lifecycles/initializeAppLifeCycle"
 import { createChromeSvelteReloadLifeCycle } from "./adapters/ui/impl/lifecycles/reloadLifeCycle"
 import { TabIdxInfoRecordStore } from "./adapters/ui/impl/tabInfoStore.svelte"
 import { Toasts } from "./adapters/ui/impl/toastPublisher.svelte"
@@ -26,24 +25,11 @@ import {
   type CheckAllTabConnectionUseCase,
 } from "./application/usecases/checkAllTabConnection"
 import {
-  createInitializeAppUseCase,
-  type InitializeAppLifeCycle,
-  type InitializeAppUseCase,
-} from "./application/usecases/initialize/initializeApp"
-import {
-  createInitializeTabInfoStore,
-  type InitializeTabInfoStoreUseCase,
-} from "./application/usecases/initialize/initializeTabInfoStore"
-import {
   createReloadAllConnectableTabs,
   type ReloadAllConnectableTabsUseCase,
   type ReloadLifeCycle,
 } from "./application/usecases/reloadAllConnectableTabs"
 import { ChromeMainFacade } from "./infra/platform/impl/ChromeMainFacade"
-import {
-  createInitializeURLTitleCollectionStore,
-  type InitializeURLTitleCollectionStoreUseCase,
-} from "@application/usecases/initialize/initializeURLTitleCollectionStore"
 import {
   createExportURLTitleCollectionFile,
   type ExportURLTitleCollectionFileUseCase,
@@ -53,6 +39,7 @@ import type { URLTitleCollection } from "@domain/entities/URLTitleCollection"
 import { URLTitleRecordJSONCodec } from "@infra/web/impl/JSONCodec"
 import { uploadURLTitleLifeCycle } from "@adapters/ui/impl/lifecycles/uploadURLTitleLifeCycle"
 import {
+  createClearURLTitleFileClickHandler,
   createExportURLTitleFileClickHandler,
   DOMURLTitleFileUploadHandler,
 } from "@adapters/ui/input/files"
@@ -67,6 +54,12 @@ import { URLTitleRecordStore } from "@adapters/impl/URLTitleRecordStore"
 import type { SettingStore } from "@application/ports/SettingStore"
 import { TabItemComponents } from "@adapters/ui/components/tabs/states/tabItemComponents.svelte"
 import type { TabInfo } from "@domain/entities/TabInfo"
+import type { OriginalTitleStore } from "@application/ports/OriginalTitleStore"
+import { OriginalTitleRecordStore } from "@adapters/impl/OriginalTitleRecordStore"
+import {
+  createClearURLTitleCollection,
+  type ClearURLTitleCollectionUseCase,
+} from "@application/usecases/file/clearURLTitleCollection"
 
 export async function runBootstrap() {
   // create infra impl
@@ -93,11 +86,14 @@ export async function runBootstrap() {
   const tabIdxInfoStore = new TabIdxInfoRecordStore() satisfies TabInfoStore
   const notConnected = tabIdxInfoStore.notConnected
 
+  const originalTitleStore: OriginalTitleStore =
+    await OriginalTitleRecordStore.build(extensionFacade)
+
   const inMemorySetting = (await InMemorySetting.build(
     extensionFacade,
   )) satisfies SettingStore
 
-  // initialize dirty impls
+  // create dirty impls
 
   const tabItemComponents = await TabItemComponents.build(extensionFacade)
 
@@ -136,6 +132,8 @@ export async function runBootstrap() {
       urlTitleCollectionStore,
       urlTitleCollectionFileExporter,
     )
+  const clearURLTitleCollectionUseCase: ClearURLTitleCollectionUseCase =
+    createClearURLTitleCollection(urlTitleCollectionStore, toastPublisher)
   const uploadURLTitleCollectionLifeCycle: UploadURLTitleCollectionLifeCycle =
     uploadURLTitleLifeCycle
   const uploadURLTitleCollectionFileUseCase: UploadURLTitleCollectionUseCase =
@@ -144,51 +142,6 @@ export async function runBootstrap() {
       toastPublisher,
       uploadURLTitleCollectionLifeCycle,
     )
-
-  // initializations
-  // url title collection store
-  // const initializeURLTitleCollectionStoreUseCase: InitializeURLTitleCollectionStoreUseCase =
-  //   createInitializeURLTitleCollectionStore(
-  //     urlTitleCollectionStore,
-  //     extensionFacade,
-  //   )
-  // // tab info store
-  // const initializeTabInfoStoreUseCase: InitializeTabInfoStoreUseCase =
-  //   createInitializeTabInfoStore(
-  //     extensionFacade,
-  //     urlTitleCollectionStore,
-  //     tabIdxInfoStore,
-  //   )
-  // // app
-  // const initializeAppLifeCycle: InitializeAppLifeCycle =
-  //   createInitializeAppLifeCycle(extensionFacade)
-  // const initializeAppUseCase: InitializeAppUseCase = createInitializeAppUseCase(
-  //   initializeURLTitleCollectionStoreUseCase,
-  //   initializeTabInfoStoreUseCase,
-  //   checkAllTabConnectionAndUpdateFlagsUseCase,
-  //   initializeAppLifeCycle,
-  // )
-
-  // const lastFocusTabId = await extensionFacade.getLastFocusTabId()
-  // console.log("[lastFocusTabId]", lastFocusTabId)
-
-  // initializations
-
-  const tabsToInitialize = await extensionFacade.getInitializeTabEntries()
-  const urlTitleCollection = await urlTitleCollectionStore.getCollection()
-  const tabInfos: TabInfo[] = tabsToInitialize.map(
-    ({ id, title, favIconUrl, url, index, status }) => ({
-      index,
-      id: id!,
-      title: title!,
-      favIconUrl: favIconUrl!,
-      url: url!,
-      status: status!,
-      persistedTitle: url ? urlTitleCollection.getTitle(url) : null,
-      connected: false,
-    }),
-  )
-  tabIdxInfoStore.clearAndSetTabInfos(tabInfos)
 
   // create input adapters
 
@@ -212,13 +165,40 @@ export async function runBootstrap() {
   const clickExportUrlTitleFileHandler = createExportURLTitleFileClickHandler(
     exportURLTitleCollectionFileUseCase,
   )
+  const clearURLTitleFileClickHandler = createClearURLTitleFileClickHandler(
+    clearURLTitleCollectionUseCase,
+  )
+
+  // run initializations
+
+  const tabsToInitialize = await extensionFacade.getInitializeTabEntries()
+  const urlTitleCollection = await urlTitleCollectionStore.getCollection()
+  const tabIdOriginalTitleLookup =
+    await originalTitleStore.getOriginalTitlesFromTabIds(
+      tabsToInitialize.map(({ id }) => id).filter((id) => id !== undefined),
+    )
+  // TODO
+  // if should apply titles is false, give null for persisted / original
+  const tabInfos: TabInfo[] = tabsToInitialize.map(
+    ({ id, title, favIconUrl, url, index, status }) => ({
+      index,
+      id: id!,
+      title: title!,
+      favIconUrl: favIconUrl!,
+      url: url!,
+      status: status!,
+      persistedTitle: url ? urlTitleCollection.getTitle(url) : null,
+      originalTitle: id ? tabIdOriginalTitleLookup[id] : null,
+      connected: false,
+    }),
+  )
+  console.log("[initializing] [tab infos]", tabInfos)
+  tabIdxInfoStore.clearAndSetTabInfos(tabInfos)
+
+  await checkAllTabConnectionAndUpdateFlagsUseCase()
+  // tabItemComponents.focusInitialItem()
 
   // registering input adapters are delegated to svelte components
-
-  // run initializing use cases
-  // await initializeAppUseCase()
-
-  // detailed instances to DI into ui components
   return {
     toasts: toastPublisher,
     // adapter only
@@ -234,5 +214,6 @@ export async function runBootstrap() {
     clickReloadUseCaseHandler,
     urlTitleFileUploadHandler,
     clickExportUrlTitleFileHandler,
+    clearURLTitleFileClickHandler,
   }
 }

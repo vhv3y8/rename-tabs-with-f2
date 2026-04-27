@@ -64,6 +64,7 @@ export class TitleApplyingMap implements Partial<OriginalTitleStore> {
 
   async getAllAppliedTitleOriginals(tabIds: number[]) {
     if (tabIds.length === 0) {
+      // give all if empty array
       return this.toStorageValue()
     } else return this.toStorageValue().filter(({ id }) => tabIds.includes(id))
   }

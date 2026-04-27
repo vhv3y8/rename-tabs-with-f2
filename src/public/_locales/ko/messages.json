@@ -46,8 +46,14 @@
   "settings_upload_titles_file": {
     "message": "탭이름들 로드"
   },
-  "settings_save_titles_file": {
+  "settings_clear_titles": {
     "message": "탭이름들 저장"
+  },
+  "settings_clear_title_datas": {
+    "message": "탭이름들 비우기"
+  },
+  "settings_clear_title_datas_warn": {
+    "message": "탭이름 데이터를 모두 지울까요?"
   },
   "settings_resolve_conflicts": {
     "message": "충돌 해결"
@@ -94,6 +100,14 @@
   },
   "toast_persist_apply_off_data_remains": {
     "message": "탭 이름 저장 & 적용 옵션을 껐음:\n이제부터 탭 이름들이 자동으로 적용되거나 저장되지 않습니다. 기존의 데이터들은 유지됩니다."
+  },
+  "toast_cleared_title_datas": {
+    "message": "탭 이름 데이터를 모두 비웠습니다. (개수: $COUNT$)",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
   },
 
   "not_connected_description_not_plural": {
