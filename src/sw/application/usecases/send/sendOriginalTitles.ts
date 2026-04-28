@@ -15,7 +15,8 @@ export function createSendOriginalTitles(
   ) {
     const originalTitles =
       await originalTitleStore.getAllAppliedTitleOriginals(tabIds)
-    console.log("[sending original titles]", originalTitles)
+    if (import.meta.env.MODE === "development")
+      console.log("[sw] [sending original titles]", originalTitles)
     sendFunction(originalTitles)
   }
 }

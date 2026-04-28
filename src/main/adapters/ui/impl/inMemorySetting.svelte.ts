@@ -12,7 +12,8 @@ export class InMemorySetting implements SettingStore {
     this.setting = $state(this._setting)
     $effect.root(() => {
       $effect(() => {
-        console.trace("[in memory setting update]", { ...this.setting })
+        if (import.meta.env.MODE === "development")
+          console.trace("[in memory setting update]", { ...this.setting })
         // update storage on setting field update
         this.extensionFacade.setSettings(this.setting)
       })

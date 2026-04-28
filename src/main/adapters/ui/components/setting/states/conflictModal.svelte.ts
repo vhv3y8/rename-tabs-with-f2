@@ -74,10 +74,11 @@ export class ConflictModalState {
         urlMatch: confliction[0].match,
       }
     })
-    console.log(
-      "[conflict state] [uploaded conflict states]",
-      this.conflictStates,
-    )
+    if (import.meta.env.MODE === "development")
+      console.log(
+        "[conflict state] [uploaded conflict states]",
+        this.conflictStates,
+      )
   }
   clearConflictions() {
     this.conflictStates = []

@@ -8,7 +8,8 @@ export class SettingModalState {
       $effect(() => {
         // cancel listen mode when setting is closed
         if (!this.show) this.listen = false
-        console.log("[setting modal show change]", this.show)
+        if (import.meta.env.MODE === "development")
+          console.log("[setting modal show change]", this.show)
       })
       $effect(() => {
         if (!this.show) this.warnClearTitles = false

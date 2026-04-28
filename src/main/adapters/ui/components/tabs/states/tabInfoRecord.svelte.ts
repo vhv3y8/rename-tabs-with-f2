@@ -2,7 +2,6 @@ import type { TabInfoStore } from "@application/ports/TabInfoStore"
 import type { TabInfo } from "@domain/entities/TabInfo"
 
 export interface TabInfoState extends TabInfo {
-  // titleState: string
   hasChanged: boolean
 }
 export class TabIdxInfoRecord implements Partial<TabInfoStore> {
@@ -10,11 +9,13 @@ export class TabIdxInfoRecord implements Partial<TabInfoStore> {
   allTabInfos: TabInfoState[]
   constructor() {
     this.allTabInfos = $derived(Object.values(this.record))
-    $effect.root(() => {
-      $effect(() => {
-        console.log("[tab info state record]", this.record)
+    if (import.meta.env.MODE === "development") {
+      $effect.root(() => {
+        $effect(() => {
+          console.log("[tab info state record]", this.record)
+        })
       })
-    })
+    }
   }
 
   getAllTabInfos() {
@@ -25,11 +26,6 @@ export class TabIdxInfoRecord implements Partial<TabInfoStore> {
       (tabInfo) => tabInfo.hasChanged && tabInfo.connected,
     )
   }
-  // getTitleInfosToSave() {
-  //   // persistedTitle is not null and title is ""
-  //   // for test
-  //   return this.getAllTabInfos()
-  // }
 
   getById(tabId: number) {
     let filtered = this.allTabInfos.filter(({ id }) => id === Number(tabId))
@@ -71,15 +67,17 @@ export class TabIdxInfoRecord implements Partial<TabInfoStore> {
       },
       {} as Record<number, TabInfoState>,
     )
-    console.log("[set tab infos]", tabInfoStateRecord)
+    if (import.meta.env.MODE === "development")
+      console.log("[set tab infos]", tabInfoStateRecord)
     this.record = { ...tabInfoStateRecord }
   }
   setConnectedFlag(idx: number, connected: boolean) {
     if (!this.record[idx]) return
-    console.log("[tab info store] [setting flag]", {
-      tabInfo: this.record[idx],
-      connected,
-    })
+    if (import.meta.env.MODE === "development")
+      console.log("[tab info store] [setting flag]", {
+        tabInfo: this.record[idx],
+        connected,
+      })
     this.record[idx]["connected"] = connected
   }
 }

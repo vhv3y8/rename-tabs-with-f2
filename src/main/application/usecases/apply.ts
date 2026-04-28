@@ -20,15 +20,18 @@ export function createApplyUseCase(
   return async function apply() {
     lifeCycle.beforeStart?.()
     const tabInfosToApply = tabInfoStore.getTabInfosToApply()
-    console.log(
-      "[apply] [tab infos to apply]",
-      tabInfosToApply.map(({ url, title, originalTitle, userInputTitle }) => ({
-        url,
-        userInputTitle,
-        originalTitle,
-        title,
-      })),
-    )
+    if (import.meta.env.MODE === "development")
+      console.log(
+        "[apply] [tab infos to apply]",
+        tabInfosToApply.map(
+          ({ url, title, originalTitle, userInputTitle }) => ({
+            url,
+            userInputTitle,
+            originalTitle,
+            title,
+          }),
+        ),
+      )
 
     if (await settingStore.shouldPersistTitles()) {
       const urlTitleCollection = await urlTitleCollectionStore.getCollection()
@@ -39,7 +42,8 @@ export function createApplyUseCase(
       )
       const urlsToRemove = tabInfosToRemove.map(({ url }) => url)
       urlTitleCollection.removeEntries(urlsToRemove)
-      console.log("[apply] [removed empty title entries]", urlsToRemove)
+      if (import.meta.env.MODE === "development")
+        console.log("[apply] [removed empty title entries]", urlsToRemove)
 
       // add or update title entries
       const entriesToAddOrUpdate = tabInfosToApply
@@ -52,10 +56,12 @@ export function createApplyUseCase(
         entriesToAddOrUpdate,
         [],
       )
-      console.log("[apply] [add or updated entries]", entriesToAddOrUpdate)
+      if (import.meta.env.MODE === "development")
+        console.log("[apply] [add or updated entries]", entriesToAddOrUpdate)
 
       urlTitleCollectionStore.storeUpdatedCollection()
-      console.log("[apply] [stored collection]", urlTitleCollection)
+      if (import.meta.env.MODE === "development")
+        console.log("[apply] [stored collection]", urlTitleCollection)
     }
 
     await Promise.allSettled(
@@ -63,12 +69,13 @@ export function createApplyUseCase(
         // send changed title to each content script
         .map(({ id, title, userInputTitle, originalTitle }) => {
           let titleToApply = userInputTitle || originalTitle || title
-          console.log("[applying]", {
-            userInputTitle,
-            originalTitle,
-            title,
-            titleToApply,
-          })
+          if (import.meta.env.MODE === "development")
+            console.log("[applying]", {
+              userInputTitle,
+              originalTitle,
+              title,
+              titleToApply,
+            })
           return extensionFacade.renameTabTitle({
             // why this can be null/undefined??
             tabId: id!,

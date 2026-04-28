@@ -103,35 +103,37 @@ export class TabItemComponents {
       })
     })
 
-    $effect.root(() => {
-      $effect(() => {
-        console.log(
-          "[focusable components update] [focusableIdxFromTabIdLookup]",
-          this.focusableIdxFromTabIdLookup,
-        )
+    if (import.meta.env.MODE === "development") {
+      $effect.root(() => {
+        $effect(() => {
+          console.log(
+            "[focusable components update] [focusableIdxFromTabIdLookup]",
+            this.focusableIdxFromTabIdLookup,
+          )
+        })
+        $effect(() => {
+          console.log(
+            "[focusable components update] [tab infos]",
+            this.focusableComponents.map(({ getTabInfo }) => {
+              const { id, index, title } = getTabInfo()
+              return { id, index, title }
+            }),
+          )
+        })
+        $effect(() => {
+          console.log(
+            "[focusable initial focus input idx update]",
+            this.initialFocusInputIdx,
+          )
+        })
+        $effect(() => {
+          console.log(
+            "[focusable current focus input idx update]",
+            this.currentFocusInputIdx,
+          )
+        })
       })
-      $effect(() => {
-        console.log(
-          "[focusable components update] [tab infos]",
-          this.focusableComponents.map(({ getTabInfo }) => {
-            const { id, index, title } = getTabInfo()
-            return { id, index, title }
-          }),
-        )
-      })
-      $effect(() => {
-        console.log(
-          "[focusable initial focus input idx update]",
-          this.initialFocusInputIdx,
-        )
-      })
-      $effect(() => {
-        console.log(
-          "[focusable current focus input idx update]",
-          this.currentFocusInputIdx,
-        )
-      })
-    })
+    }
   }
   // use this to build instance
   static async build(extensionFacade: PlatformMainFacade) {
@@ -169,22 +171,24 @@ export class TabItemComponents {
     }
   }
   focusInitialItem() {
-    console.log("[focus initial item]", {
-      length: this.focusableComponents.length,
-      initialIdx: this.initialFocusInputIdx,
-      component: this.focusableComponents[this.initialFocusInputIdx],
-    })
+    if (import.meta.env.MODE === "development")
+      console.log("[focus initial item]", {
+        length: this.focusableComponents.length,
+        initialIdx: this.initialFocusInputIdx,
+        component: this.focusableComponents[this.initialFocusInputIdx],
+      })
     if (0 < this.focusableComponents.length) {
       this.focusableComponents[this.initialFocusInputIdx].focusTabInput()
       this.currentFocusInputIdx = this.initialFocusInputIdx
     }
   }
   focusCurrentItem() {
-    console.log("[focus initial item]", {
-      length: this.focusableComponents.length,
-      currentIdx: this.currentFocusInputIdx,
-      component: this.focusableComponents[this.currentFocusInputIdx],
-    })
+    if (import.meta.env.MODE === "development")
+      console.log("[focus initial item]", {
+        length: this.focusableComponents.length,
+        currentIdx: this.currentFocusInputIdx,
+        component: this.focusableComponents[this.currentFocusInputIdx],
+      })
     if (0 < this.focusableComponents.length) {
       this.focusableComponents[this.currentFocusInputIdx].focusTabInput()
     }

@@ -8,7 +8,7 @@ import type {
   URLTitleConfliction,
   URLTitleResolvedConfliction,
 } from "@domain/entities/URLTitleCollection"
-import { err, ok, type Result } from "@lib/types/Result"
+import { type Result } from "@lib/types/Result"
 
 export const uploadURLTitleLifeCycle: UploadURLTitleCollectionLifeCycle = {
   async handleConflicts(
@@ -24,9 +24,5 @@ export const uploadURLTitleLifeCycle: UploadURLTitleCollectionLifeCycle = {
     await waitUntil(() => conflictModal.finished, true)
     // resolve result with ok or err
     return conflictModal.finishResult
-    // .match({
-    //   ok: (resolvedConflictions) => ok(resolvedConflictions),
-    //   err: (error) => err(error),
-    // })
   },
 }

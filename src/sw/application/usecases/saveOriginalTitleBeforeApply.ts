@@ -9,9 +9,9 @@ export function createSaveOriginalTitleBeforeApply(
   originalTitleStore: OriginalTitleStore,
 ) {
   return async function saveOriginalTitleBeforeApply(
-    titleApplyingInfo: Pick<TitleApplyingInfo, "id" | "originalTitle">,
+    titleApplyingInfo: Pick<TitleApplyingInfo, "id" | "title">,
   ) {
-    const { id, originalTitle } = titleApplyingInfo
-    await originalTitleStore.setOriginalTitle(id, originalTitle)
+    const { id, title } = titleApplyingInfo
+    await originalTitleStore.setOriginalTitle(id, title)
   }
 }

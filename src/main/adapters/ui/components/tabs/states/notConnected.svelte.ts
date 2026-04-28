@@ -28,17 +28,22 @@ export class NotConnectedTabInfoLists implements Partial<TabInfoStore> {
     this.reloadConnectableTabs = $derived(
       this.allTabs.filter(({ url }) => url && !isBrowserPolicyBlockedURL(url)),
     )
-    $effect.root(() => {
-      $effect(() => {
-        console.log("[not connected] [all tabs]", this.allTabs)
+    if (import.meta.env.MODE === "development") {
+      $effect.root(() => {
+        $effect(() => {
+          console.log("[not connected] [all tabs]", this.allTabs)
+        })
+        $effect(() => {
+          console.log("[not connected] [policy tabs]", this.policyBlockedTabs)
+        })
+        $effect(() => {
+          console.log(
+            "[not connected] [reload tabs]",
+            this.reloadConnectableTabs,
+          )
+        })
       })
-      $effect(() => {
-        console.log("[not connected] [policy tabs]", this.policyBlockedTabs)
-      })
-      $effect(() => {
-        console.log("[not connected] [reload tabs]", this.reloadConnectableTabs)
-      })
-    })
+    }
   }
   getTabIdsToReload() {
     return this.reloadConnectableTabs

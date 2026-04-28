@@ -46,7 +46,7 @@
   "settings_upload_titles_file": {
     "message": "탭이름들 로드"
   },
-  "settings_clear_titles_file": {
+  "settings_save_titles_file": {
     "message": "탭이름들 저장"
   },
   "settings_clear_title_datas": {

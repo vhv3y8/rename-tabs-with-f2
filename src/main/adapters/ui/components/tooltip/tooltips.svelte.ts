@@ -22,11 +22,12 @@ export class TooltipGenerator {
       let cleanupFloating: (() => void) | undefined
 
       const mouseEnterHandler = () => {
-        console.log(
-          "[mouse enter] [parent element] [scroll width]",
-          element,
-          element.clientWidth,
-        )
+        if (import.meta.env.MODE === "development")
+          console.log(
+            "[mouse enter] [parent element] [scroll width]",
+            element,
+            element.clientWidth,
+          )
         this.record[tooltipId] = {
           id: tooltipId,
           content,
@@ -36,7 +37,7 @@ export class TooltipGenerator {
       }
 
       const mouseLeaveHandler = () => {
-        console.log("[mouse leave]")
+        if (import.meta.env.MODE === "development") console.log("[mouse leave]")
         if (cleanupFloating) cleanupFloating()
         delete this.record[tooltipId]
       }
@@ -68,17 +69,23 @@ export class TooltipGenerator {
       $effect(() => {
         const data = this.record[tooltipId]
         const tooltipElem = data?.tooltipElem
-        console.log("[tooltip effect] [tooltipElem]", tooltipElem)
+        if (import.meta.env.MODE === "development")
+          console.log("[tooltip effect] [tooltipElem]", tooltipElem)
 
         if (tooltipElem && !cleanupFloating) {
-          console.log("[setting auto update]")
+          if (import.meta.env.MODE === "development")
+            console.log("[setting auto update]")
           cleanupFloating = autoUpdate(element, tooltipElem, () => {
-            console.log("[auto update]")
+            if (import.meta.env.MODE === "development")
+              console.log("[auto update]")
+
             computePosition(element, tooltipElem, {
               placement: "top",
               middleware: [offset(6), flip()],
             }).then(({ x, y }) => {
-              console.log("[compute position] [x, y]", [x, y])
+              if (import.meta.env.MODE === "development")
+                console.log("[compute position] [x, y]", [x, y])
+
               Object.assign(tooltipElem.style, {
                 left: `${x}px`,
                 top: `${y}px`,

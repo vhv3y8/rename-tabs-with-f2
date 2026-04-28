@@ -14,23 +14,29 @@ export function createOpenMainPage(
       await extensionFacade.getCurrentWindowActiveTab()
     const lastFocusTabId = currentWindowActiveTab.id
 
-    console.log("[open main page] [current window and tab id]", [
-      currentWindowId,
-      lastFocusTabId,
-    ])
+    if (import.meta.env.MODE === "development")
+      console.log("[sw] [open main page] [current window and tab id]", [
+        currentWindowId,
+        lastFocusTabId,
+      ])
 
     // set id to store
     if (currentWindowId !== null && lastFocusTabId !== undefined)
       idCollectionStore.setLastFocusTabId(currentWindowId, lastFocusTabId)
 
-    console.log("[opening main page]")
+    if (import.meta.env.MODE === "development")
+      console.log("[sw] [opening main page]")
 
     // open main page and set id
     const mainPageTab = await extensionFacade.openMainPage()
     if (mainPageTab.id) {
       extensionFacade.focusTab(mainPageTab.id)
       idCollectionStore.setMainPageTabId(mainPageTab.id)
-      console.log("[open main page] [saved main page tab id]", mainPageTab.id)
+      if (import.meta.env.MODE === "development")
+        console.log(
+          "[sw] [open main page] [saved main page tab id]",
+          mainPageTab.id,
+        )
     }
   }
 }

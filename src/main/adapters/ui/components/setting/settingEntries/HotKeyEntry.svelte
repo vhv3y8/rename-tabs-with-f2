@@ -33,7 +33,8 @@ function handleListenHotKey(e: KeyboardEvent) {
 }
 
 function publishToast() {
-  console.log("[publishing hotkey update toast]", localHotKeyText)
+  if (import.meta.env.MODE === "development")
+    console.log("[publishing hotkey update toast]", localHotKeyText)
   toasts.publishToast(TOAST_MESSAGES.SHORTCUT_UPDATED(localHotKeyText))
 }
 </script>

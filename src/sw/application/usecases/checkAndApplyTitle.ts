@@ -24,14 +24,18 @@ export function createCheckAndApplyTitle(
     url,
     title,
   }: TitleApplyingInfo) {
-    console.log("[check and apply title] [given input]", {
-      id,
-      url,
-      title,
-    })
+    if (import.meta.env.MODE === "development")
+      console.log("[sw] [check and apply title] [given input]", {
+        id,
+        url,
+        title,
+      })
     // check setting
     if (await settingStore.shouldApplyTitles()) {
-      console.log("[check and apply title] [setting] [should apply titles]")
+      if (import.meta.env.MODE === "development")
+        console.log(
+          "[sw] [check and apply title] [setting] [should apply titles]",
+        )
 
       // check persisted title
       const titleCollection = await urlTitleCollectionSWStore.getCollection()
@@ -39,13 +43,15 @@ export function createCheckAndApplyTitle(
       // can be fired by title change event
       if (persistedTitle !== null && title !== persistedTitle) {
         // fire and forget
-        saveOriginalTitleBeforeApplyUseCase({ id, originalTitle: title })
-        console.log(
-          "[check and apply title] [persisted title exists] [saved original title]",
-          { id, title },
-        )
+        saveOriginalTitleBeforeApplyUseCase({ id, title })
+        if (import.meta.env.MODE === "development")
+          console.log(
+            "[sw] [check and apply title] [persisted title exists] [saved original title]",
+            { id, title },
+          )
 
-        console.log("[applying title]", persistedTitle)
+        if (import.meta.env.MODE === "development")
+          console.log("[sw] [applying title]", persistedTitle)
         // apply title
         await extensionFacade.applyPersistedTitle(id, persistedTitle)
       }

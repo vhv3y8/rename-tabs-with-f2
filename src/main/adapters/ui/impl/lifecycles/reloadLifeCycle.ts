@@ -3,7 +3,6 @@ import {
   reload,
   type ReloadingTabStatus,
 } from "../../components/tabs/states/reload.svelte"
-// import { tabItemComponents } from "../../components/tabs/states/tabItemComponents.svelte"
 import type { TabInfoStore } from "@main/application/ports/TabInfoStore"
 import type { CheckAllTabConnectionUseCase } from "@main/application/usecases/checkAllTabConnection"
 import { waitUntil } from "../../components/util.svelte"
@@ -47,35 +46,41 @@ export function createChromeSvelteReloadLifeCycle(
             }
           },
         )
-        console.log("[reload lifecycle] [registered handler]")
+        if (import.meta.env.MODE === "development")
+          console.log("[reload lifecycle] [registered handler]")
         // time limit reject
         timeLimitTimeout = setTimeout(() => {
-          console.log(
-            "[reload lifecycle] [time limit ended] [removing listener and rejecting]",
-          )
+          if (import.meta.env.MODE === "development")
+            console.log(
+              "[reload lifecycle] [time limit ended] [removing listener and rejecting]",
+            )
           reload.endWaiting()
           reject()
         }, timeLimit)
       })
     },
     async afterFinish() {
-      console.log("[reload lifecycle] [after finish]")
+      if (import.meta.env.MODE === "development")
+        console.log("[reload lifecycle] [after finish]")
       tabItemComponents.focusInitialItem()
 
       // wait until allComplete and update states
       if (!reload.allComplete) {
-        console.log(
-          "[reload lifecycle] [after finish] [not all complete] [waiting...]",
-        )
+        if (import.meta.env.MODE === "development")
+          console.log(
+            "[reload lifecycle] [after finish] [not all complete] [waiting...]",
+          )
         await waitUntil(() => reload.allComplete, true)
-        console.log("[reload lifecycle] [after finish] [all complete!]")
+        if (import.meta.env.MODE === "development")
+          console.log("[reload lifecycle] [after finish] [all complete!]")
         await checkAllTabConnectionAndUpdateFlags()
-        console.log(
-          "[reload lifecycle] [after finish] [updated flags]",
-          tabInfoStore
-            .getAllTabInfos()
-            .map(({ title, connected }) => ({ title, connected })),
-        )
+        if (import.meta.env.MODE === "development")
+          console.log(
+            "[reload lifecycle] [after finish] [updated flags]",
+            tabInfoStore
+              .getAllTabInfos()
+              .map(({ title, connected }) => ({ title, connected })),
+          )
         tabItemComponents.focusInitialItem()
       }
     },

@@ -44,11 +44,13 @@ export function createUploadURLTitleCollection(
       return
     }
 
-    console.log("[upload url title file] [loaded entries]", loadedEntries)
-    console.log(
-      "[upload url title file] [existing collection]",
-      existingCollection,
-    )
+    if (import.meta.env.MODE === "development") {
+      console.log("[upload url title file] [loaded entries]", loadedEntries)
+      console.log(
+        "[upload url title file] [existing collection]",
+        existingCollection,
+      )
+    }
 
     // check conflictions
     const conflictions: URLTitleConfliction[] =
@@ -59,7 +61,8 @@ export function createUploadURLTitleCollection(
     if (0 < conflictions.length) {
       // ui runs here
       const conflictResult = await lifeCycle.handleConflicts(conflictions)
-      console.log("[conflictResult]", conflictResult)
+      if (import.meta.env.MODE === "development")
+        console.log("[conflictResult]", conflictResult)
       if (conflictResult.ok) {
         resolvedConflictions = conflictResult.value
       } else {
@@ -71,10 +74,11 @@ export function createUploadURLTitleCollection(
       }
     }
 
-    console.log(
-      "[upload url title file] [resolved conflictions]",
-      resolvedConflictions,
-    )
+    if (import.meta.env.MODE === "development")
+      console.log(
+        "[upload url title file] [resolved conflictions]",
+        resolvedConflictions,
+      )
 
     // important: save titles only after conflicts are resolved or doesn't exists.
     // append entries

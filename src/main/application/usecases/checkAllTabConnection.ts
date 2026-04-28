@@ -10,7 +10,8 @@ export function createCheckAllTabConnectionAndUpdateFlags(
   extensionFacade: PlatformMainFacade,
 ) {
   return async function checkAllTabConnectionAndUpdateFlags() {
-    console.log("[checking all tab connections]")
+    if (import.meta.env.MODE === "development")
+      console.log("[checking all tab connections]")
     const allTabInfos = tabInfoStore.getAllTabInfos()
 
     type TabConnectionReturn = {

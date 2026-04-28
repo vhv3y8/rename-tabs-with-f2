@@ -91,19 +91,6 @@ export class URLTitleRecord implements URLTitleCollection {
           ])
         }
       }
-      // test
-      // conflictions.push([
-      //   // existing
-      //   {
-      //     match: urlMatch,
-      //     title: existingTitle,
-      //   },
-      //   // given entry
-      //   {
-      //     match: urlMatch,
-      //     title,
-      //   },
-      // ])
     }
     console.log("[check entry conflictions]", conflictions)
     return conflictions

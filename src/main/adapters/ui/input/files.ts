@@ -38,7 +38,8 @@ export class DOMURLTitleFileUploadHandler {
     try {
       if (this.blob) {
         const blobText = await this.blob.text()
-        console.log("[blobText]", blobText, typeof blobText)
+        if (import.meta.env.MODE === "development")
+          console.log("[blobText]", blobText, typeof blobText)
         // deserialize
         const loadedCollection = this.serializer.deserialize(blobText)
         // schema check
@@ -122,7 +123,7 @@ export class DOMURLTitleFileUploadHandler {
           await this.deserializeAndRunUploadUseCase()
           this.blob = null
           target.value = ""
-          console.log("[set blob to null]")
+          console.log("[set blob and target value to null]")
         } else {
           console.error(
             "[hidden input change handler] [given files are falsy]",
