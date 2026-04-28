@@ -3,7 +3,6 @@ import Key from "@main/infra/ui/components/Key.svelte"
 import { reload } from "./states/reload.svelte"
 import { notConnectedCard } from "./states/notConnected.svelte"
 import { settingModal } from "../setting/states/settingModal.svelte"
-// import { tabItemComponents } from "./states/tabItemComponents.svelte"
 import { getInjections } from "../../injections"
 
 const {
@@ -14,7 +13,6 @@ const {
   tabItemComponents,
 } = getInjections()
 
-// const notConnected = $derived(notConnected)
 let allCount = $derived(notConnected.allTabs.length)
 let reloadCount = $derived(notConnected.reloadConnectableTabs.length)
 let policyCount = $derived(notConnected.policyBlockedTabs.length)

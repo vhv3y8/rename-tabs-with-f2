@@ -1,18 +1,6 @@
-import type {
-  TabTitle,
-  URLMatch,
-  URLTitleCollection,
-} from "@main/domain/entities/URLTitleCollection"
+import type { URLTitleCollection } from "@main/domain/entities/URLTitleCollection"
 
 export interface URLTitleCollectionStore {
-  // initializeCollection(record: Record<URLMatch, TabTitle>): Promise<void>
   getCollection(): Promise<URLTitleCollection>
   storeUpdatedCollection(): Promise<void>
-}
-
-export class StoreNotInitializedError extends Error {
-  constructor(message: string) {
-    super(message)
-    this.name = "StoreNotInitializedError"
-  }
 }

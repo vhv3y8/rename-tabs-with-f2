@@ -7,6 +7,5 @@ export interface TabInfoStore {
   setConnectedFlag(tabId: number, connected: boolean): void
 
   getTabInfosToApply(): TabInfo[]
-  // getTitleInfosToSave(): TabInfo[]
   getTabIdsToReload(): number[]
 }

@@ -21,17 +21,7 @@ export class IdCollectionSessionStore implements IdCollectionStore {
       extensionFacade,
     )
   }
-  // fetch and sync session
-  // async fetchIdCollections() {
-  //   const fetched: IdCollectionRecord =
-  //     await this.extensionFacade.getSessionIdCollections()
-  //   this.extensionTabIdCollection.resetFromStorageValue(
-  //     fetched.extensionTabIdCollection,
-  //   )
-  //   this.windowIdLastFocusTabIdCollection.resetFromStorageValue(
-  //     fetched.windowIdLastFocusTabIdCollection,
-  //   )
-  // }
+
   // always sync after value update
   async syncIdCollections() {
     const storageFormat: IdCollectionRecord = {

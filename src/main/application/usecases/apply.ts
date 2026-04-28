@@ -22,15 +22,12 @@ export function createApplyUseCase(
     const tabInfosToApply = tabInfoStore.getTabInfosToApply()
     console.log(
       "[apply] [tab infos to apply]",
-      tabInfosToApply.map(
-        ({ url, title, originalTitle, persistedTitle, userInputTitle }) => ({
-          url,
-          userInputTitle,
-          persistedTitle,
-          originalTitle,
-          title,
-        }),
-      ),
+      tabInfosToApply.map(({ url, title, originalTitle, userInputTitle }) => ({
+        url,
+        userInputTitle,
+        originalTitle,
+        title,
+      })),
     )
 
     if (await settingStore.shouldPersistTitles()) {
@@ -80,6 +77,6 @@ export function createApplyUseCase(
         }),
     )
 
-    // lifeCycle.closePageAfterFinish?.()
+    lifeCycle.closePageAfterFinish?.()
   }
 }

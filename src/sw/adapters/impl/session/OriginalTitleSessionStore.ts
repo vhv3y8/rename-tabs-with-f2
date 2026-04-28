@@ -18,12 +18,6 @@ export class OriginalTitleSessionStore implements OriginalTitleStore {
     )
   }
 
-  // fetch and sync session
-  // async fetchTitleApplyingInfos() {
-  //   const titleApplyingRecord: TitleApplyingInfosReord =
-  //     await this.extensionFacade.getSessionTitleApplyingInfos()
-  //   this.titleApplyingInfos = new TitleApplyingMap(titleApplyingRecord)
-  // }
   // always sync after value update
   async syncTitleApplyingInfos() {
     const storageFormat: TitleApplyingInfosReord =
