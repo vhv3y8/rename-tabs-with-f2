@@ -3,7 +3,6 @@ import Key from "@main/infra/ui/components/Key.svelte"
 import { reload } from "./states/reload.svelte"
 import { notConnectedCard } from "./states/notConnected.svelte"
 import { settingModal } from "../setting/states/settingModal.svelte"
-import { tabItemComponents } from "./states/tabItemComponents.svelte"
 import { getInjections } from "../../injections"
 
 const {
@@ -11,9 +10,9 @@ const {
   clickReloadUseCaseHandler,
   setting,
   notConnected,
+  tabItemComponents,
 } = getInjections()
 
-// const notConnected = $derived(notConnected)
 let allCount = $derived(notConnected.allTabs.length)
 let reloadCount = $derived(notConnected.reloadConnectableTabs.length)
 let policyCount = $derived(notConnected.policyBlockedTabs.length)
@@ -52,14 +51,16 @@ function keydownDismissHandler(e: KeyboardEvent) {
       <div class="header">
         <span style:font-size="1rem">
           <!-- TODO: fix -->
-          {chrome.i18n.getMessage("card_msg", [
+          {chrome.i18n.getMessage("not_connected_description", [
             allCount.toString(),
-            1 < allCount ? "s are" : " is",
+            1 < allCount
+              ? chrome.i18n.getMessage("not_connected_description_plural")
+              : chrome.i18n.getMessage("not_connected_description_not_plural"),
           ])}
         </span>
 
         <div class="close containsKeyBtn">
-          {chrome.i18n.getMessage("card_btn_dismiss")} : <Key
+          {chrome.i18n.getMessage("not_connected_dismiss")} : <Key
             props={{
               point: setting.pointColor,
               onOpposite: true,
@@ -78,9 +79,11 @@ function keydownDismissHandler(e: KeyboardEvent) {
         {#if 0 < reloadCount}
           <li>
             <p class="description">
-              {chrome.i18n.getMessage("card_connectable", [
+              {chrome.i18n.getMessage("not_connected_connectable", [
                 reloadCount.toString(),
-                1 < reloadCount ? "s" : "",
+                1 < reloadCount
+                  ? chrome.i18n.getMessage("not_connected_count_plural")
+                  : "",
               ])} :
             </p>
             <p class="titles">
@@ -113,10 +116,10 @@ function keydownDismissHandler(e: KeyboardEvent) {
                     padding: "0.4em",
                     fontSize: "15px",
                     point: setting.pointColor,
-                  }}>{chrome.i18n.getMessage("card_reloading")}</Key
+                  }}>{chrome.i18n.getMessage("not_connected_reloading")}...</Key
                 >
               {:else}
-                {chrome.i18n.getMessage("card_btn_reload_all")} : <Key
+                {chrome.i18n.getMessage("not_connected_reload_all")} : <Key
                   props={{
                     point: setting.pointColor,
                     onOpposite: true,
@@ -136,9 +139,11 @@ function keydownDismissHandler(e: KeyboardEvent) {
         {#if 0 < policyCount}
           <li>
             <p class="description">
-              {chrome.i18n.getMessage("card_blocked", [
+              {chrome.i18n.getMessage("not_connected_policy_blocked", [
                 policyCount.toString(),
-                1 < policyCount ? "s" : "",
+                1 < policyCount
+                  ? chrome.i18n.getMessage("not_connected_count_plural")
+                  : "",
               ])} :
             </p>
             <p class="titles">

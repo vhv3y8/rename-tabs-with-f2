@@ -1,6 +1,7 @@
 <script lang="ts">
 import { cancelAllKeydowns } from "@main/adapters/ui/components/reactivity/keys.svelte"
 import { type Snippet } from "svelte"
+import { createAttachmentKey, type Attachment } from "svelte/attachments"
 
 type KeyProps = {
   pressable: boolean
@@ -10,7 +11,7 @@ type KeyProps = {
   padding: string | null
   fontSize: string | null
   special: boolean
-  point: "cornflower" | "mutedcoral" | "coralorange"
+  point: "cornflower" | "mutedcoral" | "coralorange" | "forestgreen"
   onOpposite: boolean
   pointOnHover: boolean
   id?: string
@@ -19,6 +20,8 @@ type KeyProps = {
   onmousedown: (e?: MouseEvent) => void
   onmouseup: (e?: MouseEvent) => void
   repeatClickHandlerWithMouseDown: boolean
+
+  attachments: Attachment[]
 }
 const defaultKeyProps: KeyProps = {
   pressable: true,
@@ -36,6 +39,8 @@ const defaultKeyProps: KeyProps = {
   onmousedown: () => {},
   onmouseup: () => {},
   repeatClickHandlerWithMouseDown: false,
+
+  attachments: [],
 }
 let { props, children }: { props: Partial<KeyProps>; children: Snippet } =
   $props()
@@ -52,6 +57,7 @@ const {
   onclick,
   onmousedown,
   onmouseup,
+  attachments,
 } = $derived({ ...defaultKeyProps, ...props })
 
 const repeatMousedownThreshold = 100
@@ -61,6 +67,13 @@ let repeatMousedownTimer: ReturnType<typeof setInterval> | null = null
 let movedByMousedownCount = 0
 
 let elem: HTMLElement | null = $state(null)
+
+const attachmentProps = $derived(
+  attachments.reduce((acc, fn) => {
+    acc[createAttachmentKey()] = fn
+    return acc
+  }, {}),
+)
 </script>
 
 <!-- HTML -->
@@ -102,6 +115,7 @@ let elem: HTMLElement | null = $state(null)
       onmouseup()
     }
   }}
+  {...attachmentProps}
 >
   <div
     bind:this={elem}
@@ -115,6 +129,7 @@ let elem: HTMLElement | null = $state(null)
     class:cornflower={point === "cornflower"}
     class:mutedcoral={point === "mutedcoral"}
     class:coralorange={point === "coralorange"}
+    class:forestgreen={point === "forestgreen"}
     class:noShadow={shadow === "none"}
     class:smallShadow={shadow === "small"}
     class:largeShadow={shadow === "base"}
@@ -214,6 +229,18 @@ let elem: HTMLElement | null = $state(null)
   &.coralorange.onOpposite.pointOnHover:active {
     --background-color: var(--point-coralorange-opposite);
   }
+  /* forestgreen */
+  &.forestgreen.keydown,
+  &.forestgreen.pointOnHover:hover,
+  &.forestgreen.pointOnHover:active {
+    --background-color: var(--point-forestgreen-default);
+  }
+  &.forestgreen.special.keydown,
+  &.forestgreen.onOpposite.keydown,
+  &.forestgreen.onOpposite.pointOnHover:hover,
+  &.forestgreen.onOpposite.pointOnHover:active {
+    --background-color: var(--point-forestgreen-opposite);
+  }
 
   /* special */
   &.special {
@@ -228,6 +255,9 @@ let elem: HTMLElement | null = $state(null)
     }
     &.mutedcoral {
       --background-color: var(--point-mutedcoral-opposite);
+    }
+    &.forestgreen {
+      --background-color: var(--point-forestgreen-opposite);
     }
   }
 }

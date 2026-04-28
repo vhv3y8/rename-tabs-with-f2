@@ -15,16 +15,16 @@
 
   --point-cornflower-default: cornflowerblue;
   --point-cornflower-opposite: #3c5a9e;
-  /* --point-coralorange-light: #ff8a65; */
+
   --point-coralorange-default: #ff7043;
-  --point-coralorange-opposite: #e58e73;
-  /* --point-coralorange-dark: cornflowerblue;
-  --point-coralorange-light: #3c5a9e;
-  --point-cornflower-dark: #ff8a65;
-  --point-cornflower-light: #e58e73; */
+  --point-coralorange-opposite: #db642d;
 
   --point-mutedcoral-default: #e57373;
-  --point-mutedcoral-opposite: #d66d6d;
+  --point-mutedcoral-opposite: #b75c5c;
+
+  --point-forestgreen-default: #558b2f;
+  --point-forestgreen-opposite: #2e7d32;
+
   /* terracotta? */
   /* #D97757 */
   /* #E8A082 */
@@ -41,8 +41,13 @@
 
   --point-cornflower-default: #3c5a9e;
   --point-cornflower-opposite: cornflowerblue;
-  --point-coralorange-default: #ff7043;
-  --point-coralorange-opposite: #e58e73;
-  --point-mutedcoral-default: #e57373;
-  --point-mutedcoral-opposite: #d66d6d;
+
+  --point-coralorange-default: #db642d;
+  --point-coralorange-opposite: #ff7043;
+
+  --point-mutedcoral-default: #b75c5c;
+  --point-mutedcoral-opposite: #e57373;
+
+  --point-forestgreen-default: #2e7d32;
+  --point-forestgreen-opposite: #558b2f;
 }

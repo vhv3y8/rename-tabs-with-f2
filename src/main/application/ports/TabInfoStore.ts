@@ -6,8 +6,6 @@ export interface TabInfoStore {
   getById(tabId: number): TabInfo | null
   setConnectedFlag(tabId: number, connected: boolean): void
 
-  getAllTabIds(): number[]
   getTabInfosToApply(): TabInfo[]
-
   getTabIdsToReload(): number[]
 }

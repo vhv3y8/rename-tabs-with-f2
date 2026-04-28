@@ -16,6 +16,16 @@
   "settings": {
     "message": "Settings"
   },
+  "settings_cancel": {
+    "message": "Cancel"
+  },
+  "settings_ok": {
+    "message": "OK"
+  },
+  "settings_done": {
+    "message": "Done"
+  },
+
   "settings_darkmode": {
     "message": "Darkmode"
   },
@@ -25,35 +35,87 @@
   "settings_pointcolor": {
     "message": "Point Color"
   },
+  "settings_persist_apply": {
+    "message": "Persist & Apply Titles"
+  },
+  "tooltip_persist_apply_off_data_remains": {
+    "message": "Existing tab title datas remains even if you turn this off."
+  },
+
+  "settings_upload_titles_file": {
+    "message": "load titles"
+  },
+  "settings_save_titles_file": {
+    "message": "save titles"
+  },
+  "settings_clear_title_datas": {
+    "message": "clear titles"
+  },
+  "settings_clear_title_datas_warn": {
+    "message": "Remove all title datas?"
+  },
+  "settings_resolve_conflicts": {
+    "message": "Resolve Conflicts"
+  },
+  "settings_resolve_conflicts_all_existing": {
+    "message": "all existing"
+  },
+  "settings_resolve_conflicts_all_uploaded": {
+    "message": "all uploaded"
+  },
+
   "settings_hotkey": {
     "message": "Shortcut"
   },
-  "settings_shortcut_listening": {
+  "settings_hotkey_listening": {
     "message": "Listening"
   },
-  "settings_shortcut_reset_to_f2": {
+  "settings_hotkey_reset_to_f2": {
     "message": "Reset to F2"
   },
-  "settings_shortcut_cancel": {
-    "message": "Cancel"
-  },
-  "settings_shortcut_ok": {
-    "message": "OK"
-  },
 
-  "tips_cannot_connect_to_tab": {
-    "message": "Cannot connect to the tab.\nIt might be because of the browser policy, or try refreshing the tab and this page to reconnect."
-  },
-  "tips_shortcut_updated": {
-    "message": "Shortcut is updated to '$SHORTCUT$'.\nIf you want to use it at existing tabs, you have to refresh that tab!",
+  "toast_hotkey_updated": {
+    "message": "Shortcut is updated to '$HOTKEY$'.\nIf you want to use it at existing tabs, you have to refresh that tab!",
     "placeholders": {
-      "shortcut": {
+      "hotkey": {
+        "content": "$1"
+      }
+    }
+  },
+  "toast_upload_titles_file_cancel": {
+    "message": "Cancel File Upload:\nLoaded file is not applied."
+  },
+  "toast_upload_titles_file_success": {
+    "message": "File Upload Success:\nTab title datas are successfully appended to existing datas."
+  },
+  "toast_upload_titles_file_inappropriate_format": {
+    "message": "Error while uploading file:\nInappropriate File Format: Selected file is invalid."
+  },
+  "toast_upload_titles_file_validation_error": {
+    "message": "Error while uploading file:\nValidation Error: Data should be JSON object format, and all keys should be string wrapped with double quotes."
+  },
+  "toast_persist_apply_on": {
+    "message": "Persist & Apply Titles Option ON:\nRename applications will be saved from now.\nAnd it'll be automatically applied when opening those tabs."
+  },
+  "toast_persist_apply_off_data_remains": {
+    "message": "Persist & Apply Titles Option OFF:\nTitles will not be automatically applied or saved from now.\nExisting datas will remain."
+  },
+  "toast_cleared_title_datas": {
+    "message": "Cleared all title datas. (count: $COUNT$)",
+    "placeholders": {
+      "count": {
         "content": "$1"
       }
     }
   },
 
-  "card_msg": {
+  "not_connected_description_not_plural": {
+    "message": " is"
+  },
+  "not_connected_description_plural": {
+    "message": "s are"
+  },
+  "not_connected_description": {
     "message": "$TAB$ tab$PLURAL$ not connected.",
     "placeholders": {
       "tab": {
@@ -64,16 +126,20 @@
       }
     }
   },
-  "card_btn_dismiss": {
+  "not_connected_dismiss": {
     "message": "Dismiss"
   },
-  "card_btn_reload_all": {
+  "not_connected_reload_all": {
     "message": "Reload all connectable tabs"
   },
-  "card_reloading": {
-    "message": "Reloading..."
+  "not_connected_reloading": {
+    "message": "Reloading"
   },
-  "card_connectable": {
+
+  "not_connected_count_plural": {
+    "message": "s"
+  },
+  "not_connected_connectable": {
     "message": "Connectable by reloading tab ($TAB$ tab$PLURAL$)",
     "placeholders": {
       "tab": {
@@ -84,7 +150,7 @@
       }
     }
   },
-  "card_blocked": {
+  "not_connected_policy_blocked": {
     "message": "Blocked by browser policy ($TAB$ tab$PLURAL$)",
     "placeholders": {
       "tab": {

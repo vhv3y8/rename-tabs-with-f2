@@ -1,20 +1,22 @@
 <script lang="ts">
 import Popover from "@infra/ui/components/Popover.svelte"
-import DarkModeEntry from "./modalEntries/DarkModeEntry.svelte"
-import LargerWidthEntry from "./modalEntries/LargerWidthEntry.svelte"
-import HotKeyEntry from "./modalEntries/HotKeyEntry.svelte"
-import PointColorEntry from "./modalEntries/PointColorEntry.svelte"
+import DarkModeEntry from "./settingEntries/DarkModeEntry.svelte"
+import LargerWidthEntry from "./settingEntries/LargerWidthEntry.svelte"
+import HotKeyEntry from "./settingEntries/HotKeyEntry.svelte"
+import PointColorEntry from "./settingEntries/PointColorEntry.svelte"
+import PersistApplyEntry from "./settingEntries/PersistApplyEntry.svelte"
 
-let { onclose } = $props()
+let { blur, onclose } = $props()
 </script>
 
 <!-- HTML -->
 
-<Popover {onclose} directionDown={false}>
-  <ul id="settingsPopoverContent">
+<Popover {onclose} zIndex={100} opacity={blur ? 0.7 : 1}>
+  <ul id="settingsPopoverContent" class:otherModal={blur}>
     <PointColorEntry />
     <DarkModeEntry />
     <LargerWidthEntry />
+    <PersistApplyEntry />
     <HotKeyEntry />
   </ul>
 </Popover>
@@ -32,12 +34,23 @@ ul {
   display: flex;
   flex-flow: column nowrap;
   gap: 0.55em;
+
+  &.otherModal {
+    pointer-events: none;
+  }
 }
 :global(ul#settingsPopoverContent li button.key) {
   font-size: 0.9em;
 
   &:hover {
     cursor: pointer;
+  }
+}
+
+ul :global(button.key) {
+  display: flex;
+  & > :global(div.keyInner) {
+    flex: 1 0 0;
   }
 }
 

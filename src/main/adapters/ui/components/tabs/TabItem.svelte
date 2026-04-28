@@ -1,20 +1,20 @@
 <script lang="ts">
+import { getInjections } from "@adapters/ui/injections"
 import type { TabInfoState } from "./states/tabInfoRecord.svelte"
-import { tabItemComponents } from "./states/tabItemComponents.svelte"
+
+let { tabItemComponents } = getInjections()
 
 let elem = null
 
 let { tabInfo }: { tabInfo: TabInfoState } = $props()
-let localTitle = $state(tabInfo.title)
+let localTitle = $state(tabInfo.userInputTitle)
 let focusableIdx = $derived(
   tabItemComponents.focusableIdxFromTabIdLookup[tabInfo.id],
 )
 
 function applyLocalTitle() {
-  if (!tabInfo.hasChanged) {
-    tabInfo.title = localTitle
-    tabInfo.hasChanged = true
-  }
+  tabInfo.userInputTitle = localTitle
+  if (!tabInfo.hasChanged) tabInfo.hasChanged = true
 }
 
 export function focusTabInput(): void {
@@ -45,6 +45,7 @@ export function getTabInfo() {
     />
     <input
       type="text"
+      placeholder={tabInfo.originalTitle || tabInfo.title}
       name=""
       bind:this={elem}
       bind:value={localTitle}

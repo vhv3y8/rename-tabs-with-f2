@@ -1,15 +1,26 @@
 <script>
-let { directionDown, onclose, children } = $props()
+let {
+  zIndex = 100,
+  opacity = 1,
+  onclose,
+  padding = "0.7em 0.8em",
+  children,
+} = $props()
 </script>
 
 <!-- HTML -->
 
-<div class="popover">
+<div class="popover" style:z-index={zIndex} style:opacity style:padding>
   {@render children?.()}
 </div>
 
 <!-- svelte-ignore a11y_consider_explicit_label -->
-<button type="button" class="popoverBackground" onclick={onclose}></button>
+<button
+  type="button"
+  style:z-index={zIndex - 1}
+  class="popoverBackground"
+  onclick={onclose}
+></button>
 
 <!-- Style -->
 
@@ -19,12 +30,12 @@ div.popover {
   bottom: calc(100% + 0.4em);
   background-color: inherit;
 
-  padding: 0.7em 0.8em;
+  /* padding: 0.7em 0.8em; */
   border: 2px solid var(--primary-7);
   box-shadow: 0 0 2px 2px var(--shadow-1);
   background: var(--bg);
 
-  z-index: 100;
+  /* z-index: 100; */
 }
 
 button.popoverBackground {
@@ -37,6 +48,6 @@ button.popoverBackground {
   border: none;
   background-color: transparent;
 
-  z-index: 99;
+  /* z-index: 99; */
 }
 </style>

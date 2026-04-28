@@ -8,12 +8,11 @@ import {
   type Setting,
 } from "../models/Setting"
 import * as semver from "semver"
+import type { TitleRecord } from "@lib/models/TitleRecord"
 
-export const chromeInitialSetting: Setting = {
-  ...initialSettingPartial,
-}
 const INITIAL_STORAGE = {
-  settings: chromeInitialSetting,
+  settings: initialSettingPartial,
+  titles: {},
 }
 
 const ChromeStorage = {
@@ -36,6 +35,8 @@ const ChromeStorage = {
     migratedStorage.settings = new MigrationAggregator(
       settingMigrationMap,
     ).migrate(userStorage.settings, previousVersion)
+    // keep titles
+    migratedStorage.titles = userStorage.titles
 
     // always set version
     const version = chrome.runtime.getManifest().version
@@ -57,6 +58,15 @@ const ChromeStorage = {
     },
     async setSettings(settings: Setting) {
       return chrome.storage.local.set({ settings })
+    },
+  },
+  titles: {
+    async getTitles(): Promise<TitleRecord> {
+      return chrome.storage.local.get(["titles"]).then((db) => db.titles)
+    },
+    // TODO
+    async setTitles(titles: TitleRecord) {
+      return chrome.storage.local.set({ titles })
     },
   },
 }
