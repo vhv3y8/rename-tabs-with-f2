@@ -5,6 +5,7 @@ import { getInjections } from "@main/adapters/ui/injections"
 import HorizontalLine from "@infra/ui/components/HorizontalLine.svelte"
 import { TOAST_MESSAGES } from "@lib/toast"
 import { settingModal } from "../states/settingModal.svelte"
+import { tooltips } from "../../tooltip/tooltips.svelte"
 
 const {
   setting,
@@ -40,6 +41,13 @@ const {
           toasts.publishToast(TOAST_MESSAGES.PERSIST_APPLY_OFF, 30000)
         }
       },
+      attachments: setting.persistAndApplyTitles
+        ? [
+            tooltips.attachEllipsisTooltip(
+              chrome.i18n.getMessage("tooltip_persist_apply_off_data_remains"),
+            ),
+          ]
+        : [],
     }}>{setting.persistAndApplyTitles}</Key
   >
 

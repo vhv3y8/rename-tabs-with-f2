@@ -39,7 +39,7 @@
     "message": "Persist & Apply Titles"
   },
   "tooltip_persist_apply_off_data_remains": {
-    "message": "Existing tab title datas remains even if you turn this off."
+    "message": "Existing tab title data remains even if you turn this off."
   },
 
   "settings_upload_titles_file": {
@@ -75,7 +75,7 @@
   },
 
   "toast_hotkey_updated": {
-    "message": "Shortcut is updated to '$HOTKEY$'.\nIf you want to use it at existing tabs, you have to refresh that tab!",
+    "message": "Shortcut is updated to '$HOTKEY$'.\nRefresh the tab to use it!",
     "placeholders": {
       "hotkey": {
         "content": "$1"
@@ -83,25 +83,25 @@
     }
   },
   "toast_upload_titles_file_cancel": {
-    "message": "Cancel File Upload:\nLoaded file is not applied."
+    "message": "Cancel File Upload:\nLoaded file was not applied."
   },
   "toast_upload_titles_file_success": {
-    "message": "File Upload Success:\nTab title datas are successfully appended to existing datas."
+    "message": "File Upload Success:\nTab title data was successfully appended to existing data."
   },
   "toast_upload_titles_file_inappropriate_format": {
-    "message": "Error while uploading file:\nInappropriate File Format: Selected file is invalid."
+    "message": "Error while uploading file:\nInvalid file format: The selected file is not valid."
   },
   "toast_upload_titles_file_validation_error": {
-    "message": "Error while uploading file:\nValidation Error: Data should be JSON object format, and all keys should be string wrapped with double quotes."
+    "message": "Error while uploading file:\nValidation error: Data must be a JSON object, and all keys must be strings wrapped in double quotes."
   },
   "toast_persist_apply_on": {
-    "message": "Persist & Apply Titles Option ON:\nRename applications will be saved from now.\nAnd it'll be automatically applied when opening those tabs."
+    "message": "Persist & Apply Titles Option ON:\nRenamed titles will now be saved.\nThey will be automatically applied when opening those tabs."
   },
   "toast_persist_apply_off_data_remains": {
-    "message": "Persist & Apply Titles Option OFF:\nTitles will not be automatically applied or saved from now.\nExisting datas will remain."
+    "message": "Persist & Apply Titles Option OFF:\nTitles will no longer be automatically applied or saved.\nExisting data will remain."
   },
   "toast_cleared_title_datas": {
-    "message": "Cleared all title datas. (count: $COUNT$)",
+    "message": "Cleared all title data. (count: $COUNT$)",
     "placeholders": {
       "count": {
         "content": "$1"
@@ -130,7 +130,7 @@
     "message": "Dismiss"
   },
   "not_connected_reload_all": {
-    "message": "Reload all connectable tabs"
+    "message": "Reconnect all tabs"
   },
   "not_connected_reloading": {
     "message": "Reloading"
@@ -140,7 +140,7 @@
     "message": "s"
   },
   "not_connected_connectable": {
-    "message": "Connectable by reloading tab ($TAB$ tab$PLURAL$)",
+    "message": "Reconnect by reloading the tab ($TAB$ tab$PLURAL$)",
     "placeholders": {
       "tab": {
         "content": "$1"

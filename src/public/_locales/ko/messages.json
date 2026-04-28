@@ -46,7 +46,7 @@
   "settings_upload_titles_file": {
     "message": "탭이름들 로드"
   },
-  "settings_clear_titles": {
+  "settings_clear_titles_file": {
     "message": "탭이름들 저장"
   },
   "settings_clear_title_datas": {
@@ -62,7 +62,7 @@
     "message": "모두 기존"
   },
   "settings_resolve_conflicts_all_uploaded": {
-    "message": "모두 새로"
+    "message": "모두 업로드"
   },
 
   "settings_hotkey": {
@@ -111,10 +111,10 @@
   },
 
   "not_connected_description_not_plural": {
-    "message": " is"
+    "message": ""
   },
   "not_connected_description_plural": {
-    "message": "s are"
+    "message": ""
   },
   "not_connected_description": {
     "message": "$TAB$개의 탭이 연결되지 않았습니다.",
