@@ -4,8 +4,10 @@ import zipPack from "vite-plugin-zip-pack"
 import manifest from "../src/public/manifest.json" with { type: "json" }
 import path from "node:path"
 import fs from "node:fs/promises"
+import fsSync from "node:fs"
 import tailwindcss from "@tailwindcss/vite"
 import postcssNesting from "postcss-nesting"
+import archiver from "archiver"
 
 const isProduction = process.env.MODE === "production"
 const buildDist2ForTest = process.env.DIST2 === "true"
@@ -16,11 +18,11 @@ console.log("[buildDist2ForTest]", buildDist2ForTest)
 // Common Plugin
 
 const commonPlugins = [
-  zipPack({
-    inDir: buildDist2ForTest ? "dist2" : "dist",
-    outDir: ".",
-    outFileName: `${manifest.name}-${manifest.version}${buildDist2ForTest ? "2" : ""}.zip`,
-  }),
+  // zipPack({
+  //   inDir: buildDist2ForTest ? "dist2" : "dist",
+  //   outDir: ".",
+  //   outFileName: `${manifest.name}-${manifest.version}${buildDist2ForTest ? "2" : ""}.zip`,
+  // }),
 ]
 
 // Config
@@ -148,6 +150,20 @@ async function updateExtensionVersion() {
   await fs.writeFile(manifestFilePath, JSON.stringify(manifestJson, null, 2))
 }
 
+async function createExtensionZip() {
+  const archive = archiver("zip", {
+    zlib: {
+      level: 9,
+    },
+  })
+  const fsOuput = fsSync.createWriteStream(
+    `${manifest.name.toLowerCase().replaceAll(" ", "-")}-${manifest.version}.zip`,
+  )
+  archive.pipe(fsOuput)
+  archive.directory("dist", false)
+  return archive.finalize()
+}
+
 // Build
 
 const entries = ["src/main/index.html", "src/content.ts", "src/sw/sw.ts"]
@@ -180,3 +196,4 @@ async function run() {
 await emptyOutDirOnce()
 await run()
 if (buildDist2ForTest) await updateExtensionVersion()
+if (isProduction) await createExtensionZip()

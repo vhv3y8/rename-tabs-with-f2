@@ -3,12 +3,20 @@
 - Press 'F2' to Open Rename Page at any tab
 - 'Tab' or 'Enter' / 'Shift+Tab' or 'Shift+Enter' to Move around tab titles
 - 'Ctrl+Enter' to Apply changes and Close
+- Titles are automatically applied with 'Persist & Apply Titles' option
 - 'Shift+R' to reload connectable tabs
 - 'F5' or 'Ctrl+R' to Reset changes (browser original)
 - 'Ctrl+W' or 'Ctrl+F4' to Close without applying (browser original)
 
 📌 'F2' shortcut and Renaming is ⚠️not available⚠️ at some pages (e.g. ⚠️ chrome web store page ⚠️, chrome:// pages, new tab page, etc) due to security reasons of the browser.
 📌 When extension is 'first installed ⬇️', you need to 'refresh 🔄' tab to use 'F2' shortcut because extension cannot connect to tabs that are created before its installed.
+
+v1.3
+- Added option to toggle persist & apply titles
+- Titles are automatically applied when tab is created or title has changed (when 'Persist & Apply Titles' option is on)
+- Save, upload titles data as file & clear titles data
+- Resolve upload title conflictions by selecting
+- Added option to change point colors
 
 v1.2
 - Added descriptions about unavailable tabs

@@ -6,28 +6,32 @@ EN | [한국어](./README-ko.md)
 
 Chrome Extension that adds a F2 shortcut to open a Tab Rename Extension Page.
 
-(\* Not available at some pages due to security reasons of the browser. This extension uses content script.)
+⌨️ Rename tabs without using a mouse!
 
-### How to use
+- Press 'F2' to Open Rename Page at any tab
+- 'Tab' or 'Enter' / 'Shift+Tab' or 'Shift+Enter' to Move around tab titles
+- 'Ctrl+Enter' to Apply changes and Close
+- Titles are automatically applied with 'Persist & Apply Titles' option
+- 'Shift+R' to reload connectable tabs
+- 'F5' or 'Ctrl+R' to Reset changes (browser original)
+- 'Ctrl+W' or 'Ctrl+F4' to Close without applying (browser original)
 
-- Press `F2` to Open Tab Rename Page
-- `Tab` or `Enter` / `Shift+Tab` or `Shift+Enter` to Move around tab titles
-- `F5` or `Ctrl+R` to Reset changes (browser original shortcut)
-- `Ctrl+Enter` to Apply changes and Close
-- `Ctrl+W` or `Ctrl+F4` to Close without applying (browser original shortcut)
+📌 'F2' shortcut and Renaming is ⚠️not available⚠️ at some pages (e.g. ⚠️ chrome web store page ⚠️, chrome:// pages, new tab page, etc) due to security reasons of the browser.
 
 ### How to build
 
+Install `pnpm` if you don't have it : [https://pnpm.io/installation](https://pnpm.io/installation)
+
 ```bash
-npm i && npm run build:zip
-# or pnpm i && pnpm build:zip
+pnpm install
+pnpm build:zip
 ```
 
-### How to apply built `zip` file
+### How to apply `zip` file
 
 1. Go to `chrome://extensions/`
 2. Turn `Developer mode` on at the top right
-3. Click `Load unpacked` and select `dist` folder / or drop `dist` folder to the page
+3. Click `Load unpacked` and select or drop `dist` folder / `zip` file to the page
 4. After modifying and rebuilding, click `Refresh Icon` at extension list
 
 ### LICENSE

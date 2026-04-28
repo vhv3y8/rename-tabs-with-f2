@@ -25,6 +25,7 @@
     "@types/chrome": "^0.0.279",
     "@types/node": "^24.10.1",
     "@types/semver": "^7.7.1",
+    "archiver": "^7.0.1",
     "culori": "^4.0.2",
     "jsdom": "^27.1.0",
     "postcss": "^8.5.6",
