@@ -10,6 +10,7 @@ import { cancelAllKeydowns } from "./adapters/ui/components/reactivity/keys.svel
 import { setInjectionsContext } from "./adapters/ui/injections"
 import { initializeViewFromSettings } from "./adapters/ui/components/setting/view"
 import { runBootstrap } from "./bootstrap"
+import GlobalTooltipContext from "@adapters/ui/components/tooltip/GlobalTooltipContext.svelte"
 
 // inject to svelte components
 const uiInjections: Awaited<ReturnType<typeof runBootstrap>> = $props()
@@ -30,6 +31,8 @@ onMount(async () => {
 <svelte:document onkeyup={keyupReactivityHandler} />
 
 <GlobalToastGrid />
+
+<GlobalTooltipContext />
 
 <main
   class:large={uiInjections.setting.largerWidth}

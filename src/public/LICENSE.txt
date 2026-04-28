@@ -21,5 +21,31 @@ License File: licenses/SIL-OPEN-FONT-LICENSE-v1.1.txt
 Scarlab Icons (https://github.com/la-moore/scarlab-icons)
 > Globe (globe-alt)
 Copyright (c) 2026 Alex Moore
-License: MIT License
+License: MIT License (https://github.com/la-moore/scarlab-icons/blob/master/packages/icons/LICENSE)
 License File: licenses/MIT-LICENSE.txt
+
+========== Frameworks & Libraries ==========
+
+Svelte (https://www.npmjs.com/package/svelte)
+> UI components & responsive states
+Copyright (c) 2016-2025 [Svelte Contributors](https://github.com/sveltejs/svelte/graphs/contributors)
+License: MIT License (https://github.com/sveltejs/svelte/blob/main/LICENSE.md)
+License File: licenses/MIT-LICENSE.txt
+
+Tailwindcss (https://www.npmjs.com/package/tailwindcss)
+> Used for writing CSS partially
+Copyright (c) Tailwind Labs, Inc.
+License: MIT License (https://github.com/tailwindlabs/tailwindcss/blob/main/LICENSE)
+License File: licenses/MIT-LICENSE.txt
+
+@floating-ui/dom (https://www.npmjs.com/package/@floating-ui/dom)
+> Tooltip logic
+Copyright (c) 2021 Floating UI contributors
+License: MIT License (https://github.com/floating-ui/floating-ui/blob/master/LICENSE)
+License File: licenses/MIT-LICENSE.txt
+
+semver (https://www.npmjs.com/package/semver)
+> Storage migration logic
+Copyright (c) Isaac Z. Schlueter and Contributors
+License: ISC License (https://github.com/npm/node-semver/blob/main/LICENSE)
+License File: licenses/ISC-LICENSE.txt

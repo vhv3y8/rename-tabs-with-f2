@@ -1,6 +1,7 @@
 <script lang="ts">
 import { cancelAllKeydowns } from "@main/adapters/ui/components/reactivity/keys.svelte"
 import { type Snippet } from "svelte"
+import { createAttachmentKey, type Attachment } from "svelte/attachments"
 
 type KeyProps = {
   pressable: boolean
@@ -19,6 +20,8 @@ type KeyProps = {
   onmousedown: (e?: MouseEvent) => void
   onmouseup: (e?: MouseEvent) => void
   repeatClickHandlerWithMouseDown: boolean
+
+  attachments: Attachment[]
 }
 const defaultKeyProps: KeyProps = {
   pressable: true,
@@ -36,6 +39,8 @@ const defaultKeyProps: KeyProps = {
   onmousedown: () => {},
   onmouseup: () => {},
   repeatClickHandlerWithMouseDown: false,
+
+  attachments: [],
 }
 let { props, children }: { props: Partial<KeyProps>; children: Snippet } =
   $props()
@@ -52,6 +57,7 @@ const {
   onclick,
   onmousedown,
   onmouseup,
+  attachments,
 } = $derived({ ...defaultKeyProps, ...props })
 
 const repeatMousedownThreshold = 100
@@ -61,6 +67,13 @@ let repeatMousedownTimer: ReturnType<typeof setInterval> | null = null
 let movedByMousedownCount = 0
 
 let elem: HTMLElement | null = $state(null)
+
+const attachmentProps = $derived(
+  attachments.reduce((acc, fn) => {
+    acc[createAttachmentKey()] = fn
+    return acc
+  }, {}),
+)
 </script>
 
 <!-- HTML -->
@@ -102,6 +115,7 @@ let elem: HTMLElement | null = $state(null)
       onmouseup()
     }
   }}
+  {...attachmentProps}
 >
   <div
     bind:this={elem}

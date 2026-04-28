@@ -5,8 +5,8 @@ import { tooltips } from "./tooltips.svelte"
 
 <!-- HTML -->
 
-{#each tooltips.list as tooltip}
-  <Tooltip content={tooltip.content} />
+{#each Object.values(tooltips.record) as tooltip (tooltip.id)}
+  <Tooltip {tooltip} />
 {/each}
 
 <!-- Style -->

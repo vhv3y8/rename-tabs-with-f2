@@ -1,75 +1,110 @@
+import { autoUpdate, computePosition, flip, offset } from "@floating-ui/dom"
 import type { Attachment } from "svelte/attachments"
 
 export type TooltipItem = {
   id: number
   content: string
+  tooltipElem: HTMLElement | null
+  parentClientWidth: number
 }
+export type TooltipRecord = Record<number, TooltipItem>
 
 export class TooltipGenerator {
-  list: TooltipItem[] = $state([])
-  private timers: Map<number, ReturnType<typeof setTimeout>> = new Map()
+  record: TooltipRecord = $state({})
   private nextId = 1
   constructor() {}
 
-  attachTooltip(content: string): Attachment {
+  attachEllipsisTooltip(content: string): Attachment {
     const tooltipId = this.nextId
     this.nextId += 1
 
-    function mouseEnterHandler() {}
-    function mouseLeaveHandler() {}
-
     return (element: Element) => {
+      let cleanupFloating: (() => void) | undefined
+
+      const mouseEnterHandler = () => {
+        console.log(
+          "[mouse enter] [parent element] [scroll width]",
+          element,
+          element.clientWidth,
+        )
+        this.record[tooltipId] = {
+          id: tooltipId,
+          content,
+          tooltipElem: null,
+          parentClientWidth: element.clientWidth,
+        }
+      }
+
+      const mouseLeaveHandler = () => {
+        console.log("[mouse leave]")
+        if (cleanupFloating) cleanupFloating()
+        delete this.record[tooltipId]
+      }
+
+      // $effect(() => {
+      //   const data = this.record[tooltipId]
+      //   const ellipsisCheckElem = element.querySelector(".ellipsisCheck")
+      //   if (ellipsisCheckElem)
+      //     console.log(
+      //       "[clientWidth, scrollWidth, compare]",
+      //       element,
+      //       ellipsisCheckElem,
+      //       {
+      //         clientWidth: ellipsisCheckElem.clientWidth,
+      //         scrollWidth: ellipsisCheckElem.scrollWidth,
+      //         compare:
+      //           ellipsisCheckElem.clientWidth >= ellipsisCheckElem.scrollWidth,
+      //       },
+      //     )
+      //   if (
+      //     data &&
+      //     ellipsisCheckElem &&
+      //     ellipsisCheckElem.clientWidth >= ellipsisCheckElem.scrollWidth
+      //   ) {
+      //     delete this.record[tooltipId]
+      //   }
+      // })
+
+      $effect(() => {
+        const data = this.record[tooltipId]
+        const tooltipElem = data?.tooltipElem
+        console.log("[tooltip effect] [tooltipElem]", tooltipElem)
+
+        if (tooltipElem && !cleanupFloating) {
+          console.log("[setting auto update]")
+          cleanupFloating = autoUpdate(element, tooltipElem, () => {
+            console.log("[auto update]")
+            computePosition(element, tooltipElem, {
+              placement: "top",
+              middleware: [offset(6), flip()],
+            }).then(({ x, y }) => {
+              console.log("[compute position] [x, y]", [x, y])
+              Object.assign(tooltipElem.style, {
+                left: `${x}px`,
+                top: `${y}px`,
+              })
+            })
+          })
+        }
+
+        return () => {
+          if (cleanupFloating) {
+            cleanupFloating()
+            cleanupFloating = undefined
+          }
+        }
+      })
+
       element.addEventListener("mouseenter", mouseEnterHandler)
       element.addEventListener("mouseleave", mouseLeaveHandler)
+
       return () => {
+        if (cleanupFloating) cleanupFloating()
+        delete this.record[tooltipId]
         element.removeEventListener("mouseenter", mouseEnterHandler)
         element.removeEventListener("mouseleave", mouseLeaveHandler)
       }
     }
-  }
-
-  // publishToast(content: string, duration?: number): number {
-  //   const toastId = this.nextId
-  //   console.log("[appending toast]", "[given duration]", duration, {
-  //     id: toastId,
-  //     content,
-  //     duration: duration || this.DURATION,
-  //   })
-
-  //   this.list.unshift({
-  //     id: toastId,
-  //     content,
-  //     duration: duration || this.DURATION,
-  //   })
-  //   // add timer
-  //   if (!this.timers.has(toastId)) {
-  //     const timer = setTimeout(
-  //       () => this.removeToast(toastId),
-  //       duration || this.DURATION,
-  //     )
-  //     this.timers.set(toastId, timer)
-  //   }
-  //   this.nextId += 1
-  //   return toastId
-  // }
-  // removeToast(id: number) {
-  //   const idx = this.list.findIndex((item) => item.id === id)
-  //   if (-1 < idx) {
-  //     this.list.splice(idx, 1)
-  //     // remove timer if exists
-  //     if (this.timers.has(id)) {
-  //       const timer = this.timers.get(id)
-  //       clearTimeout(timer)
-  //       this.timers.delete(id)
-  //     }
-  //   }
-  // }
-  // getAll() {
-  //   return this.list
-  // }
-
-  renderTooltip() {
-    //
   }
 }
 export const tooltips = new TooltipGenerator()

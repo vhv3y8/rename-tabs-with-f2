@@ -2,6 +2,7 @@
 import Key from "@infra/ui/components/Key.svelte"
 import type { ConflictState } from "../states/conflictModal.svelte"
 import { getInjections } from "@adapters/ui/injections"
+import { tooltips } from "../../tooltip/tooltips.svelte"
 
 let { conflictState }: { conflictState: ConflictState } = $props()
 let { setting } = getInjections()
@@ -10,8 +11,11 @@ let { setting } = getInjections()
 <!-- HTML -->
 
 <li class="conflictItem">
-  <p class="urlMatch">
-    <span>{conflictState.urlMatch}</span>
+  <p
+    class="urlMatch flex"
+    {@attach tooltips.attachEllipsisTooltip(conflictState.urlMatch)}
+  >
+    <span class="ellipsisCheck">{conflictState.urlMatch}</span>
   </p>
 
   <div class="existingOrUploaded flex gap-[0.4em]">
@@ -25,9 +29,12 @@ let { setting } = getInjections()
         onclick: () => {
           conflictState.isUploadSelected = false
         },
+        attachments: [
+          tooltips.attachEllipsisTooltip(conflictState.existing.title),
+        ],
       }}
     >
-      <span class="title">{conflictState.existing.title}</span>
+      <span class="title ellipsisCheck">{conflictState.existing.title}</span>
     </Key>
 
     <Key
@@ -40,9 +47,12 @@ let { setting } = getInjections()
         onclick: () => {
           conflictState.isUploadSelected = true
         },
+        attachments: [
+          tooltips.attachEllipsisTooltip(conflictState.uploaded.title),
+        ],
       }}
     >
-      <span class="title">{conflictState.uploaded.title}</span>
+      <span class="title ellipsisCheck">{conflictState.uploaded.title}</span>
     </Key>
   </div>
 </li>
@@ -70,11 +80,6 @@ li.conflictItem {
   padding: 0.4em;
   font-family: "Ubuntu";
 
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: inline-block;
-
   /* direction: rtl;
   text-align: left; */
 
@@ -86,6 +91,15 @@ li.conflictItem {
   color: var(--primary-9);
   /* border-radius: 1px; */
   /* box-shadow: 0 0 2px var(--primary-8); */
+
+  display: flex;
+  & .ellipsisCheck {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 100%;
+  }
 }
 .existingOrUploaded {
   & :global(button.key:has(.keyInner)) {
