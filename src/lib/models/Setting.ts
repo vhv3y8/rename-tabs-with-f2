@@ -27,7 +27,7 @@ export const initialSettingPartial = {
   pointColor: "cornflower",
   darkmode: false,
   largerWidth: false,
-  persistAndApplyTitles: false,
+  persistAndApplyTitles: true,
   hotkey: F2HotKey,
 } satisfies Setting
 
